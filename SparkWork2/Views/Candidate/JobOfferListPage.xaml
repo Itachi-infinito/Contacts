@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Candidate.JobOfferListPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#1ABC9C">
+
+    <Grid Padding="20" RowDefinitions="Auto,Auto,*">
+
+        <Label Grid.Row="0"
+               Text="Job Offers"
+               FontSize="30"
+               FontAttributes="Bold"
+               TextColor="White"
+               HorizontalTextAlignment="Center"
+               Margin="0,20,0,10"/>
+
+        <SearchBar Grid.Row="1"
+                   x:Name="searchBar"
+                   Placeholder="Search job..."
+                   TextChanged="OnSearchTextChanged"
+                   BackgroundColor="White"
+                   Margin="0,0,0,15"/>
+
+        <CollectionView Grid.Row="2"
+                        x:Name="jobOffersCollection">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="White"
+                           CornerRadius="16"
+                           Padding="15"
+                           Margin="0,0,0,15"
+                           HasShadow="False">
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="JobOffer_Tapped"
+                                                CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="{Binding Title}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#1ABC9C" />
+
+                            <Label Text="{Binding CompanyName}"
+                                   FontSize="16"
+                                   TextColor="Black" />
+
+                            <Label Text="{Binding Location}"
+                                   FontSize="14"
+                                   TextColor="Gray" />
+
+                            <Label Text="{Binding ContractType}"
+                                   FontSize="14"
+                                   TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

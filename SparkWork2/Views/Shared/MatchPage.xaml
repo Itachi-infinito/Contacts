@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Shared.MatchPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#1ABC9C">
+
+    <Grid x:Name="RootGrid"
+          Padding="26"
+          RowDefinitions="Auto,*,Auto">
+
+        <!-- Confettis -->
+        <AbsoluteLayout Grid.RowSpan="3"
+                        InputTransparent="True">
+
+            <BoxView x:Name="confetti1"  WidthRequest="10" HeightRequest="18" Color="#FF6B6B" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.08,0.02,10,18" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti2"  WidthRequest="12" HeightRequest="12" Color="#FFD93D" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.18,0.05,12,12" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti3"  WidthRequest="8"  HeightRequest="20" Color="#6BCB77" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.30,0.03,8,20" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti4"  WidthRequest="10" HeightRequest="16" Color="#4D96FF" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.42,0.04,10,16" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti5"  WidthRequest="14" HeightRequest="10" Color="#FF8E3C" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.56,0.02,14,10" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti6"  WidthRequest="9"  HeightRequest="18" Color="#B983FF" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.68,0.06,9,18" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti7"  WidthRequest="11" HeightRequest="14" Color="#F94892" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.80,0.03,11,14" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti8"  WidthRequest="10" HeightRequest="18" Color="#00C2A8" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.90,0.05,10,18" AbsoluteLayout.LayoutFlags="PositionProportional" />
+
+            <BoxView x:Name="confetti9"  WidthRequest="10" HeightRequest="18" Color="#FFD93D" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.12,0.10,10,18" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti10" WidthRequest="12" HeightRequest="12" Color="#FF6B6B" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.25,0.11,12,12" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti11" WidthRequest="8"  HeightRequest="20" Color="#4D96FF" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.50,0.10,8,20" AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <BoxView x:Name="confetti12" WidthRequest="14" HeightRequest="10" Color="#6BCB77" CornerRadius="2" AbsoluteLayout.LayoutBounds="0.75,0.09,14,10" AbsoluteLayout.LayoutFlags="PositionProportional" />
+        </AbsoluteLayout>
+
+        <!-- Centre -->
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="18"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+            <Label Text="✨ SparkWork"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#D8FFF8"
+                   HorizontalTextAlignment="Center"
+                   Opacity="0"
+                   x:Name="lblBrand" />
+
+            <Label Text="Congratulations!"
+                   FontSize="34"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center"
+                   Opacity="0"
+                   Scale="0.8"
+                   x:Name="lblCongrats" />
+
+            <Label x:Name="lblMatchText"
+                   Text="You matched!"
+                   FontSize="18"
+                   TextColor="#E9FFFB"
+                   HorizontalTextAlignment="Center"
+                   Opacity="0" />
+
+            <Frame BackgroundColor="White"
+                   BorderColor="#DCEDE7"
+                   CornerRadius="28"
+                   Padding="24"
+                   HasShadow="True"
+                   WidthRequest="290"
+                   Opacity="0"
+                   TranslationY="30"
+                   x:Name="matchCard">
+
+                <VerticalStackLayout Spacing="14"
+                                     HorizontalOptions="Center">
+
+                    <Frame WidthRequest="150"
+                           HeightRequest="150"
+                           CornerRadius="75"
+                           Padding="0"
+                           BackgroundColor="#F4FBFA"
+                           BorderColor="#DCEDE7"
+                           HasShadow="False"
+                           HorizontalOptions="Center">
+
+                        <Image x:Name="imgMatch"
+                               Source="dotnet_bot.png"
+                               HeightRequest="150"
+                               WidthRequest="150"
+                               Aspect="AspectFill" />
+                    </Frame>
+
+                    <Label x:Name="lblParticipantName"
+                           Text="Name"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="#1ABC9C"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="You can now start the conversation and learn more about each other."
+                           FontSize="15"
+                           TextColor="#6A7A7A"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+
+        <!-- Bas -->
+        <VerticalStackLayout Grid.Row="2"
+                             Spacing="12">
+
+            <Button Text="Send Message"
+                    HeightRequest="52"
+                    BackgroundColor="White"
+                    TextColor="#1ABC9C"
+                    FontAttributes="Bold"
+                    CornerRadius="16"
+                    Clicked="SendMessage_Clicked"
+                    Opacity="0"
+                    x:Name="btnMessage" />
+
+            <Button Text="Keep Swiping"
+                    HeightRequest="52"
+                    BackgroundColor="Transparent"
+                    BorderColor="White"
+                    BorderWidth="2"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="16"
+                    Clicked="KeepSwiping_Clicked"
+                    Opacity="0"
+                    x:Name="btnKeepSwiping" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

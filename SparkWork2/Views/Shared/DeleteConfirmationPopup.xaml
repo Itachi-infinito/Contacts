@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Shared.DeleteConfirmationPopup"
+             BackgroundColor="#80000000"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid>
+        <Frame BackgroundColor="White"
+               CornerRadius="22"
+               Padding="24"
+               WidthRequest="320"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               HasShadow="True">
+
+            <VerticalStackLayout Spacing="18">
+                <Label Text="Delete"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="#0B1F1D"
+                       HorizontalTextAlignment="Center" />
+
+                <Label x:Name="lblMessage"
+                       Text="Remove this item?"
+                       FontSize="15"
+                       TextColor="#6A7A7A"
+                       HorizontalTextAlignment="Center" />
+
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12">
+
+                    <Button Grid.Column="0"
+                            Text="Cancel"
+                            BackgroundColor="Transparent"
+                            TextColor="#6A7A7A"
+                            BorderColor="#DCEDE7"
+                            BorderWidth="1"
+                            CornerRadius="14"
+                            Clicked="OnCancel" />
+
+                    <Button Grid.Column="1"
+                            Text="Delete"
+                            BackgroundColor="#FFEEF0"
+                            TextColor="#D66464"
+                            CornerRadius="14"
+                            Clicked="OnConfirm" />
+                </Grid>
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>

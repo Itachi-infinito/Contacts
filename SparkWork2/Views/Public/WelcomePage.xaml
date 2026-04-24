@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Public.WelcomePage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFFFF" Offset="0.0" />
+            <GradientStop Color="#D1F2EB" Offset="0.5" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid Padding="30">
+        <VerticalStackLayout VerticalOptions="Center" Spacing="24">
+
+            <HorizontalStackLayout HorizontalOptions="Center"
+                       Spacing="8">
+
+                <Label Text="✦"
+                       FontSize="50"
+                       FontAttributes="Bold"
+                       TextColor="#1ABC9C"
+                       VerticalOptions="Center" />
+
+                <Label Text="SparkWork"
+                       FontSize="50"
+                       FontAttributes="Bold"
+                       TextColor="#0B1F1D"
+                       VerticalOptions="Center" />
+
+            </HorizontalStackLayout>
+
+            <Label Text="Match with jobs and talents"
+                   FontSize="18"
+                   TextColor="#7B8F8B"
+                   HorizontalTextAlignment="Center" />
+
+            <Frame BackgroundColor="#22FFFFFF"
+                   BorderColor="#99FFFFFF"
+                   CornerRadius="24"
+                   Padding="24"
+                   HasShadow="True"
+                   Margin="0,20,0,10">
+
+                <VerticalStackLayout Spacing="18">
+                    <Label Text="A smarter way to connect candidates and recruiters."
+                           FontSize="18"
+                           TextColor="#7B8F8B"
+                           HorizontalTextAlignment="Center" />
+
+                    <Button Text="Login"
+                            HeightRequest="54"
+                            BackgroundColor="White"
+                            TextColor="#1ABC9C"
+                            FontAttributes="Bold"
+                            CornerRadius="14"
+                            Clicked="Login_Clicked" />
+
+                    <Button Text="Register"
+                            HeightRequest="54"
+                            BackgroundColor="Transparent"
+                            BorderColor="White"
+                            BorderWidth="2"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="14"
+                            Clicked="Register_Clicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

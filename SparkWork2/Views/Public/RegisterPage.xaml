@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Public.RegisterPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#1ABC9C">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFFFF" Offset="0.0" />
+            <GradientStop Color="#D1F2EB" Offset="0.5" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="Center">
+
+        <Label Text="Create your account"
+               FontSize="30"
+               FontAttributes="Bold"
+               TextColor="#0B1F1D"
+               HorizontalTextAlignment="Center" />
+
+        <Label Text="First choose whether you are a candidate or a recruiter."
+               FontSize="16"
+               TextColor="#0B1F1D"
+               HorizontalTextAlignment="Center" />
+
+        <Button Text="Next"
+                HeightRequest="50"
+                BackgroundColor="White"
+                TextColor="#1ABC9C"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                Clicked="Next_Clicked" />
+
+        <Label Text="Already have an account? Login"
+               TextColor="White"
+               HorizontalTextAlignment="Center">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Login_Tapped" />
+            </Label.GestureRecognizers>
+        </Label>
+
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Public.RoleSelectionPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#1ABC9C">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFFFF" Offset="0.0" />
+            <GradientStop Color="#D1F2EB" Offset="0.5" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid Padding="30">
+        <VerticalStackLayout VerticalOptions="Center"
+                             HorizontalOptions="Fill"
+                             Spacing="25">
+
+            <Label Text="Choose your role"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="#0B1F1D"
+                   HorizontalTextAlignment="Center" />
+
+            <Label Text="Select how you want to use SparkWork."
+                   FontSize="16"
+                   TextColor="#0B1F1D"
+                   HorizontalTextAlignment="Center" />
+
+            <Button Text="Candidate"
+                    HeightRequest="55"
+                    BackgroundColor="White"
+                    TextColor="#1ABC9C"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    Clicked="Candidate_Clicked" />
+
+            <Button Text="Recruiter"
+                    HeightRequest="55"
+                    BackgroundColor="Transparent"
+                    BorderColor="White"
+                    BorderWidth="2"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    Clicked="Recruiter_Clicked" />
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Shared.SettingsPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#F9FFFD" Offset="0.0" />
+            <GradientStop Color="#EAFBF5" Offset="0.4" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="22,18,22,30" Spacing="18">
+
+            <!-- Header -->
+            <Grid HeightRequest="110">
+                <Button Text="☰"
+                        FontSize="24"
+                        TextColor="#0B1F1D"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Start"
+                        Clicked="Menu_Clicked" />
+
+                <VerticalStackLayout HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     Spacing="4">
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                        <Label Text="✦"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#1ABC9C" />
+
+                        <Label Text="SparkWork"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#1ABC9C" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="Settings"
+                           FontSize="30"
+                           FontAttributes="Bold"
+                           TextColor="#334343"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Manage your account and preferences"
+                           FontSize="13"
+                           TextColor="#7B8F8F"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- User card -->
+            <Frame BackgroundColor="White"
+                   BorderColor="#DCEDE7"
+                   CornerRadius="24"
+                   Padding="22"
+                   HasShadow="True">
+
+                <VerticalStackLayout Spacing="18">
+
+                    <HorizontalStackLayout Spacing="14">
+                        <Frame WidthRequest="56"
+                               HeightRequest="56"
+                               CornerRadius="28"
+                               Padding="0"
+                               BackgroundColor="#E8FBF4"
+                               BorderColor="#BFEDE2"
+                               HasShadow="False"
+                               VerticalOptions="Center">
+
+                            <Grid>
+                                <Label Text="👤"
+                                       FontSize="24"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+
+                        <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                            <Label Text="Account"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#1ABC9C" />
+
+                            <Label Text="Your current session information"
+                                   FontSize="12"
+                                   TextColor="#7B8F8F" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+
+                        <Frame Grid.Column="0"
+                               BackgroundColor="#F8FCFB"
+                               BorderColor="#E1F1EF"
+                               CornerRadius="18"
+                               Padding="16"
+                               HasShadow="False">
+
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Current User"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#1ABC9C" />
+
+                                <Label x:Name="lblCurrentUser"
+                                       Text="User"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="#0B1F1D" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="1"
+                               BackgroundColor="#F8FCFB"
+                               BorderColor="#E1F1EF"
+                               CornerRadius="18"
+                               Padding="16"
+                               HasShadow="False">
+
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Current Role"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#1ABC9C" />
+
+                                <Label x:Name="lblCurrentRole"
+                                       Text="Role"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="#0B1F1D" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Actions -->
+            <VerticalStackLayout Spacing="14">
+
+                <Button Text="Logout"
+                        HeightRequest="54"
+                        BackgroundColor="White"
+                        TextColor="#1ABC9C"
+                        CornerRadius="18"
+                        FontAttributes="Bold"
+                        Clicked="Logout_Clicked" />
+
+                <Button Text="Delete Account"
+                        HeightRequest="54"
+                        BackgroundColor="#FFF4F4"
+                        TextColor="#D66464"
+                        BorderColor="#F4C7C7"
+                        BorderWidth="1"
+                        CornerRadius="18"
+                        FontAttributes="Bold"
+                        Clicked="DeleteAccount_Clicked" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

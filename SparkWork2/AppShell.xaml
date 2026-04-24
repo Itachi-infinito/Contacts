@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SparkWork2.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:candidate="clr-namespace:SparkWork2.Views.Candidate"
+    xmlns:recruiter="clr-namespace:SparkWork2.Views.Recruiter"
+    xmlns:shared="clr-namespace:SparkWork2.Views.Shared"
+    xmlns:publicViews="clr-namespace:SparkWork2.Views.Public"
+    FlyoutBehavior="Flyout"
+    Shell.FlyoutWidth="280">
+
+    <!-- Partie publique -->
+    
+    <FlyoutItem Title="Welcome"
+                Route="welcomeFlyout"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="WelcomePage"
+            ContentTemplate="{DataTemplate publicViews:WelcomePage}" />
+    </FlyoutItem>
+
+    <!-- CANDIDATE -->
+    <FlyoutItem Title="Discover Jobs"
+                Route="candidateHome"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="CandidateSwipePage"
+            ContentTemplate="{DataTemplate candidate:CandidateSwipePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="My Matches"
+                Route="candidateMatches"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="MatchesPage"
+            ContentTemplate="{DataTemplate candidate:MatchesPage}" />
+    </FlyoutItem>
+
+    <!-- RECRUITER -->
+    <FlyoutItem Title="Discover Candidates"
+                Route="recruiterHome"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="RecruiterSwipePage"
+            ContentTemplate="{DataTemplate recruiter:RecruiterSwipePage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="My Job Offers"
+            Route="recruiterJobOffers"
+            FlyoutItemIsVisible="False">
+        <ShellContent
+        Route="RecruiterJobOffersPage"
+        ContentTemplate="{DataTemplate recruiter:RecruiterJobOffersPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Add Job Offer"
+            Route="addJobOffer"
+            FlyoutItemIsVisible="False">
+        <ShellContent
+        Route="AddJobOfferPage"
+        ContentTemplate="{DataTemplate recruiter:AddJobOfferPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="My Matches"
+                Route="recruiterMatches"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="RecruiterMatchesPage"
+            ContentTemplate="{DataTemplate recruiter:RecruiterMatchesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Likes Received"
+                Route="likesReceived"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="LikesReceivedPage"
+            ContentTemplate="{DataTemplate recruiter:LikesReceivedPage}" />
+    </FlyoutItem>
+
+    <!-- PARTAGÉ -->
+    <FlyoutItem Title="Messages"
+                Route="messages"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="MessagesPage"
+            ContentTemplate="{DataTemplate shared:MessagesPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Profile"
+            Route="candidateProfile"
+            FlyoutItemIsVisible="False">
+        <ShellContent
+        Route="CandidateProfilePage"
+        ContentTemplate="{DataTemplate candidate:CandidateProfilePage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Profile"
+            Route="recruiterProfile"
+            FlyoutItemIsVisible="False">
+        <ShellContent
+        Route="RecruiterProfilePage"
+        ContentTemplate="{DataTemplate recruiter:RecruiterProfilePage}" />
+    </FlyoutItem>
+
+
+    <FlyoutItem Title="Settings"
+                Route="settings"
+                FlyoutItemIsVisible="False">
+        <ShellContent
+            Route="SettingsPage"
+            ContentTemplate="{DataTemplate shared:SettingsPage}" />
+    </FlyoutItem>
+    
+
+</Shell>

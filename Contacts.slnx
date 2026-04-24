@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="Contacts.Maui/Contacts.Maui.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="MauiEmployeeApp/MauiEmployeeApp.csproj" Id="2015dea3-f78a-4d64-a3a0-afc43a4b1afe" />
+  <Project Path="SparkWork/SparkWork.csproj" Id="d5e8cdaf-3971-43ec-85af-8d0a9afd462c" />
+  <Project Path="SparkWork2/SparkWork2.csproj" Id="42e3d6f2-1a6a-4bcf-8b49-e7a0da3fd523">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>

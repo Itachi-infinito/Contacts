@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Public.RegisterCandidatePage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFFFFF" Offset="0.0" />
+            <GradientStop Color="#EAF8F5" Offset="0.45" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <Grid Padding="24,30,24,30">
+            <VerticalStackLayout Spacing="20"
+                                 VerticalOptions="Center">
+
+                <Button Text="← Back"
+                        HorizontalOptions="Start"
+                        BackgroundColor="Transparent"
+                        TextColor="#0B1F1D"
+                        FontAttributes="Bold"
+                        Clicked="OnBackClicked" />
+
+                <Label Text="Candidate Registration"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="#0B1F1D"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Create your profile and start matching with opportunities"
+                       FontSize="15"
+                       TextColor="#4F6663"
+                       HorizontalTextAlignment="Center" />
+
+                <Frame BackgroundColor="#F9FFFD"
+                       BorderColor="#D8EEE8"
+                       CornerRadius="18"
+                       Padding="22"
+                       HasShadow="True">
+
+                    <VerticalStackLayout Spacing="16">
+                        <!-- upload image-->
+                        <VerticalStackLayout Spacing="10"
+                                             HorizontalOptions="Center">
+
+                            <Frame WidthRequest="120"
+                                   HeightRequest="120"
+                                   CornerRadius="60"
+                                   Padding="0"
+                                   BackgroundColor="#F8FCFB"
+                                   BorderColor="#DDEEE8"
+                                   HasShadow="False"
+                                   HorizontalOptions="Center">
+
+                                <Image x:Name="imgCandidatePhoto"
+                                        Source="dotnet_bot.png"
+                                        Aspect="AspectFill" />
+                            </Frame>
+
+                            <Button Text="Choose Photo"
+                                    HeightRequest="46"
+                                    BackgroundColor="White"
+                                    BorderColor="#BFEADF"
+                                    BorderWidth="1.5"
+                                    TextColor="#1ABC9C"
+                                    FontAttributes="Bold"
+                                    CornerRadius="14"
+                                    Clicked="ChoosePhoto_Clicked" />
+                        </VerticalStackLayout>
+
+                        <!-- Full Name -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Full name *"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,8"
+                                   HasShadow="False">
+                                <Entry x:Name="entryFullName"
+                                       Placeholder="Enter your full name"
+                                       PlaceholderColor="#8AA5A0"
+                                       TextColor="#0B1F1D"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Email -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Email *"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,8"
+                                   HasShadow="False">
+                                <Entry x:Name="entryEmail"
+                                       Placeholder="Enter your email"
+                                       PlaceholderColor="#8AA5A0"
+                                       Keyboard="Email"
+                                       TextColor="#0B1F1D"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Password -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Password *"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,8"
+                                   HasShadow="False">
+                                <Entry x:Name="entryPassword"
+                                       Placeholder="Enter your password"
+                                       PlaceholderColor="#8AA5A0"
+                                       IsPassword="True"
+                                       TextColor="#0B1F1D"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Confirm Password -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Confirm password *"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,8"
+                                   HasShadow="False">
+                                <Entry x:Name="entryConfirmPassword"
+                                       Placeholder="Confirm your password"
+                                       PlaceholderColor="#8AA5A0"
+                                       IsPassword="True"
+                                       TextColor="#0B1F1D"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Title -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Title"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,8"
+                                   HasShadow="False">
+                                <Entry x:Name="entryTitle"
+                                       Placeholder="Ex: Junior Developer"
+                                       PlaceholderColor="#8AA5A0"
+                                       TextColor="#0B1F1D"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Location -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Location"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,8"
+                                   HasShadow="False">
+                                <Entry x:Name="entryLocation"
+                                       Placeholder="Ex: Brussels"
+                                       PlaceholderColor="#8AA5A0"
+                                       TextColor="#0B1F1D"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- About -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="About"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#D5E8E3"
+                                   CornerRadius="12"
+                                   Padding="14,10"
+                                   HasShadow="False">
+                                <Editor x:Name="editorAbout"
+                                        Placeholder="Tell recruiters a bit about yourself"
+                                        PlaceholderColor="#8AA5A0"
+                                        TextColor="#0B1F1D"
+                                        BackgroundColor="Transparent"
+                                        AutoSize="TextChanges"
+                                        HeightRequest="110" />
+                            </Frame>
+                        </VerticalStackLayout>
+                        
+
+                        <Label Text="* Required fields"
+                               FontSize="13"
+                               TextColor="#5F7A75" />
+
+                        <Button Text="Create Account"
+                                HeightRequest="56"
+                                BackgroundColor="#1ABC9C"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="14"
+                                Clicked="CreateAccount_Clicked" />
+
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

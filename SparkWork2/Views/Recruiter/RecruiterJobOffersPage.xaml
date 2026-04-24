@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Recruiter.RecruiterJobOffersPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#F9FFFD" Offset="0.0" />
+            <GradientStop Color="#EAF8F5" Offset="0.40" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*"
+          Padding="20,26,20,18">
+
+        <!-- HEADER -->
+        <!-- HEADER -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="56,*,56"
+              VerticalOptions="Center"
+              Margin="0,0,0,18">
+
+            <Button Grid.Column="0"
+                    Text="☰"
+                    FontSize="22"
+                    BackgroundColor="Transparent"
+                    TextColor="#0B1F1D"
+                    Clicked="Menu_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="40" />
+
+            <VerticalStackLayout Grid.Column="1"
+                                 Spacing="4"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+
+                <HorizontalStackLayout HorizontalOptions="Center"
+                               Spacing="6">
+                    <Label Text="✦"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#1ABC9C"
+                           VerticalOptions="Center" />
+
+                    <Label Text="SparkWork"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#1ABC9C"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <Label Text="My Job Offers"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        TextColor="#0B1F1D"
+                        HorizontalTextAlignment="Center" />
+
+                <Label Text="Manage and update your published opportunities"
+                       FontSize="14"
+                       TextColor="#5F7A75"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <Label Grid.Column="2" />
+        </Grid>
+
+        <!-- LIST -->
+        <CollectionView Grid.Row="1"
+                        x:Name="jobOffersCollection"
+                        SelectionMode="None">
+
+            <CollectionView.EmptyView>
+                <Frame BackgroundColor="#FFFFFF"
+                       BorderColor="#DCEDE7"
+                       CornerRadius="22"
+                       Padding="24"
+                       HasShadow="True"
+                       Margin="0,8,0,0">
+
+                    <VerticalStackLayout Spacing="12"
+                                         HorizontalOptions="Center">
+
+                        <Label Text="You're all set ✨"
+                               FontSize="26"
+                               FontAttributes="Bold"
+                               TextColor="#0B1F1D"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Text="No job offers yet."
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#1ABC9C"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Text="Create your first offer to start discovering candidates."
+                               FontSize="14"
+                               TextColor="#5F7A75"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Reveal">
+                                <SwipeItemView>
+                                    <Grid WidthRequest="180"
+                                          Margin="0,0,12,16"
+                                          ColumnDefinitions="*,*"
+                                          HorizontalOptions="End"
+                                          VerticalOptions="Center">
+
+                                        <!-- BULLE EDIT -->
+                                        <Frame Grid.Column="0"
+                                               WidthRequest="70"
+                                               HeightRequest="70"
+                                               CornerRadius="35"
+                                               BackgroundColor="#2BBFA3"
+                                               Padding="0"
+                                               HasShadow="False"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               BindingContext="{Binding .}"
+                                               Scale="0.96"
+                                               Loaded="SwipeBubble_Loaded">
+
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="EditBubble_Tapped" />
+                                            </Frame.GestureRecognizers>
+
+                                            <Grid>
+                                                <Image Source="edit.png"
+                                                       WidthRequest="60"
+                                                       HeightRequest="60"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       Aspect="AspectFit" />
+                                            </Grid>
+                                        </Frame>
+
+                                        <!-- BULLE DELETE -->
+                                        <Frame Grid.Column="1"
+                                               WidthRequest="70"
+                                               HeightRequest="70"
+                                               CornerRadius="35"
+                                               BackgroundColor="#EB4D47"
+                                               Padding="0"
+                                               HasShadow="False"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               BindingContext="{Binding .}"
+                                               Scale="0.96"
+                                               Loaded="SwipeBubble_Loaded">
+
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="DeleteBubble_Tapped" />
+                                            </Frame.GestureRecognizers>
+
+                                            <Grid>
+                                                <Image Source="trash.png"
+                                                       WidthRequest="60"
+                                                       HeightRequest="60"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       Aspect="AspectFit" />
+                                            </Grid>
+                                        </Frame>
+
+                                    </Grid>
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <!-- TA CARTE ACTUELLE -->
+                        <Frame BackgroundColor="White"
+                               BorderColor="#DCEDE7"
+                               CornerRadius="22"
+                               Padding="18"
+                               Margin="0,0,0,16"
+                               HasShadow="True"
+                               Loaded="JobOfferCard_Loaded"
+                               Opacity="0"
+                               TranslationY="16"
+                               Scale="0.985">
+
+                            <VerticalStackLayout Spacing="14">
+
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="{Binding Title}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#0B1F1D" />
+
+                                    <Label Text="{Binding CompanyName}"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="#1ABC9C" />
+
+                                    <Label Text="{Binding Location}"
+                               FontSize="14"
+                               TextColor="#6A7A7A" />
+
+                                    <Frame BackgroundColor="#F2FBF8"
+                               BorderColor="#D0EEE8"
+                               CornerRadius="10"
+                               Padding="10,5"
+                               HasShadow="False"
+                               HorizontalOptions="Start"
+                               Margin="0,10,0,0">
+                                        <Label Text="{Binding ContractType}"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#4E6663" />
+                                    </Frame>
+                                </VerticalStackLayout>
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Shared.MessagesPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#F0FFFD" Offset="0.0" />
+            <GradientStop Color="#EAFBF5" Offset="0.4" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0"
+              Padding="18,18,18,14"
+              HeightRequest="110">
+
+            <Button Text="☰"
+                    FontSize="24"
+                    TextColor="#0B1F1D"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    Clicked="Menu_Clicked" />
+
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="4">
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                    <Label Text="✦"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#1ABC9C" />
+
+                    <Label Text="SparkWork"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#1ABC9C" />
+                </HorizontalStackLayout>
+
+                <Label Text="Messages"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#334343"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Continue your conversations"
+                       FontSize="13"
+                       TextColor="#6A7A7A"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- CONTENT -->
+        <Grid Grid.Row="1" Padding="18,14,18,18">
+            <CollectionView x:Name="messagesCollection"
+                            SelectionMode="None">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="14" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.EmptyView>
+                    <Frame BackgroundColor="White"
+                           BorderColor="#DCEDE7"
+                           CornerRadius="22"
+                           Padding="24"
+                           HasShadow="True"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           WidthRequest="320">
+
+                        <VerticalStackLayout Spacing="10"
+                                             HorizontalOptions="Center">
+                            <Label Text="💬"
+                                   FontSize="40"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Label Text="No conversations yet"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Label Text="When you start chatting, your conversations will appear here."
+                                   FontSize="13"
+                                   TextColor="#6A7A7A"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItemView>
+                                        <Grid WidthRequest="180"
+                                              Margin="0,0,12,16"
+                                              ColumnDefinitions="*,*"
+                                              HorizontalOptions="End"
+                                              VerticalOptions="Center">
+
+                                            <!-- BULLE CONVERSATION -->
+                                            <Frame Grid.Column="0"
+                                                   WidthRequest="70"
+                                                   HeightRequest="70"
+                                                   CornerRadius="35"
+                                                   BackgroundColor="#2BBFA3"
+                                                   Padding="0"
+                                                   HasShadow="False"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   BindingContext="{Binding .}"
+                                                   Scale="0.96"
+                                                   Loaded="SwipeBubble_Loaded">
+
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="ConversationBubble_Tapped" />
+                                                </Frame.GestureRecognizers>
+
+                                                <Grid>
+                                                    <Image Source="conversation.png"
+                                                           WidthRequest="60"
+                                                           HeightRequest="60"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"
+                                                           Aspect="AspectFit" />
+                                                </Grid>
+                                            </Frame>
+
+                                            <!-- BULLE DELETE -->
+                                            <Frame Grid.Column="1"
+                                                   WidthRequest="70"
+                                                   HeightRequest="70"
+                                                   CornerRadius="35"
+                                                   BackgroundColor="#EB4D47"
+                                                   Padding="0"
+                                                   HasShadow="False"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   BindingContext="{Binding .}"
+                                                   Scale="0.96"
+                                                   Loaded="SwipeBubble_Loaded">
+
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="DeleteBubble_Tapped" />
+                                                </Frame.GestureRecognizers>
+
+                                                <Grid>
+                                                    <Image Source="trash.png"
+                                                           WidthRequest="60"
+                                                           HeightRequest="60"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"
+                                                           Aspect="AspectFit" />
+                                                </Grid>
+                                            </Frame>
+
+                                        </Grid>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#DCEDE7"
+                                   CornerRadius="20"
+                                   Padding="15"
+                                   Margin="0,0,0,16"
+                                   HasShadow="True"
+                                   Loaded="MessageCard_Loaded"
+                                   Opacity="0"
+                                   TranslationY="16"
+                                   Scale="0.985">
+
+                                <VerticalStackLayout Spacing="12">
+
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          RowDefinitions="Auto,Auto">
+
+                                        <!-- Avatar -->
+                                        <Frame Grid.RowSpan="2"
+                                               WidthRequest="46"
+                                               HeightRequest="46"
+                                               CornerRadius="23"
+                                               Padding="0"
+                                               BackgroundColor="#F2FBF8"
+                                               BorderColor="#BFEDE2"
+                                               HasShadow="False"
+                                               VerticalOptions="Start">
+
+                                            <Image Source="dotnet_bot.png"
+                                   Aspect="AspectFill" />
+                                        </Frame>
+
+                                        <!-- Texte -->
+                                        <VerticalStackLayout Grid.Column="1"
+                                             Grid.Row="0"
+                                             Margin="10,0,0,0"
+                                             Spacing="2">
+
+                                            <Label Text="{Binding ParticipantName}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1ABC9C" />
+
+                                            <Label Text="{Binding LastMessage}"
+                                   FontSize="14"
+                                   TextColor="#5F5F5F"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+                                        </VerticalStackLayout>
+
+                                        <!-- Date -->
+                                        <Label Grid.Column="2"
+                               Grid.Row="0"
+                               Margin="8,0,0,0"
+                               Text="{Binding LastMessageDate, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                               FontSize="11"
+                               TextColor="#9AA7A7"
+                               VerticalOptions="Start"
+                               HorizontalTextAlignment="End" />
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1"
+                             Color="#EAEAEA"
+                             Margin="0,4,0,0" />
+
+                                    
+                                </VerticalStackLayout>
+
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Message_Tapped"
+                                          CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentPage>

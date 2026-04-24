@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Shared.SuccessPopup"
+             BackgroundColor="#80000000"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid VerticalOptions="End">
+
+        <Frame BackgroundColor="White"
+               CornerRadius="28"
+               Padding="24"
+               HasShadow="True"
+               Margin="0,0,0,0">
+
+            <VerticalStackLayout Spacing="18">
+
+                <Label Text="Success"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#0B1F1D" />
+
+                <Label x:Name="lblMessage"
+                       FontSize="14"
+                       TextColor="#5F7A75" />
+
+                <Button Text="OK"
+                        HeightRequest="50"
+                        BackgroundColor="#1ABC9C"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="14"
+                        Clicked="OnOk" />
+
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>

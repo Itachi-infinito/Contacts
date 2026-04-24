@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SparkWork2.Views.Public.LoginPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#1ABC9C">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFFFF" Offset="0.0" />
+            <GradientStop Color="#D1F2EB" Offset="0.5" />
+            <GradientStop Color="#1ABC9C" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid Padding="30">
+        <VerticalStackLayout VerticalOptions="Center"
+                             HorizontalOptions="Fill"
+                             Spacing="20">
+            <HorizontalStackLayout HorizontalOptions="Center"
+                       Spacing="6">
+
+                <Label Text="✦"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#1ABC9C"
+                       VerticalOptions="Center" />
+
+                <Label Text="SparkWork"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#1ABC9C"
+                       VerticalOptions="Center" />
+
+            </HorizontalStackLayout>
+
+            <Label Text="Login"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="#0B1F1D"
+                   HorizontalTextAlignment="Center" />
+
+            <Entry x:Name="entryEmail"
+                   Placeholder="Email"
+                   PlaceholderColor="#34495E"
+                   TextColor="#34495E"
+                   BackgroundColor="Transparent" />
+
+            <Entry x:Name="entryPassword"
+                   Placeholder="Password"
+                   PlaceholderColor="#34495E"
+                   TextColor="#34495E"
+                   IsPassword="True"
+                   BackgroundColor="Transparent" />
+
+            <Button Text="Login"
+                    HeightRequest="50"
+                    BackgroundColor="White"
+                    TextColor="#1ABC9C"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    Clicked="Login_Clicked"/>
+
+            <Label Text="Forgot password?"
+                   FontSize="14"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+
+            <Label HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Don't have an account? "
+                  TextColor="White" />
+                        <Span Text="Sign up"
+                  TextColor="White"
+                  FontAttributes="Bold" />
+                    </FormattedString>
+                </Label.FormattedText>
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SignUp_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>
