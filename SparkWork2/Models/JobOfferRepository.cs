@@ -24,7 +24,7 @@ public class JobOfferRepository
         {
             new JobOffer
             {
-                RecruiterId = 0,
+                RecruiterUserId = 0,
                 Title = "Frontend Developer",
                 CompanyName = "TechCorp",
                 Location = "Brussels",
@@ -33,7 +33,7 @@ public class JobOfferRepository
             },
             new JobOffer
             {
-                RecruiterId = 0,
+                RecruiterUserId = 0,
                 Title = "Marketing Intern",
                 CompanyName = "Startup Vision",
                 Location = "Liège",
@@ -42,7 +42,7 @@ public class JobOfferRepository
             },
             new JobOffer
             {
-                RecruiterId = 0,
+                RecruiterUserId = 0,
                 Title = "Backend Developer",
                 CompanyName = "DigitalWorks",
                 Location = "Namur",
@@ -65,7 +65,7 @@ public class JobOfferRepository
         var db = await _databaseService.GetConnectionAsync();
 
         return await db.Table<JobOffer>()
-            .Where(x => x.RecruiterId == recruiterUserId)
+            .Where(x => x.RecruiterUserId == recruiterUserId)
             .ToListAsync();
     }
 

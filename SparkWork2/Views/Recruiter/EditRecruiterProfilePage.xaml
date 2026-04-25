@@ -189,23 +189,49 @@
                         <!-- Description -->
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Description *"
-                       FontSize="14"
-                       FontAttributes="Bold"
-                       TextColor="#0B1F1D" />
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#0B1F1D" />
 
                             <Frame BackgroundColor="#F9FFFD"
-                       BorderColor="#DCEDE7"
-                       CornerRadius="14"
-                       Padding="14,10"
-                       HasShadow="False">
+                                    BorderColor="#DCEDE7"
+                                    CornerRadius="14"
+                                    Padding="14,10"
+                                    HasShadow="False">
                                 <Editor x:Name="editorDescription"
-                            Placeholder="Describe your company"
-                            PlaceholderColor="#9AA9A7"
-                            TextColor="#0B1F1D"
-                            BackgroundColor="Transparent"
-                            AutoSize="TextChanges"
-                            HeightRequest="120" />
+                                        Placeholder="Describe your company"
+                                        PlaceholderColor="#9AA9A7"
+                                        TextColor="#0B1F1D"
+                                        BackgroundColor="Transparent"
+                                        AutoSize="TextChanges"
+                                        HeightRequest="120" />
                             </Frame>
+                        <!-- Buttons -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,10,0,0">
+
+                            <Button
+                                Grid.Column="0"
+                                Text="Cancel"
+                                HeightRequest="54"
+                                BackgroundColor="White"
+                                TextColor="#1ABC9C"
+                                BorderColor="#1ABC9C"
+                                BorderWidth="1.5"
+                                CornerRadius="16"
+                                FontAttributes="Bold"
+                                Clicked="Cancel_Clicked" />
+
+                            <Button
+                                Grid.Column="1"
+                                Text="Save"
+                                HeightRequest="54"
+                                BackgroundColor="#1ABC9C"
+                                TextColor="White"
+                                CornerRadius="16"
+                                FontAttributes="Bold"
+                                Clicked="Update_Clicked" />
+
+                            </Grid>
                         </VerticalStackLayout>
 
                     </VerticalStackLayout>

@@ -252,7 +252,7 @@ public partial class CandidateSwipePage : ContentPage
 
         bool recruiterLikedCandidate =
             await _recruiterCandidateLikeRepository.HasRecruiterLikedCandidateAsync(
-                likedOffer.RecruiterId,
+                likedOffer.RecruiterUserId,
                 _sessionService.CurrentUserId);
 
         _jobOffers.RemoveAt(_currentIndex);
@@ -263,13 +263,13 @@ public partial class CandidateSwipePage : ContentPage
             await _matchRepository.AddMatchAsync(
                 _sessionService.CurrentUserId,
                 _sessionService.CurrentUserName,
-                likedOffer.RecruiterId,
+                likedOffer.RecruiterUserId,
                 likedOffer,
                 true);
 
             await Shell.Current.GoToAsync(
                 $"{nameof(MatchPage)}" +
-                $"?participantId={likedOffer.RecruiterId}" +
+                $"?participantId={likedOffer.RecruiterUserId}" +
                 $"&participantName={Uri.EscapeDataString(likedOffer.CompanyName)}");
         }
     }

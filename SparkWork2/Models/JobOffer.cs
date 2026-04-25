@@ -1,7 +1,5 @@
 ﻿using SQLite;
 
-namespace SparkWork2.Models;
-
 public class JobOffer
 {
     [PrimaryKey, AutoIncrement]
@@ -14,6 +12,4 @@ public class JobOffer
     public string Location { get; set; } = string.Empty;
     public string ContractType { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-
-    public int RecruiterId { get; set; }
 }

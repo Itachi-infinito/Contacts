@@ -15,6 +15,7 @@ public partial class SettingsPage : ContentPage
         AccountCleanupRepository accountCleanupRepository)
     {
         InitializeComponent();
+
         _sessionService = sessionService;
         _accountCleanupRepository = accountCleanupRepository;
     }
@@ -32,10 +33,14 @@ public partial class SettingsPage : ContentPage
         Shell.Current.FlyoutIsPresented = true;
     }
 
-    private void Logout_Clicked(object sender, EventArgs e)
+    private async void Logout_Clicked(object sender, EventArgs e)
     {
         _sessionService.ClearSession();
-        Application.Current.MainPage = new NavigationPage(new WelcomePage());
+
+        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
+        Application.Current.MainPage = appShell;
+
+        await appShell.GoToAsync($"//{nameof(WelcomePage)}");
     }
 
     private async void DeleteAccount_Clicked(object sender, EventArgs e)
@@ -44,6 +49,7 @@ public partial class SettingsPage : ContentPage
         await Navigation.PushModalAsync(popup);
 
         bool confirmed = await popup.CompletionSource.Task;
+
         if (!confirmed)
             return;
 
@@ -54,9 +60,9 @@ public partial class SettingsPage : ContentPage
 
         _sessionService.ClearSession();
 
-        await MainThread.InvokeOnMainThreadAsync(() =>
-        {
-            Application.Current.MainPage = new NavigationPage(new WelcomePage());
-        });
+        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
+        Application.Current.MainPage = appShell;
+
+        await appShell.GoToAsync($"//{nameof(WelcomePage)}");
     }
 }

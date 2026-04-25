@@ -45,7 +45,7 @@ public partial class ConversationDetailPage : ContentPage
         }
     }
 
-    private async void LoadConversation()
+    private async Task LoadConversation()
     {
         if (participantUserId <= 0 || !_sessionService.IsLoggedIn)
             return;
@@ -53,6 +53,11 @@ public partial class ConversationDetailPage : ContentPage
         var messages = await _messageRepository.GetConversationAsync(
             _sessionService.CurrentUserId,
             participantUserId);
+
+        foreach (var message in messages)
+        {
+            message.IsMine = message.SenderUserId == _sessionService.CurrentUserId;
+        }
 
         conversationCollection.ItemsSource = null;
         conversationCollection.ItemsSource = messages;
