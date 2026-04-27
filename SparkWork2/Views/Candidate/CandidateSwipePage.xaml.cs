@@ -73,27 +73,28 @@ public partial class CandidateSwipePage : ContentPage
         {
             _currentJobOffer = null;
 
-            lblTitle.Text = "You're all caught up ✨";
-            lblCompany.Text = "";
-            lblLocation.Text = "";
-            lblContractType.Text = "";
-            lblDescription.Text = "";
-            lblDetailCompany.Text = "";
-            lblDetailLocation.Text = "";
-            lblDetailContractType.Text = "";
             lblEmptyMessage.Text = "No more opportunities right now.";
-            imgJob.Source = "dotnet_bot.png";
+
+            jobCard.IsVisible = false;
+            emptyStateSection.IsVisible = true;
+            lblSwipeHint.IsVisible = false;
+            actionsGrid.IsVisible = false;
 
             contractTypeBadge.IsVisible = false;
             btnImageExpandCollapse.IsVisible = false;
             btnHeaderExpandCollapse.IsVisible = false;
             descriptionSection.IsVisible = false;
             expandedDetailsSection.IsVisible = false;
-            emptyStateSection.IsVisible = true;
+
             return;
         }
 
         _currentJobOffer = _jobOffers[_currentIndex];
+
+        jobCard.IsVisible = true;
+        emptyStateSection.IsVisible = false;
+        lblSwipeHint.IsVisible = true;
+        actionsGrid.IsVisible = true;
 
         lblTitle.Text = _currentJobOffer.Title;
         lblCompany.Text = _currentJobOffer.CompanyName;
@@ -101,19 +102,22 @@ public partial class CandidateSwipePage : ContentPage
         lblContractType.Text = _currentJobOffer.ContractType;
         lblDescription.Text = _currentJobOffer.Description;
 
-        lblDetailCompany.Text = _currentJobOffer.CompanyName;
-        lblDetailLocation.Text = _currentJobOffer.Location;
-        lblDetailContractType.Text = _currentJobOffer.ContractType;
+        lblDetailCompany.Text = $"Entreprise : {_currentJobOffer.CompanyName}";
+        lblDetailLocation.Text = $"Lieu : {_currentJobOffer.Location}";
+        lblDetailContractType.Text = $"Contrat : {_currentJobOffer.ContractType}";
 
-        imgJob.Source = "dotnet_bot.png";
+        imgJob.Source = null;
+        imgJob.IsVisible = false;
+        imgJob.Opacity = 0;
+
 
         contractTypeBadge.IsVisible = !string.IsNullOrWhiteSpace(_currentJobOffer.ContractType);
         btnImageExpandCollapse.IsVisible = true;
         btnHeaderExpandCollapse.IsVisible = false;
         descriptionSection.IsVisible = true;
         expandedDetailsSection.IsVisible = false;
-        emptyStateSection.IsVisible = false;
     }
+
 
     private void ResetCardVisuals()
     {
@@ -312,4 +316,24 @@ public partial class CandidateSwipePage : ContentPage
     {
         Shell.Current.FlyoutIsPresented = true;
     }
+    private async void Discover_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+    }
+
+    private async void Messages_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
+    }
+
+    private async void Stats_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MatchesPage)}");
+    }
+
+    private async void Profile_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
+    }
+
 }

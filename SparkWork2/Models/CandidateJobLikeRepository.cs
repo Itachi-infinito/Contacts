@@ -125,4 +125,30 @@ public class CandidateJobLikeRepository
             await db.DeleteAsync(like);
         }
     }
+    public async Task<JobOffer?> GetFirstLikedOfferOfRecruiterAsync(int candidateUserId, int recruiterUserId)
+    {
+        var recruiterOffers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(recruiterUserId);
+
+        if (!recruiterOffers.Any())
+            return null;
+
+        var recruiterOfferIds = recruiterOffers
+            .Select(x => x.JobOfferId)
+            .ToList();
+
+        var db = await _databaseService.GetConnectionAsync();
+
+        var candidateLikes = await db.Table<CandidateJobLike>()
+            .Where(x => x.CandidateUserId == candidateUserId)
+            .ToListAsync();
+
+        var matchingLike = candidateLikes
+            .FirstOrDefault(x => recruiterOfferIds.Contains(x.JobOfferId));
+
+        if (matchingLike == null)
+            return null;
+
+        return recruiterOffers.FirstOrDefault(x => x.JobOfferId == matchingLike.JobOfferId);
+    }
+
 }

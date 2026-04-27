@@ -1,4 +1,6 @@
-﻿using SQLite;
+﻿namespace SparkWork2.Models;
+
+using SQLite;
 
 public class JobOffer
 {

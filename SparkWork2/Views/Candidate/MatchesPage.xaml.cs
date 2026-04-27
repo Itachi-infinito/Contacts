@@ -12,9 +12,9 @@ public partial class MatchesPage : ContentPage
     private readonly SessionService _sessionService;
 
     public MatchesPage(
-    MatchRepository matchRepository,
-    JobOfferRepository jobOfferRepository,
-    SessionService sessionService)
+        MatchRepository matchRepository,
+        JobOfferRepository jobOfferRepository,
+        SessionService sessionService)
     {
         InitializeComponent();
 
@@ -31,10 +31,13 @@ public partial class MatchesPage : ContentPage
 
     private async Task LoadMatches()
     {
+        if (!_sessionService.IsLoggedIn)
+            return;
+
         int candidateUserId = _sessionService.CurrentUserId;
 
         var matches = await _matchRepository.GetMatchesAsync(candidateUserId);
-        var visibleMatches = new List<Match>();
+        var visibleMatches = new List<CandidateMatchDashboardItem>();
 
         foreach (var match in matches)
         {
@@ -42,34 +45,73 @@ public partial class MatchesPage : ContentPage
             if (offer == null)
                 continue;
 
-            visibleMatches.Add(new Match
+            visibleMatches.Add(new CandidateMatchDashboardItem
             {
                 MatchId = match.MatchId,
-                UserId = match.UserId,
-                CandidateUserId = match.CandidateUserId,
-                CandidateName = match.CandidateName,
-                RecruiterUserId = match.RecruiterUserId,
                 JobOfferId = match.JobOfferId,
-                JobTitle = offer.Title,
+                RecruiterUserId = match.RecruiterUserId,
                 CompanyName = offer.CompanyName,
-                ShowToCandidate = match.ShowToCandidate,
-                ShowToRecruiter = match.ShowToRecruiter
+                JobTitle = offer.Title,
+                Initials = BuildInitials(offer.CompanyName)
             });
         }
 
         matchesCollection.ItemsSource = null;
         matchesCollection.ItemsSource = visibleMatches;
 
-        noMatchesLabel.IsVisible = visibleMatches.Count == 0;
+        lblMatchesCount.Text = visibleMatches.Count.ToString();
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "?";
+
+        var parts = value.Trim()
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0].Length >= 2
+                ? parts[0][..2].ToUpperInvariant()
+                : parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[1][0]}".ToUpperInvariant();
     }
 
     private async void Match_Tapped(object sender, TappedEventArgs e)
     {
-        if (e.Parameter is Match selectedMatch)
+        if (e.Parameter is CandidateMatchDashboardItem selectedMatch)
         {
             await Shell.Current.GoToAsync(
                 $"{nameof(JobOfferDetailPage)}?id={selectedMatch.JobOfferId}");
         }
+    }
+
+    private async void Contact_Clicked(object sender, EventArgs e)
+    {
+        if (sender is not Button button ||
+            button.CommandParameter is not CandidateMatchDashboardItem match)
+            return;
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(ConversationDetailPage)}" +
+            $"?participantId={match.RecruiterUserId}" +
+            $"&participantName={Uri.EscapeDataString(match.CompanyName)}");
+    }
+
+    private async void Discover_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+    }
+
+    private async void Messages_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
+    }
+
+    private async void Profile_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
     }
 
     private void Menu_Clicked(object sender, EventArgs e)
@@ -77,36 +119,9 @@ public partial class MatchesPage : ContentPage
         Shell.Current.FlyoutIsPresented = true;
     }
 
-    private async void OnViewDetailsClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.CommandParameter is Match match)
-        {
-            await Shell.Current.GoToAsync(
-                $"{nameof(JobOfferDetailPage)}?id={match.JobOfferId}");
-        }
-    }
-
-    private async void DeleteBubble_Tapped(object sender, TappedEventArgs e)
-    {
-        if (sender is not Frame frame || frame.BindingContext is not Match match)
-            return;
-
-        await BubbleTapAnimation(frame);
-
-        var popup = new DeleteConfirmationPopup("Remove this match?");
-        await Navigation.PushModalAsync(popup);
-
-        bool confirmed = await popup.CompletionSource.Task;
-        if (!confirmed)
-            return;
-
-        await _matchRepository.RemoveMatchAsync(match.MatchId);
-        await LoadMatches();
-    }
-
     private async void SwipeBubble_Loaded(object sender, EventArgs e)
     {
-        if (sender is not Frame bubble)
+        if (sender is not VisualElement bubble)
             return;
 
         if (Math.Abs(bubble.Scale - 1) < 0.01)
@@ -117,7 +132,7 @@ public partial class MatchesPage : ContentPage
 
     private async void MatchCard_Loaded(object sender, EventArgs e)
     {
-        if (sender is not Frame card)
+        if (sender is not VisualElement card)
             return;
 
         if (card.Opacity >= 0.99 &&
@@ -131,10 +146,14 @@ public partial class MatchesPage : ContentPage
             card.ScaleTo(1, 260, Easing.SpringOut)
         );
     }
+}
 
-    private async Task BubbleTapAnimation(Frame bubble)
-    {
-        await bubble.ScaleTo(0.88, 70, Easing.CubicIn);
-        await bubble.ScaleTo(1.0, 140, Easing.SpringOut);
-    }
+public class CandidateMatchDashboardItem
+{
+    public int MatchId { get; set; }
+    public int JobOfferId { get; set; }
+    public int RecruiterUserId { get; set; }
+    public string CompanyName { get; set; } = string.Empty;
+    public string JobTitle { get; set; } = string.Empty;
+    public string Initials { get; set; } = "?";
 }

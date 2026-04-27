@@ -89,6 +89,7 @@ public partial class ConversationDetailPage : ContentPage
 
         editorNewMessage.Text = string.Empty;
         LoadConversation();
+
     }
 
     private async void Back_Tapped(object sender, TappedEventArgs e)

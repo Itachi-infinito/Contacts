@@ -1,6 +1,8 @@
 using SparkWork2.Models;
 using SparkWork2.Repositories;
 using SparkWork2.Services;
+using SparkWork2.Views.Shared;
+
 
 namespace SparkWork2.Views.Candidate;
 
@@ -10,20 +12,28 @@ public partial class JobOfferDetailPage : ContentPage
     private readonly CandidateJobLikeRepository _candidateJobLikeRepository;
     private readonly JobOfferRepository _jobOfferRepository;
     private readonly SessionService _sessionService;
+    private readonly RecruiterCandidateLikeRepository _recruiterCandidateLikeRepository;
+    private readonly MatchRepository _matchRepository;
+
 
     private JobOffer? _currentJobOffer;
 
     public JobOfferDetailPage(
-        JobOfferRepository jobOfferRepository,
-        CandidateJobLikeRepository candidateJobLikeRepository,
-        SessionService sessionService)
+    JobOfferRepository jobOfferRepository,
+    CandidateJobLikeRepository candidateJobLikeRepository,
+    RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
+    MatchRepository matchRepository,
+    SessionService sessionService)
     {
         InitializeComponent();
 
         _jobOfferRepository = jobOfferRepository;
         _candidateJobLikeRepository = candidateJobLikeRepository;
+        _recruiterCandidateLikeRepository = recruiterCandidateLikeRepository;
+        _matchRepository = matchRepository;
         _sessionService = sessionService;
     }
+
 
     public string JobOfferId
     {
@@ -61,16 +71,39 @@ public partial class JobOfferDetailPage : ContentPage
             _sessionService.CurrentUserId,
             _currentJobOffer.JobOfferId);
 
-        if (added)
-        {
-            await UpdateLikeButton();
-            await DisplayAlert("Like sent", "Your interest has been sent to the recruiter.", "OK");
-        }
-        else
+        if (!added)
         {
             await DisplayAlert("Info", "You already liked this offer.", "OK");
+            return;
         }
+
+        await UpdateLikeButton();
+
+        bool recruiterLikedCandidate =
+            await _recruiterCandidateLikeRepository.HasRecruiterLikedCandidateAsync(
+                _currentJobOffer.RecruiterUserId,
+                _sessionService.CurrentUserId);
+
+        if (recruiterLikedCandidate)
+        {
+            await _matchRepository.AddMatchAsync(
+                _sessionService.CurrentUserId,
+                _sessionService.CurrentUserName,
+                _currentJobOffer.RecruiterUserId,
+                _currentJobOffer,
+                true);
+
+            await Shell.Current.GoToAsync(
+                $"{nameof(MatchPage)}" +
+                $"?participantId={_currentJobOffer.RecruiterUserId}" +
+                $"&participantName={Uri.EscapeDataString(_currentJobOffer.CompanyName)}");
+
+            return;
+        }
+
+        await DisplayAlert("Like sent", "Your interest has been sent to the recruiter.", "OK");
     }
+
 
     private async Task UpdateLikeButton()
     {

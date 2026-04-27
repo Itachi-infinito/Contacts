@@ -27,6 +27,14 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <Color x:Key="PrimaryPurple">#7C4DFF</Color>
+    <Color x:Key="PrimaryPink">#E85D8F</Color>
+    <Color x:Key="PrimaryGreen">#5BCDA4</Color>
+    <Color x:Key="BackgroundSoft">#F7F5FC</Color>
+    <Color x:Key="TextDark">#07142D</Color>
+    <Color x:Key="TextMuted">#8581A6</Color>
+    <Color x:Key="CardWhite">#FFFFFF</Color>
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>

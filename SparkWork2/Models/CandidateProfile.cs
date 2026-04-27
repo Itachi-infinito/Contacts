@@ -11,10 +11,10 @@ public class CandidateProfile
     [PrimaryKey]
     public int CandidateId { get; set; }
 
-    public string FullName { get; set; }
-    public string Title { get; set; }
-    public string Location { get; set; }
-    public string About { get; set; }
-    public string Email { get; set; }
+    public string FullName { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string About { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
     public string? PhotoPath { get; set; }
 }

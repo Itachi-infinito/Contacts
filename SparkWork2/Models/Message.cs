@@ -10,10 +10,10 @@ public class Message
     public int SenderUserId { get; set; }
     public int ReceiverUserId { get; set; }
 
-    public string SenderName { get; set; }
-    public string ReceiverName { get; set; }
+    public string SenderName { get; set; } = string.Empty;
+    public string ReceiverName { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
 
-    public string Content { get; set; }
     public DateTime SentAt { get; set; }
 
     [Ignore]

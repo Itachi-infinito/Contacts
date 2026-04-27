@@ -2,131 +2,152 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Shared.ConversationDetailPage"
+             Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="White">
+             BackgroundColor="#F7F5FC">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#F9FFFD" Offset="0.0" />
-            <GradientStop Color="#EAF8F5" Offset="0.40" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
-
-    <Grid RowDefinitions="Auto,*,Auto"
-          Padding="20,26,20,14">
+    <Grid RowDefinitions="Auto,*,Auto">
 
         <!-- HEADER -->
-        <Grid Grid.Row="0" HeightRequest="60">
+        <Grid Grid.Row="0"
+              BackgroundColor="White"
+              Padding="22,26,22,16"
+              ColumnDefinitions="Auto,*,Auto">
 
-            <!-- Bouton back (gauche absolu) -->
-            <Label Text="←"
-           FontSize="16"
-           FontAttributes="Bold"
-           TextColor="#0B1F1D"
-           VerticalOptions="Center"
-           HorizontalOptions="Start"
-           Margin="10,0,0,0">
+            <Label Grid.Column="0"
+                   Text="←"
+                   FontSize="24"
+                   TextColor="#111827"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Back_Tapped" />
                 </Label.GestureRecognizers>
             </Label>
 
-            <!-- Centre VRAIMENT centré -->
-            <VerticalStackLayout
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        Spacing="2">
+            <VerticalStackLayout Grid.Column="1"
+                                 Spacing="2"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
 
-                <Label Text="✦ SparkWork"
-               FontSize="14"
-               FontAttributes="Bold"
-               TextColor="#1ABC9C"
-               HorizontalTextAlignment="Center"/>
+                <Label Text="SparkWork"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="#7C4DFF"
+                       HorizontalTextAlignment="Center" />
 
                 <Label x:Name="lblConversationTitle"
-               Text="adel"
-               FontSize="22"
-               FontAttributes="Bold"
-               TextColor="#0B1F1D"
-               HorizontalTextAlignment="Center"/>
-
+                       Text="Conversation"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#111827"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
+            <Frame Grid.Column="2"
+                   WidthRequest="44"
+                   HeightRequest="44"
+                   CornerRadius="22"
+                   Padding="0"
+                   HasShadow="False"
+                   VerticalOptions="Center">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+
+                <Label Text="●"
+                       FontSize="16"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
         </Grid>
 
         <!-- MESSAGES -->
         <CollectionView Grid.Row="1"
                         x:Name="conversationCollection"
                         SelectionMode="None"
-                        Margin="0,0,0,10">
+                        Margin="18,18,18,10">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="0,6">
+                    <Grid Padding="0,2">
 
-                        <!-- Message reçu -->
+                        <!-- MESSAGE RECU -->
                         <Frame BackgroundColor="White"
                                CornerRadius="18"
-                               Padding="12"
-                               HasShadow="True"
+                               Padding="12,10"
+                               HasShadow="False"
                                HorizontalOptions="Start"
-                               MaximumWidthRequest="260"
+                               MaximumWidthRequest="270"
                                IsVisible="False">
 
                             <Frame.Triggers>
                                 <DataTrigger TargetType="Frame"
                                              Binding="{Binding IsMine}"
                                              Value="False">
-                                    <Setter Property="IsVisible"
-                                            Value="True" />
+                                    <Setter Property="IsVisible" Value="True" />
                                 </DataTrigger>
                             </Frame.Triggers>
 
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="{Binding SenderName}"
-                                       FontSize="12"
+                                       FontSize="11"
                                        FontAttributes="Bold"
-                                       TextColor="#1ABC9C" />
+                                       TextColor="#7C4DFF" />
 
                                 <Label Text="{Binding Content}"
                                        FontSize="14"
-                                       TextColor="#0B1F1D" />
+                                       TextColor="#111827"
+                                       LineBreakMode="WordWrap" />
 
                                 <Label Text="{Binding SentAt, StringFormat='{0:HH:mm}'}"
-                                       FontSize="11"
-                                       TextColor="#8A9A98"
+                                       FontSize="10"
+                                       TextColor="#8B86A3"
                                        HorizontalTextAlignment="End" />
                             </VerticalStackLayout>
                         </Frame>
 
-                        <!-- Message envoyé -->
-                        <Frame BackgroundColor="#DFF8F3"
-                               CornerRadius="18"
-                               Padding="12"
+                        <!-- MESSAGE ENVOYE -->
+                        <Frame CornerRadius="18"
+                               Padding="12,10"
                                HasShadow="False"
                                HorizontalOptions="End"
-                               MaximumWidthRequest="260"
+                               MaximumWidthRequest="270"
                                IsVisible="False">
+
+                            <Frame.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                    <GradientStop Color="#D34C88" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Frame.Background>
 
                             <Frame.Triggers>
                                 <DataTrigger TargetType="Frame"
                                              Binding="{Binding IsMine}"
                                              Value="True">
-                                    <Setter Property="IsVisible"
-                                            Value="True" />
+                                    <Setter Property="IsVisible" Value="True" />
                                 </DataTrigger>
                             </Frame.Triggers>
 
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="{Binding Content}"
                                        FontSize="14"
-                                       TextColor="#0B1F1D"
-                                       HorizontalTextAlignment="End" />
+                                       TextColor="White"
+                                       LineBreakMode="WordWrap" />
 
                                 <Label Text="{Binding SentAt, StringFormat='{0:HH:mm}'}"
-                                       FontSize="11"
-                                       TextColor="#6B8F8A"
+                                       FontSize="10"
+                                       TextColor="#F4EFFF"
                                        HorizontalTextAlignment="End" />
                             </VerticalStackLayout>
                         </Frame>
@@ -139,33 +160,55 @@
         <Grid Grid.Row="2"
               ColumnDefinitions="*,Auto"
               ColumnSpacing="10"
-              VerticalOptions="End">
+              Padding="18,8,18,18"
+              BackgroundColor="#F7F5FC">
 
             <Frame Grid.Column="0"
                    BackgroundColor="White"
-                   BorderColor="#DCEDE7"
-                   CornerRadius="22"
-                   Padding="12,8"
+                   CornerRadius="18"
+                   Padding="14,6"
                    HasShadow="True">
+                <Frame.Shadow>
+                    <Shadow Brush="#22000000"
+                            Offset="0,8"
+                            Radius="18" />
+                </Frame.Shadow>
 
                 <Entry x:Name="editorNewMessage"
                        Placeholder="Write a message..."
-                       PlaceholderColor="#9AA9A7"
-                       TextColor="#0B1F1D"
+                       PlaceholderColor="#8B86A3"
+                       TextColor="#111827"
                        BackgroundColor="Transparent"
                        VerticalOptions="Center" />
             </Frame>
 
-            <Button Grid.Column="1"
-                    Text="➤"
-                    FontSize="18"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    CornerRadius="25"
-                    BackgroundColor="#1ABC9C"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    Clicked="Send_Clicked" />
+            <Frame Grid.Column="1"
+                   WidthRequest="52"
+                   HeightRequest="52"
+                   CornerRadius="26"
+                   Padding="0"
+                   HasShadow="True"
+                   VerticalOptions="Center">
+                <Frame.Shadow>
+                    <Shadow Brush="#457C4DFF"
+                            Offset="0,10"
+                            Radius="20" />
+                </Frame.Shadow>
+
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+
+                <Button Text="➤"
+                        FontSize="18"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Clicked="Send_Clicked" />
+            </Frame>
         </Grid>
     </Grid>
 </ContentPage>

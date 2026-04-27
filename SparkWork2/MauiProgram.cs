@@ -59,7 +59,6 @@ public static class MauiProgram
         builder.Services.AddTransient<RecruiterProfileRepository>();
         builder.Services.AddTransient<RecruiterProfilePage>();
         builder.Services.AddTransient<RecruiterCandidateLikeRepository>();
-        builder.Services.AddTransient<RecruiterCandidateLikeRepository>();
         builder.Services.AddTransient<RecruiterSwipePage>();
         builder.Services.AddTransient<RecruiterJobOffersPage>();
         builder.Services.AddTransient<RecruiterMatchesPage>();
