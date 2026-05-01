@@ -45,14 +45,34 @@ public partial class EditCandidateProfilePage : ContentPage
         entryLocation.Text = _currentProfile.Location;
         entryEmail.Text = _currentProfile.Email;
         editorAbout.Text = _currentProfile.About;
+        entrySkills.Text = _currentProfile.Skills;
+        entryDesiredContractType.Text = _currentProfile.DesiredContractType;
+        entryExperienceLevel.Text = _currentProfile.ExperienceLevel;
+        entryDesiredSalaryMin.Text = _currentProfile.DesiredSalaryMin > 0 ? _currentProfile.DesiredSalaryMin.ToString() : string.Empty;
+        entryDesiredSalaryMax.Text = _currentProfile.DesiredSalaryMax > 0 ? _currentProfile.DesiredSalaryMax.ToString() : string.Empty;
+        entryMaxDistanceKm.Text = _currentProfile.MaxDistanceKm > 0 ? _currentProfile.MaxDistanceKm.ToString() : "25";
 
-        if (!string.IsNullOrWhiteSpace(_currentProfile.PhotoPath) && File.Exists(_currentProfile.PhotoPath))
+
+        var initials = BuildInitials(_currentProfile.FullName);
+        lblHeaderInitials.Text = initials;
+        lblPhotoInitials.Text = initials;
+
+        SetProfilePhoto(_currentProfile.PhotoPath);
+    }
+
+    private void SetProfilePhoto(string? photoPath)
+    {
+        if (!string.IsNullOrWhiteSpace(photoPath) && File.Exists(photoPath))
         {
-            imgCandidatePhoto.Source = ImageSource.FromFile(_currentProfile.PhotoPath);
+            imgCandidatePhoto.Source = ImageSource.FromFile(photoPath);
+            photoImageFrame.IsVisible = true;
+            photoPlaceholderFrame.IsVisible = false;
         }
         else
         {
-            imgCandidatePhoto.Source = "dotnet_bot.png";
+            imgCandidatePhoto.Source = null;
+            photoImageFrame.IsVisible = false;
+            photoPlaceholderFrame.IsVisible = true;
         }
     }
 
@@ -66,6 +86,14 @@ public partial class EditCandidateProfilePage : ContentPage
         string location = entryLocation.Text?.Trim() ?? string.Empty;
         string email = entryEmail.Text?.Trim() ?? string.Empty;
         string about = editorAbout.Text?.Trim() ?? string.Empty;
+        string skills = entrySkills.Text?.Trim() ?? string.Empty;
+        string desiredContractType = entryDesiredContractType.Text?.Trim() ?? string.Empty;
+        string experienceLevel = entryExperienceLevel.Text?.Trim() ?? string.Empty;
+
+        int.TryParse(entryDesiredSalaryMin.Text?.Trim(), out int desiredSalaryMin);
+        int.TryParse(entryDesiredSalaryMax.Text?.Trim(), out int desiredSalaryMax);
+        int.TryParse(entryMaxDistanceKm.Text?.Trim(), out int maxDistanceKm);
+
 
         if (string.IsNullOrWhiteSpace(fullName) ||
             string.IsNullOrWhiteSpace(title) ||
@@ -73,33 +101,50 @@ public partial class EditCandidateProfilePage : ContentPage
             string.IsNullOrWhiteSpace(email) ||
             string.IsNullOrWhiteSpace(about))
         {
-            await DisplayAlert("Error", "Please fill in all fields.", "OK");
+            await DisplayAlert("Erreur", "Merci de remplir tous les champs.", "OK");
             return;
         }
 
         if (fullName.Length < 2)
         {
-            await DisplayAlert("Error", "Full name must contain at least 2 characters.", "OK");
+            await DisplayAlert("Erreur", "Le nom doit contenir au moins 2 caractères.", "OK");
             return;
         }
 
         if (title.Length < 2)
         {
-            await DisplayAlert("Error", "Title must contain at least 2 characters.", "OK");
+            await DisplayAlert("Erreur", "Le titre doit contenir au moins 2 caractères.", "OK");
             return;
         }
 
         if (!IsValidEmail(email))
         {
-            await DisplayAlert("Error", "Please enter a valid email address.", "OK");
+            await DisplayAlert("Erreur", "Merci d'entrer une adresse email valide.", "OK");
             return;
         }
 
         if (about.Length < 10)
         {
-            await DisplayAlert("Error", "About must contain at least 10 characters.", "OK");
+            await DisplayAlert("Erreur", "La description doit contenir au moins 10 caractères.", "OK");
             return;
         }
+        if (desiredSalaryMin < 0 || desiredSalaryMax < 0)
+        {
+            await DisplayAlert("Erreur", "Le salaire ne peut pas être négatif.", "OK");
+            return;
+        }
+
+        if (desiredSalaryMin > 0 && desiredSalaryMax > 0 && desiredSalaryMin > desiredSalaryMax)
+        {
+            await DisplayAlert("Erreur", "Le salaire minimum ne peut pas être supérieur au salaire maximum.", "OK");
+            return;
+        }
+
+        if (maxDistanceKm <= 0)
+        {
+            maxDistanceKm = 25;
+        }
+
 
         _currentProfile.FullName = fullName;
         _currentProfile.Title = title;
@@ -107,10 +152,17 @@ public partial class EditCandidateProfilePage : ContentPage
         _currentProfile.Email = email;
         _currentProfile.About = about;
         _currentProfile.PhotoPath = _selectedPhotoPath ?? _currentProfile.PhotoPath;
+        _currentProfile.Skills = skills;
+        _currentProfile.DesiredContractType = desiredContractType;
+        _currentProfile.ExperienceLevel = experienceLevel;
+        _currentProfile.DesiredSalaryMin = desiredSalaryMin;
+        _currentProfile.DesiredSalaryMax = desiredSalaryMax;
+        _currentProfile.MaxDistanceKm = maxDistanceKm;
+
 
         await _candidateProfileRepository.UpdateCandidateProfileAsync(_currentProfile);
 
-        await DisplayAlert("Success", "Profile updated successfully.", "OK");
+        await DisplayAlert("Succès", "Profil mis à jour.", "OK");
         await Shell.Current.GoToAsync("..");
     }
 
@@ -119,9 +171,22 @@ public partial class EditCandidateProfilePage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    private bool IsValidEmail(string email)
+    private static bool IsValidEmail(string email)
     {
         return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "ME";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
     }
 
     private async void ChangePhoto_Clicked(object sender, EventArgs e)
@@ -130,7 +195,7 @@ public partial class EditCandidateProfilePage : ContentPage
         {
             var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
             {
-                Title = "Choose your profile photo"
+                Title = "Choisir une photo de profil"
             });
 
             if (result == null)
@@ -145,11 +210,11 @@ public partial class EditCandidateProfilePage : ContentPage
             await sourceStream.CopyToAsync(localFileStream);
 
             _selectedPhotoPath = localPath;
-            imgCandidatePhoto.Source = ImageSource.FromFile(localPath);
+            SetProfilePhoto(localPath);
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Unable to select photo: {ex.Message}", "OK");
+            await DisplayAlert("Erreur", $"Impossible de sélectionner la photo : {ex.Message}", "OK");
         }
     }
 }

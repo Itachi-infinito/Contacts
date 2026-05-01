@@ -3,227 +3,308 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Public.RegisterRecruiterPage"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="White">
+             BackgroundColor="#F7F5FC">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#FFFFFF" Offset="0.0" />
-            <GradientStop Color="#EAF8F5" Offset="0.45" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid RowDefinitions="Auto,*"
+          Padding="24,24,24,0">
 
-    <ScrollView>
-        <Grid Padding="24,30,24,30">
-            <VerticalStackLayout Spacing="20"
-                                 VerticalOptions="Center">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFFFFF" Offset="0.0" />
+                <GradientStop Color="#F7F5FC" Offset="0.48" />
+                <GradientStop Color="#EDE7FF" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-                <Button Text="← Back"
-                        HorizontalOptions="Start"
-                        BackgroundColor="Transparent"
-                        TextColor="#0B1F1D"
-                        FontAttributes="Bold"
-                        Clicked="OnBackClicked" />
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto,*,Auto">
 
-                <Label Text="Recruiter Registration"
-                       FontSize="30"
+            <Button Grid.Column="0"
+                    Text="‹"
+                    FontSize="34"
+                    Padding="0"
+                    HeightRequest="44"
+                    WidthRequest="44"
+                    BackgroundColor="Transparent"
+                    TextColor="#111827"
+                    Clicked="OnBackClicked" />
+
+            <Label Grid.Column="1"
+                   Text="Inscription recruteur"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#111827"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center" />
+
+            <Frame Grid.Column="2"
+                   HeightRequest="46"
+                   WidthRequest="46"
+                   CornerRadius="23"
+                   Padding="0"
+                   HasShadow="False">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+
+                <Label x:Name="lblHeaderInitials"
+                       Text="HR"
+                       TextColor="White"
                        FontAttributes="Bold"
-                       TextColor="#0B1F1D"
-                       HorizontalTextAlignment="Center" />
-
-                <Label Text="Create your recruiter profile and start discovering candidates"
                        FontSize="15"
-                       TextColor="#4F6663"
-                       HorizontalTextAlignment="Center" />
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
+        </Grid>
 
-                <Frame BackgroundColor="#F9FFFD"
-                       BorderColor="#D8EEE8"
-                       CornerRadius="18"
-                       Padding="22"
-                       HasShadow="True">
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="0,24,0,28"
+                                 Spacing="16">
+
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="CRÉER TON ESPACE RECRUTEUR"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#8581A6" />
+
+                    <Label Text="Ces informations seront visibles par les candidats."
+                           FontSize="13"
+                           TextColor="#8B86A3" />
+                </VerticalStackLayout>
+
+                <Frame CornerRadius="24"
+                       Padding="20"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="14"
+                                         HorizontalOptions="Center">
+
+                        <Grid WidthRequest="112"
+                              HeightRequest="112">
+
+                            <Frame x:Name="photoPlaceholderFrame"
+                                   WidthRequest="112"
+                                   HeightRequest="112"
+                                   CornerRadius="28"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Frame.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                        <GradientStop Color="#D34C88" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </Frame.Background>
+
+                                <Label x:Name="lblPhotoInitials"
+                                       Text="HR"
+                                       FontSize="30"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Frame>
+
+                            <Frame x:Name="photoImageFrame"
+                                   WidthRequest="112"
+                                   HeightRequest="112"
+                                   CornerRadius="28"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   IsClippedToBounds="True"
+                                   IsVisible="False">
+                                <Image x:Name="imgCompanyPhoto"
+                                       Aspect="AspectFill" />
+                            </Frame>
+                        </Grid>
+
+                        <Button Text="Choisir une photo"
+                                HeightRequest="40"
+                                Padding="18,0"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                CornerRadius="12"
+                                Clicked="ChoosePhoto_Clicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
 
                     <VerticalStackLayout Spacing="16">
 
-                        <!-- Company Name -->
-                        <VerticalStackLayout Spacing="10"
-                     HorizontalOptions="Center">
+                        <Label Text="Informations de connexion"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
 
-                            <Frame WidthRequest="120"
-                                   HeightRequest="120"
-                                   CornerRadius="20"
-                                   Padding="0"
-                                   BackgroundColor="#F8FCFB"
-                                   BorderColor="#DDEEE8"
-                                   HasShadow="False"
-                                   HorizontalOptions="Center">
-
-                                <Image x:Name="imgCompanyPhoto"
-                                       Source="dotnet_bot.png"
-                                       Aspect="AspectFill" />
-                            </Frame>
-
-                            <Button Text="Choose Company Photo"
-                                    HeightRequest="46"
-                                    BackgroundColor="White"
-                                    BorderColor="#BFEADF"
-                                    BorderWidth="1.5"
-                                    TextColor="#1ABC9C"
-                                    FontAttributes="Bold"
-                                    CornerRadius="14"
-                                    Clicked="ChoosePhoto_Clicked" />
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Company name *"
-                                   FontSize="14"
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Nom de l'entreprise"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
-                                   Padding="14,8"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
                                    HasShadow="False">
                                 <Entry x:Name="entryCompanyName"
-                                       Placeholder="Enter company name"
-                                       PlaceholderColor="#8AA5A0"
-                                       TextColor="#0B1F1D"
+                                       Placeholder="Ex: Thales"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       TextChanged="CompanyName_TextChanged"
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- Contact Email -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Contact email *"
-                                   FontSize="14"
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Email de contact"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
-                                   Padding="14,8"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
                                    HasShadow="False">
                                 <Entry x:Name="entryEmail"
-                                       Placeholder="Enter contact email"
-                                       PlaceholderColor="#8AA5A0"
+                                       Placeholder="contact@example.com"
+                                       PlaceholderColor="#A6A0C0"
                                        Keyboard="Email"
-                                       TextColor="#0B1F1D"
+                                       TextColor="#111827"
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- Password -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Password *"
-                                   FontSize="14"
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Mot de passe"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
-                                   Padding="14,8"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
                                    HasShadow="False">
                                 <Entry x:Name="entryPassword"
-                                       Placeholder="Enter password"
-                                       PlaceholderColor="#8AA5A0"
+                                       Placeholder="Minimum 4 caractères"
+                                       PlaceholderColor="#A6A0C0"
                                        IsPassword="True"
-                                       TextColor="#0B1F1D"
+                                       TextColor="#111827"
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- Confirm Password -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Confirm password *"
-                                   FontSize="14"
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Confirmer le mot de passe"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
-                                   Padding="14,8"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
                                    HasShadow="False">
                                 <Entry x:Name="entryConfirmPassword"
-                                       Placeholder="Confirm password"
-                                       PlaceholderColor="#8AA5A0"
+                                       Placeholder="Confirme ton mot de passe"
+                                       PlaceholderColor="#A6A0C0"
                                        IsPassword="True"
-                                       TextColor="#0B1F1D"
+                                       TextColor="#111827"
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
 
-                        <!-- Sector -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Sector"
-                                   FontSize="14"
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <Label Text="Profil entreprise"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Secteur"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
-                                   Padding="14,8"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
                                    HasShadow="False">
                                 <Entry x:Name="entrySector"
-                                       Placeholder="Ex: Technology"
-                                       PlaceholderColor="#8AA5A0"
-                                       TextColor="#0B1F1D"
+                                       Placeholder="Ex: Technologie"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- Location -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Location"
-                                   FontSize="14"
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Localisation"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
-                                   Padding="14,8"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
                                    HasShadow="False">
                                 <Entry x:Name="entryLocation"
-                                       Placeholder="Ex: Brussels"
-                                       PlaceholderColor="#8AA5A0"
-                                       TextColor="#0B1F1D"
+                                       Placeholder="Ex: Bruxelles"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- Description -->
-                        <VerticalStackLayout Spacing="6">
+                        <VerticalStackLayout Spacing="7">
                             <Label Text="Description"
-                                   FontSize="14"
+                                   FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#0B1F1D" />
-                            <Frame BackgroundColor="White"
-                                   BorderColor="#D5E8E3"
-                                   CornerRadius="12"
+                                   TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
                                    Padding="14,10"
                                    HasShadow="False">
                                 <Editor x:Name="editorDescription"
-                                        Placeholder="Describe your company or recruitment needs"
-                                        PlaceholderColor="#8AA5A0"
-                                        TextColor="#0B1F1D"
+                                        Placeholder="Présente ton entreprise et le type de talents recherchés."
+                                        PlaceholderColor="#A6A0C0"
+                                        TextColor="#111827"
                                         BackgroundColor="Transparent"
                                         AutoSize="TextChanges"
-                                        HeightRequest="110" />
+                                        HeightRequest="120" />
                             </Frame>
                         </VerticalStackLayout>
 
-                        <Label Text="* Required fields"
-                               FontSize="13"
-                               TextColor="#5F7A75" />
-
-                        <Button Text="Create Account"
-                                HeightRequest="56"
-                                BackgroundColor="#1ABC9C"
+                        <Button Text="Créer mon compte"
+                                HeightRequest="54"
+                                BackgroundColor="#7C4DFF"
                                 TextColor="White"
                                 FontAttributes="Bold"
                                 CornerRadius="14"
                                 Clicked="CreateAccount_Clicked" />
-
                     </VerticalStackLayout>
                 </Frame>
+
             </VerticalStackLayout>
-        </Grid>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

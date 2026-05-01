@@ -16,4 +16,9 @@ public partial class RoleSelectionPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(RegisterRecruiterPage));
     }
+
+    private async void Back_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }

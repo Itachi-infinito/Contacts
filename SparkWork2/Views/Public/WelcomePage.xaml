@@ -3,68 +3,93 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Public.WelcomePage"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="White">
+             BackgroundColor="#F7F5FC">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#FFFFFF" Offset="0.0" />
-            <GradientStop Color="#D1F2EB" Offset="0.5" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid Padding="24">
 
-    <Grid Padding="30">
-        <VerticalStackLayout VerticalOptions="Center" Spacing="24">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFFFFF" Offset="0.0" />
+                <GradientStop Color="#F7F5FC" Offset="0.48" />
+                <GradientStop Color="#EDE7FF" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-            <HorizontalStackLayout HorizontalOptions="Center"
-                       Spacing="8">
+        <VerticalStackLayout VerticalOptions="Center"
+                             Spacing="24">
 
-                <Label Text="✦"
-                       FontSize="50"
-                       FontAttributes="Bold"
-                       TextColor="#1ABC9C"
-                       VerticalOptions="Center" />
+            <VerticalStackLayout Spacing="12"
+                                 HorizontalOptions="Center">
+
+                <Frame WidthRequest="92"
+                       HeightRequest="92"
+                       CornerRadius="30"
+                       Padding="0"
+                       HasShadow="False"
+                       HorizontalOptions="Center">
+
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7C4DFF" Offset="0.0" />
+                            <GradientStop Color="#D34C88" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+
+                    <Label Text="✦"
+                           FontSize="42"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Frame>
 
                 <Label Text="SparkWork"
-                       FontSize="50"
+                       FontSize="44"
                        FontAttributes="Bold"
-                       TextColor="#0B1F1D"
-                       VerticalOptions="Center" />
+                       TextColor="#111827"
+                       HorizontalTextAlignment="Center" />
 
-            </HorizontalStackLayout>
+                <Label Text="Match with jobs and talents"
+                       FontSize="16"
+                       TextColor="#8581A6"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
-            <Label Text="Match with jobs and talents"
-                   FontSize="18"
-                   TextColor="#7B8F8B"
-                   HorizontalTextAlignment="Center" />
-
-            <Frame BackgroundColor="#22FFFFFF"
-                   BorderColor="#99FFFFFF"
-                   CornerRadius="24"
-                   Padding="24"
-                   HasShadow="True"
-                   Margin="0,20,0,10">
+            <Frame BackgroundColor="White"
+                   BorderColor="#EEEAF8"
+                   CornerRadius="26"
+                   Padding="22"
+                   HasShadow="False"
+                   Margin="0,8,0,0">
 
                 <VerticalStackLayout Spacing="18">
-                    <Label Text="A smarter way to connect candidates and recruiters."
-                           FontSize="18"
-                           TextColor="#7B8F8B"
-                           HorizontalTextAlignment="Center" />
 
-                    <Button Text="Login"
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Bienvenue"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="#111827"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Text="Connecte candidats et recruteurs autour des bonnes opportunités."
+                               FontSize="14"
+                               TextColor="#8581A6"
+                               HorizontalTextAlignment="Center"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <Button Text="Se connecter"
                             HeightRequest="54"
-                            BackgroundColor="White"
-                            TextColor="#1ABC9C"
+                            BackgroundColor="#7C4DFF"
+                            TextColor="White"
                             FontAttributes="Bold"
                             CornerRadius="14"
                             Clicked="Login_Clicked" />
 
-                    <Button Text="Register"
+                    <Button Text="Créer un compte"
                             HeightRequest="54"
-                            BackgroundColor="Transparent"
-                            BorderColor="White"
-                            BorderWidth="2"
-                            TextColor="White"
+                            BackgroundColor="#F0EAFE"
+                            TextColor="#7C4DFF"
                             FontAttributes="Bold"
                             CornerRadius="14"
                             Clicked="Register_Clicked" />

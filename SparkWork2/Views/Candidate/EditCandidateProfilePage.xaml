@@ -2,215 +2,438 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Candidate.EditCandidateProfilePage"
-             NavigationPage.HasNavigationBar="False">
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F7F5FC">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#F9FFFD" Offset="0.0" />
-            <GradientStop Color="#EAF8F5" Offset="0.4" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid RowDefinitions="Auto,*">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20,26,20,24"
-                             Spacing="18">
+        <!-- HEADER -->
+        <Grid Grid.Row="0"
+              BackgroundColor="White"
+              Padding="18,24,24,0"
+              RowDefinitions="Auto,Auto"
+              ColumnDefinitions="Auto,*,Auto">
 
-            <!-- HEADER -->
-            <Grid ColumnDefinitions="56,*,56"
-                  VerticalOptions="Center"
-                  Margin="0,0,0,10">
+            <Button Grid.Column="0"
+                    Text="‹"
+                    FontSize="34"
+                    Padding="0"
+                    HeightRequest="44"
+                    WidthRequest="44"
+                    BackgroundColor="Transparent"
+                    TextColor="#111827"
+                    Clicked="Cancel_Clicked" />
 
-                <Button Grid.Column="0"
-                        Text="←"
-                        FontSize="22"
-                        BackgroundColor="Transparent"
-                        TextColor="#0B1F1D"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        WidthRequest="40"
-                        Clicked="Cancel_Clicked" />
+            <Label Grid.Column="1"
+                   Text="Modifier le profil"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#111827"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center" />
 
-                <VerticalStackLayout Grid.Column="1"
-                                     Spacing="4"
-                                     HorizontalOptions="Center"
-                                     VerticalOptions="Center">
+            <Frame Grid.Column="2"
+                   HeightRequest="46"
+                   WidthRequest="46"
+                   CornerRadius="23"
+                   Padding="0"
+                   HasShadow="False"
+                   VerticalOptions="Center">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
 
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-                        <Label Text="✦"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                        <Label Text="SparkWork"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                    </HorizontalStackLayout>
+                <Label x:Name="lblHeaderInitials"
+                       Text="ME"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       FontSize="15"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
 
-                    <Label Text="Edit Candidate Profile"
-                           FontSize="28"
-                           FontAttributes="Bold"
-                           TextColor="#0B1F1D"
-                           HorizontalTextAlignment="Center" />
-                </VerticalStackLayout>
+            <Grid Grid.Row="1"
+                  Grid.ColumnSpan="3"
+                  ColumnDefinitions="*,*,*"
+                  Margin="0,22,0,0"
+                  HeightRequest="42">
 
-                <Label Grid.Column="2" />
+                <Label Text="DÉCOUVRIR"
+                       Grid.Column="0"
+                       FontSize="14"
+                       TextColor="#8B86A3"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+
+                <Label Text="MESSAGES"
+                       Grid.Column="1"
+                       FontSize="14"
+                       TextColor="#8B86A3"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+
+                <Label Text="STATS"
+                       Grid.Column="2"
+                       FontSize="14"
+                       TextColor="#8B86A3"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
             </Grid>
-            
+        </Grid>
 
-            <!-- FORM CARD -->
-            <Frame BackgroundColor="White"
-                   BorderColor="#DCEDE7"
-                   CornerRadius="24"
-                   Padding="22"
-                   HasShadow="True">
+        <!-- CONTENT -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,24,20,28"
+                                 Spacing="16">
 
-                <VerticalStackLayout Spacing="18">
-                    <VerticalStackLayout Spacing="10"
+                <Frame CornerRadius="24"
+                       Padding="20"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="14"
                                          HorizontalOptions="Center">
 
-                        <Frame WidthRequest="120"
-                                HeightRequest="120"
-                                CornerRadius="60"
-                                Padding="0"
-                                BackgroundColor="#F8FCFB"
-                                BorderColor="#DDEEE8"
-                                HasShadow="False"
-                                HorizontalOptions="Center">
+                        <Grid WidthRequest="112"
+                              HeightRequest="112">
 
-                            <Image x:Name="imgCandidatePhoto"
-                                    Source="dotnet_bot.png"
-                                    Aspect="AspectFill" />
-                        </Frame>
+                            <Frame x:Name="photoPlaceholderFrame"
+                                   WidthRequest="112"
+                                   HeightRequest="112"
+                                   CornerRadius="56"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Frame.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                        <GradientStop Color="#D34C88" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </Frame.Background>
 
-                        <Button Text="Change Photo"
-                                 HeightRequest="46"
-                                 BackgroundColor="White"
-                                 BorderColor="#BFEADF"
-                                 BorderWidth="1.5"
-                                 TextColor="#1ABC9C"
-                                 FontAttributes="Bold"
-                                 CornerRadius="14"
-                                 Clicked="ChangePhoto_Clicked" />
+                                <Label x:Name="lblPhotoInitials"
+                                       Text="ME"
+                                       FontSize="30"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Frame>
+
+                            <Frame x:Name="photoImageFrame"
+                                   WidthRequest="112"
+                                   HeightRequest="112"
+                                   CornerRadius="56"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   IsClippedToBounds="True"
+                                   IsVisible="False">
+                                <Image x:Name="imgCandidatePhoto"
+                                       Aspect="AspectFill" />
+                            </Frame>
+                        </Grid>
+
+                        <Button Text="Changer la photo"
+                                HeightRequest="40"
+                                Padding="18,0"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                CornerRadius="12"
+                                Clicked="ChangePhoto_Clicked" />
                     </VerticalStackLayout>
+                </Frame>
 
-                    <!-- Full name -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Full Name"
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <Label Text="Informations principales"
+                               FontSize="17"
                                FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                        <Frame BackgroundColor="#F8FCFB"
-                               BorderColor="#DDEEE8"
-                               CornerRadius="14"
-                               Padding="14,8"
-                               HasShadow="False">
-                            <Entry x:Name="entryFullName"
-                                   Placeholder="Full Name"
-                                   PlaceholderColor="#8BA5A0"
-                                   TextColor="#0B1F1D"
-                                   BackgroundColor="Transparent" />
-                        </Frame>
+                               TextColor="#111827" />
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Nom complet"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryFullName"
+                                       Placeholder="Ex: Adel Martin"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Titre professionnel"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryTitle"
+                                       Placeholder="Ex: Développeur junior"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Localisation"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryLocation"
+                                       Placeholder="Ex: Bruxelles"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Email"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryEmail"
+                                       Placeholder="email@example.com"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent"
+                                       Keyboard="Email" />
+                            </Frame>
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
+                </Frame>
 
-                    <!-- Title -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Professional Title"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                        <Frame BackgroundColor="#F8FCFB"
-                               BorderColor="#DDEEE8"
-                               CornerRadius="14"
-                               Padding="14,8"
-                               HasShadow="False">
-                            <Entry x:Name="entryTitle"
-                                   Placeholder="Professional Title"
-                                   PlaceholderColor="#8BA5A0"
-                                   TextColor="#0B1F1D"
-                                   BackgroundColor="Transparent" />
-                        </Frame>
-                    </VerticalStackLayout>
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
 
-                    <!-- Location -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Location"
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="À propos"
+                               FontSize="17"
                                FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                        <Frame BackgroundColor="#F8FCFB"
-                               BorderColor="#DDEEE8"
-                               CornerRadius="14"
-                               Padding="14,8"
-                               HasShadow="False">
-                            <Entry x:Name="entryLocation"
-                                   Placeholder="Location"
-                                   PlaceholderColor="#8BA5A0"
-                                   TextColor="#0B1F1D"
-                                   BackgroundColor="Transparent" />
-                        </Frame>
-                    </VerticalStackLayout>
+                               TextColor="#111827" />
 
-                    <!-- Email -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Email"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                        <Frame BackgroundColor="#F8FCFB"
-                               BorderColor="#DDEEE8"
-                               CornerRadius="14"
-                               Padding="14,8"
-                               HasShadow="False">
-                            <Entry x:Name="entryEmail"
-                                   Placeholder="Email"
-                                   PlaceholderColor="#8BA5A0"
-                                   TextColor="#0B1F1D"
-                                   BackgroundColor="Transparent"
-                                   Keyboard="Email" />
-                        </Frame>
-                    </VerticalStackLayout>
-
-                    <!-- About -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="About"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-                        <Frame BackgroundColor="#F8FCFB"
-                               BorderColor="#DDEEE8"
+                        <Frame BackgroundColor="#FAF9FF"
+                               BorderColor="#EEEAF8"
                                CornerRadius="14"
                                Padding="14,10"
                                HasShadow="False">
                             <Editor x:Name="editorAbout"
-                                    Placeholder="Tell recruiters more about you"
-                                    PlaceholderColor="#8BA5A0"
-                                    TextColor="#0B1F1D"
+                                    Placeholder="Présente ton profil, tes compétences et ce que tu recherches."
+                                    PlaceholderColor="#A6A0C0"
+                                    TextColor="#111827"
                                     BackgroundColor="Transparent"
                                     AutoSize="TextChanges"
-                                    HeightRequest="120" />
+                                    HeightRequest="130" />
                         </Frame>
                     </VerticalStackLayout>
+                </Frame>
 
-                </VerticalStackLayout>
-            </Frame>
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
 
-            <!-- ACTIONS -->
-            <VerticalStackLayout Spacing="12">
+                    <VerticalStackLayout Spacing="16">
 
-                <Button Text="Update"
-                        HeightRequest="54"
-                        BackgroundColor="White"
-                        TextColor="#1ABC9C"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        Clicked="Update_Clicked" />
+                        <Label Text="Préférences de recherche"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
 
-                <Button Text="Cancel"
-                        HeightRequest="54"
-                        BackgroundColor="Transparent"
-                        BorderColor="White"
-                        BorderWidth="2"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        Clicked="Cancel_Clicked" />
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Compétences"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entrySkills"
+                                       Placeholder="Ex: C#, SQL, MAUI, Git"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+
+                            <Label Text="Sépare les compétences par des virgules."
+                                   FontSize="12"
+                                   TextColor="#8B86A3" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Contrat recherché"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryDesiredContractType"
+                                       Placeholder="Ex: CDI, Stage, Full-time"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Niveau"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperienceLevel"
+                                       Placeholder="Ex: Junior, Medior, Senior"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="7">
+                                <Label Text="Salaire min"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#8581A6" />
+
+                                <Frame BackgroundColor="#FAF9FF"
+                                       BorderColor="#EEEAF8"
+                                       CornerRadius="14"
+                                       Padding="14,4"
+                                       HasShadow="False">
+                                    <Entry x:Name="entryDesiredSalaryMin"
+                                           Placeholder="Ex: 2500"
+                                           Keyboard="Numeric"
+                                           PlaceholderColor="#A6A0C0"
+                                           TextColor="#111827"
+                                           BackgroundColor="Transparent" />
+                                </Frame>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="7">
+                                <Label Text="Salaire max"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#8581A6" />
+
+                                <Frame BackgroundColor="#FAF9FF"
+                                       BorderColor="#EEEAF8"
+                                       CornerRadius="14"
+                                       Padding="14,4"
+                                       HasShadow="False">
+                                    <Entry x:Name="entryDesiredSalaryMax"
+                                           Placeholder="Ex: 4000"
+                                           Keyboard="Numeric"
+                                           PlaceholderColor="#A6A0C0"
+                                           TextColor="#111827"
+                                           BackgroundColor="Transparent" />
+                                </Frame>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="Distance maximale"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryMaxDistanceKm"
+                                       Placeholder="Ex: 25"
+                                       Keyboard="Numeric"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12"
+                      Margin="0,4,0,0">
+
+                    <Button Grid.Column="0"
+                            Text="Annuler"
+                            HeightRequest="52"
+                            BackgroundColor="White"
+                            BorderColor="#DED8F5"
+                            BorderWidth="1"
+                            TextColor="#111827"
+                            FontAttributes="Bold"
+                            CornerRadius="14"
+                            Clicked="Cancel_Clicked" />
+
+                    <Button Grid.Column="1"
+                            Text="Enregistrer"
+                            HeightRequest="52"
+                            BackgroundColor="#7C4DFF"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="14"
+                            Clicked="Update_Clicked" />
+                </Grid>
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

@@ -33,14 +33,17 @@ public partial class MatchPage : ContentPage
         set
         {
             _participantName = Uri.UnescapeDataString(value ?? string.Empty);
+
             lblParticipantName.Text = _participantName;
-            lblMatchText.Text = $"You matched with {_participantName}!";
+            lblParticipantInitials.Text = BuildInitials(_participantName);
+            lblMatchText.Text = $"Match avec {_participantName}.";
         }
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
         await PlayEntranceAnimation();
         await PlayConfettiAnimation();
     }
@@ -51,19 +54,33 @@ public partial class MatchPage : ContentPage
         lblCongrats.Opacity = 0;
         lblCongrats.Scale = 0.8;
         lblMatchText.Opacity = 0;
+
         matchCard.Opacity = 0;
         matchCard.TranslationY = 30;
+        matchCard.Scale = 0.96;
+
         btnMessage.Opacity = 0;
         btnKeepSwiping.Opacity = 0;
 
-        await lblBrand.FadeTo(1, 250);
-        await lblCongrats.FadeTo(1, 250);
-        await lblCongrats.ScaleTo(1, 300, Easing.SpringOut);
-        await lblMatchText.FadeTo(1, 250);
-        await matchCard.FadeTo(1, 300);
-        await matchCard.TranslateTo(0, 0, 300, Easing.CubicOut);
-        await btnMessage.FadeTo(1, 250);
-        await btnKeepSwiping.FadeTo(1, 250);
+        await lblBrand.FadeTo(1, 220, Easing.CubicOut);
+
+        await Task.WhenAll(
+            lblCongrats.FadeTo(1, 260, Easing.CubicOut),
+            lblCongrats.ScaleTo(1, 320, Easing.SpringOut)
+        );
+
+        await lblMatchText.FadeTo(1, 220, Easing.CubicOut);
+
+        await Task.WhenAll(
+            matchCard.FadeTo(1, 300, Easing.CubicOut),
+            matchCard.TranslateTo(0, 0, 300, Easing.CubicOut),
+            matchCard.ScaleTo(1, 300, Easing.SpringOut)
+        );
+
+        await Task.WhenAll(
+            btnMessage.FadeTo(1, 220, Easing.CubicOut),
+            btnKeepSwiping.FadeTo(1, 260, Easing.CubicOut)
+        );
     }
 
     private async Task PlayConfettiAnimation()
@@ -87,8 +104,8 @@ public partial class MatchPage : ContentPage
 
         foreach (var confetti in confettis)
         {
-            uint duration = (uint)random.Next(1400, 2300);
-            double targetY = random.Next(450, 750);
+            uint duration = (uint)random.Next(1300, 2200);
+            double targetY = random.Next(440, 720);
             double rotation = random.Next(180, 720);
 
             tasks.Add(Task.WhenAll(
@@ -107,6 +124,19 @@ public partial class MatchPage : ContentPage
         await element.FadeTo(0, totalDuration / 3);
     }
 
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "?";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
+
     private async void SendMessage_Clicked(object sender, EventArgs e)
     {
         if (_participantId == 0 || string.IsNullOrWhiteSpace(_participantName))
@@ -120,7 +150,7 @@ public partial class MatchPage : ContentPage
 
     private async void KeepSwiping_Clicked(object sender, EventArgs e)
     {
-        if (_sessionService.CurrentUserRole == "Recruiter")
+        if (string.Equals(_sessionService.CurrentUserRole, "Recruiter", StringComparison.OrdinalIgnoreCase))
             await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
         else
             await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");

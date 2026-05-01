@@ -3,7 +3,6 @@ using SparkWork2.Repositories;
 using SparkWork2.Services;
 using SparkWork2.Views.Shared;
 
-
 namespace SparkWork2.Views.Candidate;
 
 [QueryProperty(nameof(JobOfferId), "id")]
@@ -15,15 +14,14 @@ public partial class JobOfferDetailPage : ContentPage
     private readonly RecruiterCandidateLikeRepository _recruiterCandidateLikeRepository;
     private readonly MatchRepository _matchRepository;
 
-
     private JobOffer? _currentJobOffer;
 
     public JobOfferDetailPage(
-    JobOfferRepository jobOfferRepository,
-    CandidateJobLikeRepository candidateJobLikeRepository,
-    RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
-    MatchRepository matchRepository,
-    SessionService sessionService)
+        JobOfferRepository jobOfferRepository,
+        CandidateJobLikeRepository candidateJobLikeRepository,
+        RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
+        MatchRepository matchRepository,
+        SessionService sessionService)
     {
         InitializeComponent();
 
@@ -33,7 +31,6 @@ public partial class JobOfferDetailPage : ContentPage
         _matchRepository = matchRepository;
         _sessionService = sessionService;
     }
-
 
     public string JobOfferId
     {
@@ -51,13 +48,34 @@ public partial class JobOfferDetailPage : ContentPage
         _currentJobOffer = await _jobOfferRepository.GetJobOfferByIdAsync(id);
 
         if (_currentJobOffer == null)
+        {
+            await DisplayAlert("Erreur", "Offre introuvable.", "OK");
+            await Shell.Current.GoToAsync("..");
             return;
+        }
 
         lblTitle.Text = _currentJobOffer.Title;
         lblCompany.Text = _currentJobOffer.CompanyName;
         lblLocation.Text = _currentJobOffer.Location;
         lblContractType.Text = _currentJobOffer.ContractType;
         lblDescription.Text = _currentJobOffer.Description;
+        levelBadge.IsVisible = !string.IsNullOrWhiteSpace(_currentJobOffer.Level);
+        lblLevel.Text = _currentJobOffer.Level;
+
+        remoteBadge.IsVisible = !string.IsNullOrWhiteSpace(_currentJobOffer.RemoteMode);
+        lblRemoteMode.Text = _currentJobOffer.RemoteMode;
+
+        salaryCard.IsVisible = _currentJobOffer.SalaryMin > 0 || _currentJobOffer.SalaryMax > 0;
+        lblSalary.Text = GetSalaryDisplay(_currentJobOffer);
+
+        requiredSkillsLayout.IsVisible = !string.IsNullOrWhiteSpace(_currentJobOffer.RequiredSkills);
+        lblRequiredSkills.Text = _currentJobOffer.RequiredSkills;
+
+        niceSkillsLayout.IsVisible = !string.IsNullOrWhiteSpace(_currentJobOffer.NiceToHaveSkills);
+        lblNiceToHaveSkills.Text = _currentJobOffer.NiceToHaveSkills;
+
+        skillsCard.IsVisible = requiredSkillsLayout.IsVisible || niceSkillsLayout.IsVisible;
+
 
         await UpdateLikeButton();
     }
@@ -73,7 +91,7 @@ public partial class JobOfferDetailPage : ContentPage
 
         if (!added)
         {
-            await DisplayAlert("Info", "You already liked this offer.", "OK");
+            await DisplayAlert("Info", "Tu as déjà liké cette offre.", "OK");
             return;
         }
 
@@ -101,9 +119,8 @@ public partial class JobOfferDetailPage : ContentPage
             return;
         }
 
-        await DisplayAlert("Like sent", "Your interest has been sent to the recruiter.", "OK");
+        await DisplayAlert("Intérêt envoyé", "Ton intérêt a été envoyé au recruteur.", "OK");
     }
-
 
     private async Task UpdateLikeButton()
     {
@@ -116,19 +133,21 @@ public partial class JobOfferDetailPage : ContentPage
 
         if (alreadyLiked)
         {
-            btnLike.Text = "Already liked";
+            btnLike.Text = "Offre déjà likée";
             btnLike.IsEnabled = false;
             btnLike.BackgroundColor = Colors.White;
-            btnLike.BorderColor = Color.FromArgb("#CDEDE7");
-            btnLike.TextColor = Color.FromArgb("#7B8F8B");
+            btnLike.BorderColor = Color.FromArgb("#DED8F5");
+            btnLike.BorderWidth = 1;
+            btnLike.TextColor = Color.FromArgb("#8581A6");
         }
         else
         {
-            btnLike.Text = "Like";
+            btnLike.Text = "Liker cette offre";
             btnLike.IsEnabled = true;
-            btnLike.BackgroundColor = Colors.White;
-            btnLike.BorderColor = Color.FromArgb("#BFEADF");
-            btnLike.TextColor = Color.FromArgb("#1ABC9C");
+            btnLike.BackgroundColor = Color.FromArgb("#7C4DFF");
+            btnLike.BorderColor = Colors.Transparent;
+            btnLike.BorderWidth = 0;
+            btnLike.TextColor = Colors.White;
         }
     }
 
@@ -136,4 +155,33 @@ public partial class JobOfferDetailPage : ContentPage
     {
         await Shell.Current.GoToAsync("..");
     }
+    private async void Discover_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+    }
+
+    private async void Messages_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
+    }
+
+    private async void Stats_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MatchesPage)}");
+    }
+    private string GetSalaryDisplay(JobOffer jobOffer)
+    {
+        if (jobOffer.SalaryMin > 0 && jobOffer.SalaryMax > 0)
+            return $"{jobOffer.SalaryMin} - {jobOffer.SalaryMax} €";
+
+        if (jobOffer.SalaryMin > 0)
+            return $"À partir de {jobOffer.SalaryMin} €";
+
+        if (jobOffer.SalaryMax > 0)
+            return $"Jusqu'à {jobOffer.SalaryMax} €";
+
+        return "Salaire non renseigné";
+    }
+
+
 }

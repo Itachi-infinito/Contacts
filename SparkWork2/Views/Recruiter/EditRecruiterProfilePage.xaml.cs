@@ -46,13 +46,26 @@ public partial class EditRecruiterProfilePage : ContentPage
         entryContactEmail.Text = _currentProfile.ContactEmail;
         editorDescription.Text = _currentProfile.Description;
 
-        if (!string.IsNullOrWhiteSpace(_currentProfile.CompanyPhotoPath) && File.Exists(_currentProfile.CompanyPhotoPath))
+        var initials = BuildInitials(_currentProfile.CompanyName);
+        lblHeaderInitials.Text = initials;
+        lblPhotoInitials.Text = initials;
+
+        SetCompanyPhoto(_currentProfile.CompanyPhotoPath);
+    }
+
+    private void SetCompanyPhoto(string? photoPath)
+    {
+        if (!string.IsNullOrWhiteSpace(photoPath) && File.Exists(photoPath))
         {
-            imgCompanyPhoto.Source = ImageSource.FromFile(_currentProfile.CompanyPhotoPath);
+            imgCompanyPhoto.Source = ImageSource.FromFile(photoPath);
+            photoImageFrame.IsVisible = true;
+            photoPlaceholderFrame.IsVisible = false;
         }
         else
         {
-            imgCompanyPhoto.Source = "dotnet_bot.png";
+            imgCompanyPhoto.Source = null;
+            photoImageFrame.IsVisible = false;
+            photoPlaceholderFrame.IsVisible = true;
         }
     }
 
@@ -73,31 +86,31 @@ public partial class EditRecruiterProfilePage : ContentPage
             string.IsNullOrWhiteSpace(contactEmail) ||
             string.IsNullOrWhiteSpace(description))
         {
-            await DisplayAlert("Error", "Please fill in all fields.", "OK");
+            await DisplayAlert("Erreur", "Merci de remplir tous les champs.", "OK");
             return;
         }
 
         if (companyName.Length < 2)
         {
-            await DisplayAlert("Error", "Company name must contain at least 2 characters.", "OK");
+            await DisplayAlert("Erreur", "Le nom de l'entreprise doit contenir au moins 2 caractères.", "OK");
             return;
         }
 
         if (sector.Length < 2)
         {
-            await DisplayAlert("Error", "Sector must contain at least 2 characters.", "OK");
+            await DisplayAlert("Erreur", "Le secteur doit contenir au moins 2 caractères.", "OK");
             return;
         }
 
         if (!IsValidEmail(contactEmail))
         {
-            await DisplayAlert("Error", "Please enter a valid contact email.", "OK");
+            await DisplayAlert("Erreur", "Merci d'entrer une adresse email valide.", "OK");
             return;
         }
 
         if (description.Length < 10)
         {
-            await DisplayAlert("Error", "Description must contain at least 10 characters.", "OK");
+            await DisplayAlert("Erreur", "La description doit contenir au moins 10 caractères.", "OK");
             return;
         }
 
@@ -110,7 +123,7 @@ public partial class EditRecruiterProfilePage : ContentPage
 
         await _recruiterProfileRepository.UpdateRecruiterProfileAsync(_currentProfile);
 
-        await DisplayAlert("Success", "Profile updated successfully.", "OK");
+        await DisplayAlert("Succès", "Profil mis à jour.", "OK");
         await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
     }
 
@@ -119,14 +132,22 @@ public partial class EditRecruiterProfilePage : ContentPage
         await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
     }
 
-    private async void Back_Tapped(object sender, TappedEventArgs e)
-    {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
-    }
-
-    private bool IsValidEmail(string email)
+    private static bool IsValidEmail(string email)
     {
         return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "AL";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
     }
 
     private async void ChangePhoto_Clicked(object sender, EventArgs e)
@@ -135,7 +156,7 @@ public partial class EditRecruiterProfilePage : ContentPage
         {
             var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
             {
-                Title = "Choose company photo"
+                Title = "Choisir une photo d'entreprise"
             });
 
             if (result == null)
@@ -150,11 +171,11 @@ public partial class EditRecruiterProfilePage : ContentPage
             await sourceStream.CopyToAsync(localFileStream);
 
             _selectedCompanyPhotoPath = localPath;
-            imgCompanyPhoto.Source = ImageSource.FromFile(localPath);
+            SetCompanyPhoto(localPath);
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Unable to select photo: {ex.Message}", "OK");
+            await DisplayAlert("Erreur", $"Impossible de sélectionner la photo : {ex.Message}", "OK");
         }
     }
 }

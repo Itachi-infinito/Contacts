@@ -24,7 +24,7 @@ public partial class SplashPage : ContentPage
         _animated = true;
 
         await AnimateLogo();
-        await Task.Delay(1200);
+        await Task.Delay(900);
 
         var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
         Application.Current.MainPage = appShell;
@@ -34,27 +34,37 @@ public partial class SplashPage : ContentPage
 
     private async Task AnimateLogo()
     {
-        StarIcon.Scale = 0.5;
-        StarIcon.Rotation = -30;
-        StarIcon.Opacity = 0;
+        LogoMark.Scale = 0.72;
+        LogoMark.Rotation = -8;
+        LogoMark.Opacity = 0;
+
+        StarIcon.Scale = 0.7;
+        StarIcon.Rotation = -25;
 
         TitleLabel.Opacity = 0;
-        TitleLabel.TranslationY = 20;
+        TitleLabel.TranslationY = 18;
+
+        SubtitleLabel.Opacity = 0;
+        SubtitleLabel.TranslationY = 10;
 
         await Task.WhenAll(
-            StarIcon.FadeTo(1, 400),
-            StarIcon.RotateTo(0, 500, Easing.CubicOut),
-            StarIcon.ScaleTo(1.1, 500, Easing.CubicOut)
+            LogoMark.FadeTo(1, 360, Easing.CubicOut),
+            LogoMark.ScaleTo(1.08, 460, Easing.CubicOut),
+            LogoMark.RotateTo(0, 460, Easing.CubicOut),
+            StarIcon.RotateTo(0, 520, Easing.CubicOut),
+            StarIcon.ScaleTo(1, 460, Easing.CubicOut)
         );
 
-        await StarIcon.ScaleTo(1.0, 150, Easing.CubicOut);
+        await LogoMark.ScaleTo(1, 140, Easing.CubicOut);
 
         await Task.WhenAll(
-            TitleLabel.FadeTo(1, 600),
-            TitleLabel.TranslateTo(0, 0, 600, Easing.CubicOut)
+            TitleLabel.FadeTo(1, 420, Easing.CubicOut),
+            TitleLabel.TranslateTo(0, 0, 420, Easing.CubicOut)
         );
 
-        await StarIcon.FadeTo(0.7, 150);
-        await StarIcon.FadeTo(1, 150);
+        await Task.WhenAll(
+            SubtitleLabel.FadeTo(1, 320, Easing.CubicOut),
+            SubtitleLabel.TranslateTo(0, 0, 320, Easing.CubicOut)
+        );
     }
 }

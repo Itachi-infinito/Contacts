@@ -17,8 +17,8 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         return await db.Table<Match>()
-                       .Where(x => x.UserId == userId)
-                       .ToListAsync();
+            .Where(x => x.CandidateUserId == userId || x.RecruiterUserId == userId)
+            .ToListAsync();
     }
 
     public async Task<bool> AddMatchAsync(
@@ -31,10 +31,10 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         var existingMatch = await db.Table<Match>()
-                                    .FirstOrDefaultAsync(x =>
-                                        x.CandidateUserId == candidateUserId &&
-                                        x.RecruiterUserId == recruiterUserId &&
-                                        x.JobOfferId == jobOffer.JobOfferId);
+            .FirstOrDefaultAsync(x =>
+                x.CandidateUserId == candidateUserId &&
+                x.RecruiterUserId == recruiterUserId &&
+                x.JobOfferId == jobOffer.JobOfferId);
 
         if (existingMatch != null)
             return false;
@@ -48,8 +48,11 @@ public class MatchRepository
             JobOfferId = jobOffer.JobOfferId,
             JobTitle = jobOffer.Title,
             CompanyName = jobOffer.CompanyName,
-            ShowToCandidate = createdByCandidate,
-            ShowToRecruiter = !createdByCandidate
+
+            // Celui qui crée le match voit déjà l'animation immédiatement.
+            // L'autre devra la voir à sa prochaine connexion.
+            ShowToCandidate = !createdByCandidate,
+            ShowToRecruiter = createdByCandidate
         };
 
         await db.InsertAsync(match);
@@ -61,7 +64,7 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         var match = await db.Table<Match>()
-                            .FirstOrDefaultAsync(x => x.MatchId == matchId);
+            .FirstOrDefaultAsync(x => x.MatchId == matchId);
 
         if (match != null)
             await db.DeleteAsync(match);
@@ -72,9 +75,9 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         var existingMatch = await db.Table<Match>()
-                                    .FirstOrDefaultAsync(x =>
-                                        x.JobOfferId == jobOfferId &&
-                                        x.UserId == userId);
+            .FirstOrDefaultAsync(x =>
+                x.JobOfferId == jobOfferId &&
+                (x.CandidateUserId == userId || x.RecruiterUserId == userId));
 
         return existingMatch != null;
     }
@@ -83,33 +86,22 @@ public class MatchRepository
     {
         var db = await _databaseService.GetConnectionAsync();
 
-        var recruiterOffers = await db.Table<JobOffer>()
-                        .Where(x => x.RecruiterUserId == recruiterUserId)
-                        .ToListAsync();
-
-        var recruiterOfferIds = recruiterOffers.Select(x => x.JobOfferId).ToList();
-
-        if (!recruiterOfferIds.Any())
-            return new List<RecruiterMatchItem>();
-
-        var allMatches = await db.Table<Match>().ToListAsync();
-
-        var recruiterMatches = allMatches
-            .Where(x => recruiterOfferIds.Contains(x.JobOfferId))
-            .ToList();
+        var matches = await db.Table<Match>()
+            .Where(x => x.RecruiterUserId == recruiterUserId)
+            .ToListAsync();
 
         var result = new List<RecruiterMatchItem>();
 
-        foreach (var match in recruiterMatches)
+        foreach (var match in matches)
         {
             var user = await db.Table<User>()
-                               .FirstOrDefaultAsync(x => x.UserId == match.UserId);
+                .FirstOrDefaultAsync(x => x.UserId == match.CandidateUserId);
 
             result.Add(new RecruiterMatchItem
             {
                 MatchId = match.MatchId,
-                CandidateUserId = match.UserId,
-                CandidateName = user?.FullName ?? "Unknown candidate",
+                CandidateUserId = match.CandidateUserId,
+                CandidateName = user?.FullName ?? match.CandidateName,
                 JobOfferId = match.JobOfferId,
                 JobTitle = match.JobTitle
             });
@@ -122,34 +114,23 @@ public class MatchRepository
     {
         var db = await _databaseService.GetConnectionAsync();
 
-        var recruiterOffers = await db.Table<JobOffer>()
-                                        .Where(x => x.RecruiterUserId == recruiterUserId)
-                                        .ToListAsync();
-
-        var recruiterOfferIds = recruiterOffers.Select(x => x.JobOfferId).ToList();
-
-        if (!recruiterOfferIds.Any())
-            return new List<RecruiterLikeReceivedItem>();
-
-        var allMatches = await db.Table<Match>().ToListAsync();
-
-        var recruiterMatches = allMatches
-            .Where(x => recruiterOfferIds.Contains(x.JobOfferId))
-            .ToList();
+        var matches = await db.Table<Match>()
+            .Where(x => x.RecruiterUserId == recruiterUserId)
+            .ToListAsync();
 
         var result = new List<RecruiterLikeReceivedItem>();
 
-        foreach (var match in recruiterMatches)
+        foreach (var match in matches)
         {
             var user = await db.Table<User>()
-                               .FirstOrDefaultAsync(x => x.UserId == match.UserId);
+                .FirstOrDefaultAsync(x => x.UserId == match.CandidateUserId);
 
             if (user == null)
                 continue;
 
             result.Add(new RecruiterLikeReceivedItem
             {
-                CandidateUserId = match.UserId,
+                CandidateUserId = match.CandidateUserId,
                 CandidateName = user.FullName,
                 JobOfferId = match.JobOfferId,
                 JobTitle = match.JobTitle
@@ -164,19 +145,21 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         var recruiterOffers = await db.Table<JobOffer>()
-                                        .Where(x => x.RecruiterUserId == recruiterUserId)
-                                        .ToListAsync();
+            .Where(x => x.RecruiterUserId == recruiterUserId)
+            .ToListAsync();
 
-        var recruiterOfferIds = recruiterOffers.Select(x => x.JobOfferId).ToList();
+        var recruiterOfferIds = recruiterOffers
+            .Select(x => x.JobOfferId)
+            .ToList();
 
         if (!recruiterOfferIds.Any())
             return false;
 
-        var allMatches = await db.Table<Match>().ToListAsync();
+        var candidateLikes = await db.Table<CandidateJobLike>()
+            .Where(x => x.CandidateUserId == candidateUserId)
+            .ToListAsync();
 
-        return allMatches.Any(x =>
-            x.UserId == candidateUserId &&
-            recruiterOfferIds.Contains(x.JobOfferId));
+        return candidateLikes.Any(x => recruiterOfferIds.Contains(x.JobOfferId));
     }
 
     public async Task<Match?> GetPendingMatchForCandidateAsync(int candidateUserId)
@@ -184,9 +167,9 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         return await db.Table<Match>()
-                       .Where(x => x.UserId == candidateUserId && x.ShowToCandidate)
-                       .OrderByDescending(x => x.MatchId)
-                       .FirstOrDefaultAsync();
+            .Where(x => x.CandidateUserId == candidateUserId && x.ShowToCandidate)
+            .OrderByDescending(x => x.MatchId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Match?> GetPendingMatchForRecruiterAsync(int recruiterUserId)
@@ -194,9 +177,24 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         return await db.Table<Match>()
-                       .Where(x => x.RecruiterUserId == recruiterUserId && x.ShowToRecruiter)
-                       .OrderByDescending(x => x.MatchId)
-                       .FirstOrDefaultAsync();
+            .Where(x => x.RecruiterUserId == recruiterUserId && x.ShowToRecruiter)
+            .OrderByDescending(x => x.MatchId)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Match?> GetPendingMatchAnimationAsync(int userId)
+    {
+        var db = await _databaseService.GetConnectionAsync();
+
+        var matches = await db.Table<Match>()
+            .Where(x =>
+                (x.CandidateUserId == userId && x.ShowToCandidate) ||
+                (x.RecruiterUserId == userId && x.ShowToRecruiter))
+            .ToListAsync();
+
+        return matches
+            .OrderByDescending(x => x.MatchId)
+            .FirstOrDefault();
     }
 
     public async Task MarkShownToCandidateAsync(int matchId)
@@ -204,7 +202,7 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         var match = await db.Table<Match>()
-                            .FirstOrDefaultAsync(x => x.MatchId == matchId);
+            .FirstOrDefaultAsync(x => x.MatchId == matchId);
 
         if (match == null)
             return;
@@ -218,12 +216,31 @@ public class MatchRepository
         var db = await _databaseService.GetConnectionAsync();
 
         var match = await db.Table<Match>()
-                            .FirstOrDefaultAsync(x => x.MatchId == matchId);
+            .FirstOrDefaultAsync(x => x.MatchId == matchId);
 
         if (match == null)
             return;
 
         match.ShowToRecruiter = false;
+        await db.UpdateAsync(match);
+    }
+
+    public async Task MarkMatchAnimationSeenAsync(int matchId, int userId)
+    {
+        var db = await _databaseService.GetConnectionAsync();
+
+        var match = await db.Table<Match>()
+            .FirstOrDefaultAsync(x => x.MatchId == matchId);
+
+        if (match == null)
+            return;
+
+        if (match.CandidateUserId == userId)
+            match.ShowToCandidate = false;
+
+        if (match.RecruiterUserId == userId)
+            match.ShowToRecruiter = false;
+
         await db.UpdateAsync(match);
     }
 }

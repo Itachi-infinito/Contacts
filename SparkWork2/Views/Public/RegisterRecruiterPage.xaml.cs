@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Storage;
 using SparkWork2.Models;
@@ -43,31 +44,31 @@ public partial class RegisterRecruiterPage : ContentPage
             string.IsNullOrWhiteSpace(password) ||
             string.IsNullOrWhiteSpace(confirmPassword))
         {
-            await DisplayAlert("Error", "Please fill in all required fields.", "OK");
+            await DisplayAlert("Erreur", "Merci de remplir tous les champs obligatoires.", "OK");
             return;
         }
 
         if (companyName.Length < 2)
         {
-            await DisplayAlert("Error", "Company name must contain at least 2 characters.", "OK");
+            await DisplayAlert("Erreur", "Le nom de l'entreprise doit contenir au moins 2 caractères.", "OK");
             return;
         }
 
         if (!IsValidEmail(email))
         {
-            await DisplayAlert("Error", "Please enter a valid email address.", "OK");
+            await DisplayAlert("Erreur", "Merci d'entrer une adresse email valide.", "OK");
             return;
         }
 
         if (password.Length < 4)
         {
-            await DisplayAlert("Error", "Password must contain at least 4 characters.", "OK");
+            await DisplayAlert("Erreur", "Le mot de passe doit contenir au moins 4 caractères.", "OK");
             return;
         }
 
         if (password != confirmPassword)
         {
-            await DisplayAlert("Error", "Passwords do not match.", "OK");
+            await DisplayAlert("Erreur", "Les mots de passe ne correspondent pas.", "OK");
             return;
         }
 
@@ -79,7 +80,7 @@ public partial class RegisterRecruiterPage : ContentPage
 
         if (!registerResult.Success)
         {
-            await DisplayAlert("Error", registerResult.ErrorMessage, "OK");
+            await DisplayAlert("Erreur", registerResult.ErrorMessage, "OK");
             return;
         }
 
@@ -87,7 +88,7 @@ public partial class RegisterRecruiterPage : ContentPage
 
         if (registeredUser == null)
         {
-            await DisplayAlert("Error", "Registration succeeded, but automatic login failed.", "OK");
+            await DisplayAlert("Erreur", "Le compte a été créé, mais la connexion automatique a échoué.", "OK");
             return;
         }
 
@@ -106,22 +107,41 @@ public partial class RegisterRecruiterPage : ContentPage
 
         _sessionService.SetSession(registeredUser);
 
-        if (Application.Current?.MainPage is AppShell shell)
-        {
-            shell.UpdateFlyoutByRole();
-        }
+        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
+        Application.Current.MainPage = appShell;
+        appShell.UpdateFlyoutByRole();
 
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await appShell.GoToAsync($"//{nameof(RecruiterSwipePage)}");
     }
 
-    private bool IsValidEmail(string email)
+    private static bool IsValidEmail(string email)
     {
         return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
     }
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private void CompanyName_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var initials = BuildInitials(e.NewTextValue);
+        lblHeaderInitials.Text = initials;
+        lblPhotoInitials.Text = initials;
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "HR";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
     }
 
     private async void ChoosePhoto_Clicked(object sender, EventArgs e)
@@ -130,7 +150,7 @@ public partial class RegisterRecruiterPage : ContentPage
         {
             var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
             {
-                Title = "Choose company photo"
+                Title = "Choisir une photo d'entreprise"
             });
 
             if (result == null)
@@ -146,10 +166,12 @@ public partial class RegisterRecruiterPage : ContentPage
 
             _selectedCompanyPhotoPath = localPath;
             imgCompanyPhoto.Source = ImageSource.FromFile(localPath);
+            photoImageFrame.IsVisible = true;
+            photoPlaceholderFrame.IsVisible = false;
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Unable to select photo: {ex.Message}", "OK");
+            await DisplayAlert("Erreur", $"Impossible de sélectionner la photo : {ex.Message}", "OK");
         }
     }
 }

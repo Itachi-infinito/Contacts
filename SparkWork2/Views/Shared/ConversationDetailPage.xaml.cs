@@ -1,5 +1,6 @@
 using SparkWork2.Repositories;
 using SparkWork2.Services;
+using SparkWork2.Views.Candidate;
 using SparkWork2.Views.Recruiter;
 
 namespace SparkWork2.Views.Shared;
@@ -16,6 +17,7 @@ public partial class ConversationDetailPage : ContentPage
 
     private int participantUserId;
     private string participantName = string.Empty;
+    private bool _isSending;
 
     public ConversationDetailPage(MessageRepository messageRepository, SessionService sessionService)
     {
@@ -31,7 +33,7 @@ public partial class ConversationDetailPage : ContentPage
             if (int.TryParse(value, out int id))
             {
                 participantUserId = id;
-                LoadConversation();
+                _ = LoadConversation();
             }
         }
     }
@@ -40,8 +42,9 @@ public partial class ConversationDetailPage : ContentPage
     {
         set
         {
-            participantName = Uri.UnescapeDataString(value);
+            participantName = Uri.UnescapeDataString(value ?? string.Empty);
             lblConversationTitle.Text = participantName;
+            lblParticipantInitials.Text = BuildInitials(participantName);
         }
     }
 
@@ -66,7 +69,7 @@ public partial class ConversationDetailPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay(100);
+                await Task.Delay(120);
                 conversationCollection.ScrollTo(messages.Last(), position: ScrollToPosition.End, animate: true);
             });
         }
@@ -74,22 +77,42 @@ public partial class ConversationDetailPage : ContentPage
 
     private async void Send_Clicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(editorNewMessage.Text))
+        await SendMessageAsync();
+    }
+
+    private async void Message_Completed(object sender, EventArgs e)
+    {
+        await SendMessageAsync();
+    }
+
+    private async Task SendMessageAsync()
+    {
+        if (_isSending)
             return;
 
-        if (!_sessionService.IsLoggedIn)
+        var content = editorNewMessage.Text?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(content))
             return;
+
+        if (!_sessionService.IsLoggedIn || participantUserId <= 0)
+            return;
+
+        _isSending = true;
+        btnSend.IsEnabled = false;
 
         await _messageRepository.AddMessageAsync(
             _sessionService.CurrentUserId,
             participantUserId,
             _sessionService.CurrentUserName,
             participantName,
-            editorNewMessage.Text);
+            content);
 
         editorNewMessage.Text = string.Empty;
-        LoadConversation();
+        await LoadConversation();
 
+        btnSend.IsEnabled = true;
+        _isSending = false;
     }
 
     private async void Back_Tapped(object sender, TappedEventArgs e)
@@ -99,5 +122,18 @@ public partial class ConversationDetailPage : ContentPage
             : ReturnRoute;
 
         await Shell.Current.GoToAsync($"//{route}");
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "?";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
     }
 }

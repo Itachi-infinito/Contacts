@@ -69,7 +69,8 @@ public partial class AppShell : Shell
 
         FlyoutBehavior = FlyoutBehavior.Flyout;
 
-        if (_sessionService.CurrentUserRole == "Candidate")
+        if (string.Equals(_sessionService.CurrentUserRole, "Candidate", StringComparison.OrdinalIgnoreCase))
+
         {
             SetVisible("candidateHome");
             SetVisible("candidateMatches");
@@ -77,17 +78,18 @@ public partial class AppShell : Shell
             SetVisible("candidateProfile");
             SetVisible("settings");
         }
-        else if (_sessionService.CurrentUserRole == "Recruiter")
+        else if (string.Equals(_sessionService.CurrentUserRole, "Recruiter", StringComparison.OrdinalIgnoreCase))
+
         {
             SetVisible("recruiterHome");
             SetVisible("recruiterJobOffers");
-            SetVisible("addJobOffer");
             SetVisible("recruiterMatches");
             SetVisible("likesReceived");
             SetVisible("messages");
             SetVisible("recruiterProfile");
             SetVisible("settings");
         }
+
     }
 
     private void SetVisible(string route)

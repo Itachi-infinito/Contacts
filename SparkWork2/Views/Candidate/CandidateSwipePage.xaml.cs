@@ -1,8 +1,9 @@
-using System.Linq;
+using Microsoft.Extensions.Logging;
 using SparkWork2.Models;
 using SparkWork2.Repositories;
 using SparkWork2.Services;
 using SparkWork2.Views.Shared;
+using System.Linq;
 
 namespace SparkWork2.Views.Candidate;
 
@@ -42,6 +43,8 @@ public partial class CandidateSwipePage : ContentPage
     {
         base.OnAppearing();
         await LoadJobOffers();
+        await ShowPendingMatchAnimationIfNeeded();
+
     }
 
     private async Task LoadJobOffers()
@@ -81,6 +84,11 @@ public partial class CandidateSwipePage : ContentPage
             actionsGrid.IsVisible = false;
 
             contractTypeBadge.IsVisible = false;
+            levelBadge.IsVisible = false;
+            remoteBadge.IsVisible = false;
+            skillsPreviewCard.IsVisible = false;
+            lblSalary.IsVisible = false;
+
             btnImageExpandCollapse.IsVisible = false;
             btnHeaderExpandCollapse.IsVisible = false;
             descriptionSection.IsVisible = false;
@@ -90,33 +98,66 @@ public partial class CandidateSwipePage : ContentPage
         }
 
         _currentJobOffer = _jobOffers[_currentIndex];
+        var currentOffer = _currentJobOffer;
 
         jobCard.IsVisible = true;
         emptyStateSection.IsVisible = false;
         lblSwipeHint.IsVisible = true;
         actionsGrid.IsVisible = true;
 
-        lblTitle.Text = _currentJobOffer.Title;
-        lblCompany.Text = _currentJobOffer.CompanyName;
-        lblLocation.Text = _currentJobOffer.Location;
-        lblContractType.Text = _currentJobOffer.ContractType;
-        lblDescription.Text = _currentJobOffer.Description;
+        lblTitle.Text = currentOffer.Title;
+        lblCompany.Text = currentOffer.CompanyName;
+        lblLocation.Text = currentOffer.Location;
+        lblDescription.Text = currentOffer.Description;
 
-        lblDetailCompany.Text = $"Entreprise : {_currentJobOffer.CompanyName}";
-        lblDetailLocation.Text = $"Lieu : {_currentJobOffer.Location}";
-        lblDetailContractType.Text = $"Contrat : {_currentJobOffer.ContractType}";
+        lblSalary.Text = GetSalaryDisplay(currentOffer);
+        lblSalary.IsVisible = currentOffer.SalaryMin > 0 || currentOffer.SalaryMax > 0;
+
+        contractTypeBadge.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.ContractType);
+        lblContractType.Text = currentOffer.ContractType;
+
+        levelBadge.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.Level);
+        lblLevel.Text = currentOffer.Level;
+
+        remoteBadge.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.RemoteMode);
+        lblRemoteMode.Text = currentOffer.RemoteMode;
+
+        string skillsPreview = !string.IsNullOrWhiteSpace(currentOffer.RequiredSkills)
+            ? currentOffer.RequiredSkills
+            : currentOffer.NiceToHaveSkills;
+
+        skillsPreviewCard.IsVisible = !string.IsNullOrWhiteSpace(skillsPreview);
+        lblSkillsPreview.Text = skillsPreview;
+
+        lblDetailCompany.Text = $"Entreprise : {currentOffer.CompanyName}";
+        lblDetailLocation.Text = $"Lieu : {currentOffer.Location}";
+        lblDetailContractType.Text = $"Contrat : {currentOffer.ContractType}";
+
+        lblDetailSalary.Text = $"Salaire : {GetSalaryDisplay(currentOffer)}";
+        lblDetailSalary.IsVisible = currentOffer.SalaryMin > 0 || currentOffer.SalaryMax > 0;
+
+        lblDetailLevel.Text = $"Niveau : {currentOffer.Level}";
+        lblDetailLevel.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.Level);
+
+        lblDetailRemoteMode.Text = $"Mode : {currentOffer.RemoteMode}";
+        lblDetailRemoteMode.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.RemoteMode);
+
+        requiredSkillsDetailSection.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.RequiredSkills);
+        lblDetailRequiredSkills.Text = currentOffer.RequiredSkills;
+
+        niceSkillsDetailSection.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.NiceToHaveSkills);
+        lblDetailNiceToHaveSkills.Text = currentOffer.NiceToHaveSkills;
 
         imgJob.Source = null;
         imgJob.IsVisible = false;
         imgJob.Opacity = 0;
 
-
-        contractTypeBadge.IsVisible = !string.IsNullOrWhiteSpace(_currentJobOffer.ContractType);
         btnImageExpandCollapse.IsVisible = true;
         btnHeaderExpandCollapse.IsVisible = false;
         descriptionSection.IsVisible = true;
         expandedDetailsSection.IsVisible = false;
     }
+
 
 
     private void ResetCardVisuals()
@@ -335,5 +376,41 @@ public partial class CandidateSwipePage : ContentPage
     {
         await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
     }
+
+    private async Task ShowPendingMatchAnimationIfNeeded()
+    {
+        if (!_sessionService.IsLoggedIn)
+            return;
+
+        var pendingMatch = await _matchRepository.GetPendingMatchAnimationAsync(_sessionService.CurrentUserId);
+
+        if (pendingMatch == null)
+            return;
+
+        await _matchRepository.MarkMatchAnimationSeenAsync(
+            pendingMatch.MatchId,
+            _sessionService.CurrentUserId);
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(MatchPage)}" +
+            $"?participantId={pendingMatch.RecruiterUserId}" +
+            $"&participantName={Uri.EscapeDataString(pendingMatch.CompanyName)}");
+    }
+
+    private string GetSalaryDisplay(JobOffer jobOffer)
+    {
+        if (jobOffer.SalaryMin > 0 && jobOffer.SalaryMax > 0)
+            return $"{jobOffer.SalaryMin} - {jobOffer.SalaryMax} €";
+
+        if (jobOffer.SalaryMin > 0)
+            return $"À partir de {jobOffer.SalaryMin} €";
+
+        if (jobOffer.SalaryMax > 0)
+            return $"Jusqu'à {jobOffer.SalaryMax} €";
+
+        return string.Empty;
+    }
+
+
 
 }

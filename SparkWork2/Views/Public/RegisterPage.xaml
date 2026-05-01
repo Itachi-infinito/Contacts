@@ -3,43 +3,121 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Public.RegisterPage"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#1ABC9C">
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#FFFFFF" Offset="0.0" />
-            <GradientStop Color="#D1F2EB" Offset="0.5" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+             BackgroundColor="#F7F5FC">
 
-    <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="Center">
+    <Grid Padding="24">
 
-        <Label Text="Create your account"
-               FontSize="30"
-               FontAttributes="Bold"
-               TextColor="#0B1F1D"
-               HorizontalTextAlignment="Center" />
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFFFFF" Offset="0.0" />
+                <GradientStop Color="#F7F5FC" Offset="0.48" />
+                <GradientStop Color="#EDE7FF" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Label Text="First choose whether you are a candidate or a recruiter."
-               FontSize="16"
-               TextColor="#0B1F1D"
-               HorizontalTextAlignment="Center" />
+        <Grid RowDefinitions="Auto,*">
 
-        <Button Text="Next"
-                HeightRequest="50"
-                BackgroundColor="White"
-                TextColor="#1ABC9C"
-                FontAttributes="Bold"
-                CornerRadius="12"
-                Clicked="Next_Clicked" />
+            <Button Grid.Row="0"
+                    Text="‹"
+                    FontSize="34"
+                    Padding="0"
+                    HeightRequest="44"
+                    WidthRequest="44"
+                    BackgroundColor="Transparent"
+                    TextColor="#111827"
+                    HorizontalOptions="Start"
+                    Clicked="Back_Clicked" />
 
-        <Label Text="Already have an account? Login"
-               TextColor="White"
-               HorizontalTextAlignment="Center">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="Login_Tapped" />
-            </Label.GestureRecognizers>
-        </Label>
+            <VerticalStackLayout Grid.Row="1"
+                                 VerticalOptions="Center"
+                                 Spacing="22">
 
-    </VerticalStackLayout>
+                <VerticalStackLayout Spacing="10"
+                                     HorizontalOptions="Center">
+
+                    <Frame WidthRequest="76"
+                           HeightRequest="76"
+                           CornerRadius="24"
+                           Padding="0"
+                           HasShadow="False"
+                           HorizontalOptions="Center">
+
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+
+                        <Label Text="✦"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
+
+                    <Label Text="Créer un compte"
+                           FontSize="34"
+                           FontAttributes="Bold"
+                           TextColor="#111827"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Choisis ton rôle, puis complète ton profil."
+                           FontSize="14"
+                           TextColor="#8581A6"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+
+                <Frame BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       CornerRadius="26"
+                       Padding="22"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="18">
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Bienvenue sur SparkWork"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Label Text="Crée un compte candidat ou recruteur pour commencer à matcher autour des bonnes opportunités."
+                                   FontSize="14"
+                                   TextColor="#8581A6"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Button Text="Continuer"
+                                HeightRequest="54"
+                                BackgroundColor="#7C4DFF"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="14"
+                                Clicked="Next_Clicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Label HorizontalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Déjà un compte ? "
+                                  TextColor="#8581A6" />
+                            <Span Text="Se connecter"
+                                  TextColor="#7C4DFF"
+                                  FontAttributes="Bold" />
+                        </FormattedString>
+                    </Label.FormattedText>
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Login_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

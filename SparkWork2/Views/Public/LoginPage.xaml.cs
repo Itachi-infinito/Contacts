@@ -25,13 +25,13 @@ public partial class LoginPage : ContentPage
 
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
-            await DisplayAlert("Error", "Please enter your email and password.", "OK");
+            await DisplayAlert("Erreur", "Merci d'entrer ton email et ton mot de passe.", "OK");
             return;
         }
 
         if (!IsValidEmail(email))
         {
-            await DisplayAlert("Error", "Please enter a valid email address.", "OK");
+            await DisplayAlert("Erreur", "Merci d'entrer une adresse email valide.", "OK");
             return;
         }
 
@@ -39,7 +39,7 @@ public partial class LoginPage : ContentPage
 
         if (user == null)
         {
-            await DisplayAlert("Login failed", "Invalid email or password.", "OK");
+            await DisplayAlert("Connexion impossible", "Email ou mot de passe incorrect.", "OK");
             return;
         }
 
@@ -49,7 +49,7 @@ public partial class LoginPage : ContentPage
         Application.Current.MainPage = appShell;
         appShell.UpdateFlyoutByRole();
 
-        if (user.Role == "Candidate")
+        if (string.Equals(user.Role, "Candidate", StringComparison.OrdinalIgnoreCase))
         {
             await appShell.GoToAsync($"//{nameof(CandidateSwipePage)}");
         }
@@ -64,7 +64,12 @@ public partial class LoginPage : ContentPage
         await Shell.Current.GoToAsync(nameof(RegisterPage));
     }
 
-    private bool IsValidEmail(string email)
+    private async void Back_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private static bool IsValidEmail(string email)
     {
         return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
     }

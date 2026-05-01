@@ -46,6 +46,8 @@ public partial class RecruiterSwipePage : ContentPage
     {
         base.OnAppearing();
         await LoadCandidates();
+        await ShowPendingMatchAnimationIfNeeded();
+
     }
 
     private async Task LoadCandidates()
@@ -393,5 +395,26 @@ public partial class RecruiterSwipePage : ContentPage
             candidatePlaceholderIllustration.IsVisible = true;
         }
     }
+
+    private async Task ShowPendingMatchAnimationIfNeeded()
+    {
+        if (!_sessionService.IsLoggedIn)
+            return;
+
+        var pendingMatch = await _matchRepository.GetPendingMatchAnimationAsync(_sessionService.CurrentUserId);
+
+        if (pendingMatch == null)
+            return;
+
+        await _matchRepository.MarkMatchAnimationSeenAsync(
+            pendingMatch.MatchId,
+            _sessionService.CurrentUserId);
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(MatchPage)}" +
+            $"?participantId={pendingMatch.CandidateUserId}" +
+            $"&participantName={Uri.EscapeDataString(pendingMatch.CandidateName)}");
+    }
+
 
 }

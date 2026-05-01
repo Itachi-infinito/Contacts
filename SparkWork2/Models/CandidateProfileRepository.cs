@@ -29,8 +29,17 @@ public class CandidateProfileRepository
             Title = "",
             Location = "",
             About = "",
-            Email = email
+            Email = email,
+            Skills = "",
+            DesiredContractType = "",
+            ExperienceLevel = "",
+            DesiredSalaryMin = 0,
+            DesiredSalaryMax = 0,
+            MaxDistanceKm = 25,
+            Latitude = 0,
+            Longitude = 0
         };
+
 
         await db.InsertAsync(profile);
         return profile;

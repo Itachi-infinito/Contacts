@@ -3,34 +3,58 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Public.SplashPage"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#1ABC9C">
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#FFFFFF" Offset="0.0" />
-            <GradientStop Color="#D1F2EB" Offset="0.5" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+             BackgroundColor="#F7F5FC">
 
     <Grid>
-        <HorizontalStackLayout HorizontalOptions="Center"
-                       Spacing="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFFFFF" Offset="0.0" />
+                <GradientStop Color="#F7F5FC" Offset="0.45" />
+                <GradientStop Color="#EDE7FF" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-            <Label x:Name="StarIcon" 
-                   Text="✦"
-                   FontSize="44"
-                   TextColor="#1ABC9C"
-                   VerticalOptions="Center" />
+        <VerticalStackLayout HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Spacing="18">
 
-            <Label  x:Name="TitleLabel"
-                    Text="SparkWork"
-                    FontSize="50"
-                    FontAttributes="Bold"
-                    TextColor="#0B1F1D"
-                    VerticalOptions="Center" />
+            <Frame x:Name="LogoMark"
+                   WidthRequest="96"
+                   HeightRequest="96"
+                   CornerRadius="32"
+                   Padding="0"
+                   HasShadow="False"
+                   HorizontalOptions="Center">
 
-        </HorizontalStackLayout>
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
 
+                <Label x:Name="StarIcon"
+                       Text="✦"
+                       FontSize="44"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
+
+            <Label x:Name="TitleLabel"
+                   Text="SparkWork"
+                   FontSize="42"
+                   FontAttributes="Bold"
+                   TextColor="#111827"
+                   HorizontalTextAlignment="Center" />
+
+            <Label x:Name="SubtitleLabel"
+                   Text="Jobs, talents, matches."
+                   FontSize="15"
+                   TextColor="#8581A6"
+                   Opacity="0"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
     </Grid>
-    
 </ContentPage>

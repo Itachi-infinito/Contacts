@@ -1,20 +1,21 @@
 ﻿using SparkWork2.Services;
+using SparkWork2.Views.Public;
 
 namespace SparkWork2;
 
 public partial class App : Application
 {
     private readonly DatabaseService _databaseService;
-    private readonly AppShell _appShell;
+    private readonly SplashPage _splashPage;
 
-    public App(DatabaseService databaseService, AppShell appShell)
+    public App(DatabaseService databaseService, SplashPage splashPage)
     {
         InitializeComponent();
 
         _databaseService = databaseService;
-        _appShell = appShell;
+        _splashPage = splashPage;
 
-        MainPage = _appShell;
+        MainPage = _splashPage;
 
         _ = InitializeAppAsync();
     }

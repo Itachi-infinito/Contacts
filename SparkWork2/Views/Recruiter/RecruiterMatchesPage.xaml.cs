@@ -7,154 +7,132 @@ namespace SparkWork2.Views.Recruiter;
 
 public partial class RecruiterMatchesPage : ContentPage
 {
-    private readonly CandidateJobLikeRepository _candidateJobLikeRepository;
-    private readonly RecruiterCandidateLikeRepository _recruiterCandidateLikeRepository;
-    private readonly CandidateProfileRepository _candidateProfileRepository;
-    private readonly UserRepository _userRepository;
+    private readonly MatchRepository _matchRepository;
     private readonly SessionService _sessionService;
 
     public RecruiterMatchesPage(
-        CandidateJobLikeRepository candidateJobLikeRepository,
-        RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
-        CandidateProfileRepository candidateProfileRepository,
-        UserRepository userRepository,
+        MatchRepository matchRepository,
         SessionService sessionService)
     {
         InitializeComponent();
-        _candidateJobLikeRepository = candidateJobLikeRepository;
-        _recruiterCandidateLikeRepository = recruiterCandidateLikeRepository;
-        _candidateProfileRepository = candidateProfileRepository;
-        _userRepository = userRepository;
+
+        _matchRepository = matchRepository;
         _sessionService = sessionService;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await LoadMatches();
+        await LoadDashboard();
     }
 
-    private async Task LoadMatches()
+    private async Task LoadDashboard()
     {
         if (!_sessionService.IsLoggedIn)
-            return;
-
-        int recruiterUserId = _sessionService.CurrentUserId;
-
-        var recruiterLikes = await _recruiterCandidateLikeRepository.GetLikesByRecruiterAsync(recruiterUserId);
-        var allProfiles = await _candidateProfileRepository.GetAllCandidateProfilesAsync();
-
-        var mutualMatches = new List<CandidateBrowseItem>();
-
-        foreach (var like in recruiterLikes)
         {
-            bool candidateLikedRecruiter =
-                await _candidateJobLikeRepository.HasCandidateLikedAnyOfferOfRecruiterAsync(
-                    like.CandidateUserId,
-                    recruiterUserId);
-
-            if (!candidateLikedRecruiter)
-                continue;
-
-            var user = await _userRepository.GetUserByIdAsync(like.CandidateUserId);
-            if (user == null)
-                continue;
-
-            var profile = allProfiles.FirstOrDefault(x => x.CandidateId == like.CandidateUserId);
-            if (profile == null)
-                continue;
-
-            mutualMatches.Add(new CandidateBrowseItem
-            {
-                CandidateUserId = profile.CandidateId,
-                FullName = profile.FullName,
-                Title = profile.Title,
-                Location = profile.Location,
-                About = profile.About,
-                Email = profile.Email
-            });
+            lblMatchesCount.Text = "0";
+            lblNewMatchesText.Text = "0 nouveaux";
+            matchesCollection.ItemsSource = new List<RecruiterMatchDashboardItem>();
+            return;
         }
+
+        var matches = await _matchRepository.GetMatchesAsync(_sessionService.CurrentUserId);
+
+        var visibleMatches = matches
+            .Where(match => match.RecruiterUserId == _sessionService.CurrentUserId)
+            .Select(match => new RecruiterMatchDashboardItem
+            {
+                MatchId = match.MatchId,
+                CandidateUserId = match.CandidateUserId,
+                CandidateName = string.IsNullOrWhiteSpace(match.CandidateName)
+                    ? "Candidat"
+                    : match.CandidateName,
+                JobTitle = string.IsNullOrWhiteSpace(match.JobTitle)
+                    ? "Profil candidat"
+                    : match.JobTitle,
+                Initials = BuildInitials(match.CandidateName)
+            })
+            .ToList();
+
+        lblMatchesCount.Text = visibleMatches.Count.ToString();
+        lblNewMatchesText.Text = visibleMatches.Count == 1
+            ? "1 nouveau"
+            : $"{visibleMatches.Count} nouveaux";
 
         matchesCollection.ItemsSource = null;
-        matchesCollection.ItemsSource = mutualMatches;
-
-        emptyStateFrame.IsVisible = mutualMatches.Count == 0;
+        matchesCollection.ItemsSource = visibleMatches;
     }
 
-    private async void Candidate_Tapped(object sender, TappedEventArgs e)
+    private static string BuildInitials(string value)
     {
-        if (e.Parameter is CandidateBrowseItem selectedCandidate)
+        if (string.IsNullOrWhiteSpace(value))
+            return "?";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
+
+    private async Task OpenConversationAsync(RecruiterMatchDashboardItem match)
+    {
+        await Shell.Current.GoToAsync(
+            $"{nameof(ConversationDetailPage)}" +
+            $"?participantId={match.CandidateUserId}" +
+            $"&participantName={Uri.EscapeDataString(match.CandidateName)}" +
+            $"&returnRoute={nameof(RecruiterMatchesPage)}");
+    }
+
+    private async void Contact_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button button &&
+            button.CommandParameter is RecruiterMatchDashboardItem match)
         {
-            await Shell.Current.GoToAsync(
-                $"{nameof(CandidateDetailPage)}?candidateId={selectedCandidate.CandidateUserId}");
+            await OpenConversationAsync(match);
         }
     }
 
-    private void Menu_Clicked(object sender, EventArgs e)
+    private async void Match_Tapped(object sender, TappedEventArgs e)
     {
-        Shell.Current.FlyoutIsPresented = true;
+        if (e.Parameter is RecruiterMatchDashboardItem match)
+        {
+            await OpenConversationAsync(match);
+        }
     }
 
-    private async Task DeleteMatchAsync(int candidateUserId)
+    private async void Discover_Tapped(object sender, TappedEventArgs e)
     {
-        if (!_sessionService.IsLoggedIn)
-            return;
-
-        int recruiterUserId = _sessionService.CurrentUserId;
-
-        await _recruiterCandidateLikeRepository.DeleteLikeAsync(recruiterUserId, candidateUserId);
-        await _candidateJobLikeRepository.DeleteLikesForCandidateAndRecruiterAsync(candidateUserId, recruiterUserId);
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
     }
 
-    private async void DeleteBubble_Tapped(object sender, TappedEventArgs e)
+    private async void Messages_Tapped(object sender, TappedEventArgs e)
     {
-        if (sender is not Frame frame || frame.BindingContext is not CandidateBrowseItem selectedCandidate)
-            return;
-
-        await BubbleTapAnimation(frame);
-
-        var popup = new DeleteConfirmationPopup("Remove this match?");
-        await Navigation.PushModalAsync(popup);
-
-        bool confirmed = await popup.CompletionSource.Task;
-        if (!confirmed)
-            return;
-
-        await DeleteMatchAsync(selectedCandidate.CandidateUserId);
-        await LoadMatches();
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
     }
 
-    private async void SwipeBubble_Loaded(object sender, EventArgs e)
+    private async void Profile_Tapped(object sender, TappedEventArgs e)
     {
-        if (sender is not Frame bubble)
-            return;
-
-        if (Math.Abs(bubble.Scale - 1) < 0.01)
-            return;
-
-        await bubble.ScaleTo(1, 220, Easing.SpringOut);
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
+    }
+    private async void Candidate_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button button &&
+            button.CommandParameter is RecruiterMatchDashboardItem match)
+        {
+            await Shell.Current.GoToAsync(
+                $"{nameof(CandidateDetailPage)}?candidateId={match.CandidateUserId}");
+        }
     }
 
-    private async void MatchCard_Loaded(object sender, EventArgs e)
-    {
-        if (sender is not Frame card)
-            return;
+}
 
-        if (card.Opacity >= 0.99 &&
-            Math.Abs(card.TranslationY) < 0.1 &&
-            Math.Abs(card.Scale - 1) < 0.01)
-            return;
-
-        await Task.WhenAll(
-            card.FadeTo(1, 180, Easing.CubicOut),
-            card.TranslateTo(0, 0, 240, Easing.CubicOut),
-            card.ScaleTo(1, 260, Easing.SpringOut)
-        );
-    }
-
-    private async Task BubbleTapAnimation(Frame bubble)
-    {
-        await bubble.ScaleTo(0.88, 70, Easing.CubicIn);
-        await bubble.ScaleTo(1.0, 140, Easing.SpringOut);
-    }
+public class RecruiterMatchDashboardItem
+{
+    public int MatchId { get; set; }
+    public int CandidateUserId { get; set; }
+    public string CandidateName { get; set; } = string.Empty;
+    public string JobTitle { get; set; } = string.Empty;
+    public string Initials { get; set; } = "?";
 }

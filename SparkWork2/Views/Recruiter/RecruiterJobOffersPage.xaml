@@ -2,229 +2,377 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Recruiter.RecruiterJobOffersPage"
+             Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="White">
+             BackgroundColor="#F7F5FC">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#F9FFFD" Offset="0.0" />
-            <GradientStop Color="#EAF8F5" Offset="0.40" />
-            <GradientStop Color="#1ABC9C" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid RowDefinitions="Auto,*">
 
-    <Grid RowDefinitions="Auto,*"
-          Padding="20,26,20,18">
-
-        <!-- HEADER -->
         <!-- HEADER -->
         <Grid Grid.Row="0"
-              ColumnDefinitions="56,*,56"
-              VerticalOptions="Center"
-              Margin="0,0,0,18">
+              BackgroundColor="White"
+              Padding="28,26,28,0"
+              RowDefinitions="Auto,Auto"
+              ColumnDefinitions="*,Auto">
 
-            <Button Grid.Column="0"
-                    Text="☰"
-                    FontSize="22"
-                    BackgroundColor="Transparent"
-                    TextColor="#0B1F1D"
-                    Clicked="Menu_Clicked"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    WidthRequest="40" />
+            <Label Text="SparkWork"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#7C4DFF"
+                   VerticalOptions="Center" />
 
-            <VerticalStackLayout Grid.Column="1"
-                                 Spacing="4"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center">
+            <Frame Grid.Column="1"
+                   HeightRequest="54"
+                   WidthRequest="54"
+                   CornerRadius="27"
+                   Padding="0"
+                   HasShadow="False"
+                   HorizontalOptions="End"
+                   VerticalOptions="Center">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Profile_Tapped" />
+                </Frame.GestureRecognizers>
 
-                <HorizontalStackLayout HorizontalOptions="Center"
-                               Spacing="6">
-                    <Label Text="✦"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           TextColor="#1ABC9C"
-                           VerticalOptions="Center" />
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
 
-                    <Label Text="SparkWork"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           TextColor="#1ABC9C"
-                           VerticalOptions="Center" />
-                </HorizontalStackLayout>
+                <Label Text="AL"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
 
-                <Label Text="My Job Offers"
-                        FontSize="30"
-                        FontAttributes="Bold"
-                        TextColor="#0B1F1D"
-                        HorizontalTextAlignment="Center" />
+            <Grid Grid.Row="1"
+                  Grid.ColumnSpan="2"
+                  ColumnDefinitions="*,*,*"
+                  Margin="0,24,0,0"
+                  HeightRequest="42">
 
-                <Label Text="Manage and update your published opportunities"
-                       FontSize="14"
-                       TextColor="#5F7A75"
-                       HorizontalTextAlignment="Center" />
-            </VerticalStackLayout>
+                <Label Text="DÉCOUVRIR"
+                       Grid.Column="0"
+                       FontSize="15"
+                       TextColor="#8B86A3"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Discover_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
 
-            <Label Grid.Column="2" />
+                <Label Text="MESSAGES"
+                       Grid.Column="1"
+                       FontSize="15"
+                       TextColor="#8B86A3"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Messages_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Label Text="STATS"
+                       Grid.Column="2"
+                       FontSize="15"
+                       TextColor="#8B86A3"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Stats_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
         </Grid>
 
-        <!-- LIST -->
-        <CollectionView Grid.Row="1"
-                        x:Name="jobOffersCollection"
-                        SelectionMode="None">
+        <!-- CONTENT -->
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto,*"
+              Padding="20,24,20,20">
 
-            <CollectionView.EmptyView>
-                <Frame BackgroundColor="#FFFFFF"
-                       BorderColor="#DCEDE7"
-                       CornerRadius="22"
-                       Padding="24"
-                       HasShadow="True"
-                       Margin="0,8,0,0">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,Auto"
+                  Margin="0,0,0,18">
 
-                    <VerticalStackLayout Spacing="12"
-                                         HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="MES OFFRES"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#8581A6" />
 
-                        <Label Text="You're all set ✨"
-                               FontSize="26"
-                               FontAttributes="Bold"
-                               TextColor="#0B1F1D"
-                               HorizontalTextAlignment="Center" />
+                    <Label x:Name="lblOfferCount"
+                           Text="0 offre publiée"
+                           FontSize="13"
+                           TextColor="#8B86A3" />
+                </VerticalStackLayout>
 
-                        <Label Text="No job offers yet."
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C"
-                               HorizontalTextAlignment="Center" />
+                <Button Grid.Column="1"
+                        Text="Créer"
+                        HeightRequest="40"
+                        Padding="18,0"
+                        BackgroundColor="#7C4DFF"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        CornerRadius="12"
+                        Clicked="CreateOffer_Clicked" />
+            </Grid>
 
-                        <Label Text="Create your first offer to start discovering candidates."
-                               FontSize="14"
-                               TextColor="#5F7A75"
-                               HorizontalTextAlignment="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-            </CollectionView.EmptyView>
+            <CollectionView Grid.Row="1"
+                            x:Name="jobOffersCollection"
+                            SelectionMode="None">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItems Mode="Reveal">
-                                <SwipeItemView>
-                                    <Grid WidthRequest="180"
-                                          Margin="0,0,12,16"
-                                          ColumnDefinitions="*,*"
-                                          HorizontalOptions="End"
-                                          VerticalOptions="Center">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="14" />
+                </CollectionView.ItemsLayout>
 
-                                        <!-- BULLE EDIT -->
-                                        <Frame Grid.Column="0"
-                                               WidthRequest="70"
-                                               HeightRequest="70"
-                                               CornerRadius="35"
-                                               BackgroundColor="#2BBFA3"
-                                               Padding="0"
-                                               HasShadow="False"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               BindingContext="{Binding .}"
-                                               Scale="0.96"
-                                               Loaded="SwipeBubble_Loaded">
+                <CollectionView.EmptyView>
+                    <Frame BackgroundColor="White"
+                           BorderColor="#EEEAF8"
+                           CornerRadius="22"
+                           Padding="24"
+                           HasShadow="False"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Center">
 
-                                            <Frame.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="EditBubble_Tapped" />
-                                            </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10"
+                                             HorizontalOptions="Center">
+                            <Frame WidthRequest="74"
+                                   HeightRequest="74"
+                                   CornerRadius="22"
+                                   Padding="0"
+                                   BackgroundColor="#F0EAFE"
+                                   HasShadow="False">
+                                <Label Text="+"
+                                       FontSize="36"
+                                       FontAttributes="Bold"
+                                       TextColor="#7C4DFF"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Frame>
 
-                                            <Grid>
-                                                <Image Source="edit.png"
-                                                       WidthRequest="60"
-                                                       HeightRequest="60"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center"
-                                                       Aspect="AspectFit" />
-                                            </Grid>
-                                        </Frame>
-
-                                        <!-- BULLE DELETE -->
-                                        <Frame Grid.Column="1"
-                                               WidthRequest="70"
-                                               HeightRequest="70"
-                                               CornerRadius="35"
-                                               BackgroundColor="#EB4D47"
-                                               Padding="0"
-                                               HasShadow="False"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               BindingContext="{Binding .}"
-                                               Scale="0.96"
-                                               Loaded="SwipeBubble_Loaded">
-
-                                            <Frame.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="DeleteBubble_Tapped" />
-                                            </Frame.GestureRecognizers>
-
-                                            <Grid>
-                                                <Image Source="trash.png"
-                                                       WidthRequest="60"
-                                                       HeightRequest="60"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center"
-                                                       Aspect="AspectFit" />
-                                            </Grid>
-                                        </Frame>
-
-                                    </Grid>
-                                </SwipeItemView>
-                            </SwipeItems>
-                        </SwipeView.RightItems>
-
-                        <!-- TA CARTE ACTUELLE -->
-                        <Frame BackgroundColor="White"
-                               BorderColor="#DCEDE7"
-                               CornerRadius="22"
-                               Padding="18"
-                               Margin="0,0,0,16"
-                               HasShadow="True"
-                               Loaded="JobOfferCard_Loaded"
-                               Opacity="0"
-                               TranslationY="16"
-                               Scale="0.985">
-
-                            <VerticalStackLayout Spacing="14">
-
-                                <VerticalStackLayout Spacing="6">
-                                    <Label Text="{Binding Title}"
-                               FontSize="22"
-                               FontAttributes="Bold"
-                               TextColor="#0B1F1D" />
-
-                                    <Label Text="{Binding CompanyName}"
-                               FontSize="17"
-                               FontAttributes="Bold"
-                               TextColor="#1ABC9C" />
-
-                                    <Label Text="{Binding Location}"
-                               FontSize="14"
-                               TextColor="#6A7A7A" />
-
-                                    <Frame BackgroundColor="#F2FBF8"
-                               BorderColor="#D0EEE8"
-                               CornerRadius="10"
-                               Padding="10,5"
-                               HasShadow="False"
-                               HorizontalOptions="Start"
-                               Margin="0,10,0,0">
-                                        <Label Text="{Binding ContractType}"
-                                   FontSize="13"
+                            <Label Text="Aucune offre"
+                                   FontSize="20"
                                    FontAttributes="Bold"
-                                   TextColor="#4E6663" />
-                                    </Frame>
-                                </VerticalStackLayout>
+                                   TextColor="#111827"
+                                   HorizontalTextAlignment="Center" />
 
-                            </VerticalStackLayout>
-                        </Frame>
-                    </SwipeView>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                            <Label Text="Crée ta première offre pour commencer à recevoir des candidats."
+                                   FontSize="13"
+                                   TextColor="#8581A6"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Button Text="Créer une offre"
+                                    HeightRequest="42"
+                                    Padding="18,0"
+                                    BackgroundColor="#7C4DFF"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    Clicked="CreateOffer_Clicked" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItemView>
+                                        <Grid WidthRequest="128"
+                                              ColumnDefinitions="*,*"
+                                              ColumnSpacing="10"
+                                              VerticalOptions="Center">
+
+                                            <Frame Grid.Column="0"
+                                                   WidthRequest="50"
+                                                   HeightRequest="50"
+                                                   CornerRadius="25"
+                                                   Padding="0"
+                                                   BackgroundColor="#F0EAFE"
+                                                   HasShadow="False"
+                                                   BindingContext="{Binding .}"
+                                                   Scale="0.96"
+                                                   Loaded="SwipeBubble_Loaded">
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="EditBubble_Tapped" />
+                                                </Frame.GestureRecognizers>
+
+                                                <Label Text="✎"
+                                                       FontSize="20"
+                                                       TextColor="#7C4DFF"
+                                                       HorizontalTextAlignment="Center"
+                                                       VerticalTextAlignment="Center" />
+                                            </Frame>
+
+                                            <Frame Grid.Column="1"
+                                                   WidthRequest="50"
+                                                   HeightRequest="50"
+                                                   CornerRadius="25"
+                                                   Padding="0"
+                                                   BackgroundColor="#FFF1F4"
+                                                   HasShadow="False"
+                                                   BindingContext="{Binding .}"
+                                                   Scale="0.96"
+                                                   Loaded="SwipeBubble_Loaded">
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="DeleteBubble_Tapped" />
+                                                </Frame.GestureRecognizers>
+
+                                                <Label Text="×"
+                                                       FontSize="24"
+                                                       TextColor="#EF4D7A"
+                                                       HorizontalTextAlignment="Center"
+                                                       VerticalTextAlignment="Center" />
+                                            </Frame>
+                                        </Grid>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Frame BackgroundColor="White"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="22"
+                                   Padding="16"
+                                   HasShadow="False"
+                                   Loaded="JobOfferCard_Loaded"
+                                   Opacity="0"
+                                   TranslationY="16"
+                                   Scale="0.985">
+
+                                <VerticalStackLayout Spacing="14">
+
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10">
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="{Binding Title}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#111827"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+
+                                            <Label Text="{Binding CompanyName}"
+                                                   FontSize="14"
+                                                   TextColor="#7C4DFF"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+
+                                            <Label Text="{Binding Location}"
+                                                   FontSize="13"
+                                                   TextColor="#8581A6"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+                                        </VerticalStackLayout>
+
+                                        <Frame Grid.Column="1"
+                                               BackgroundColor="#F0EAFE"
+                                               CornerRadius="12"
+                                               Padding="10,4"
+                                               HasShadow="False"
+                                               VerticalOptions="Start">
+                                            <Label Text="Actif"
+                                                   FontSize="12"
+                                                   TextColor="#7C4DFF" />
+                                        </Frame>
+                                    </Grid>
+
+                                    <Frame BackgroundColor="#FAF9FF"
+                                           BorderColor="#EEEAF8"
+                                           CornerRadius="14"
+                                           Padding="12"
+                                           HasShadow="False">
+                                        <VerticalStackLayout Spacing="10"
+                                                             Margin="0,10,0,0">
+
+                                            <HorizontalStackLayout Spacing="8">
+
+                                                <Frame BackgroundColor="#F0EAFE"
+                                                       CornerRadius="12"
+                                                       Padding="10,4"
+                                                       HasShadow="False">
+                                                    <Label Text="{Binding ContractType}"
+                                                           FontSize="12"
+                                                           TextColor="#7C4DFF" />
+                                                </Frame>
+
+                                                <Frame BackgroundColor="#F0EAFE"
+                                                       CornerRadius="12"
+                                                       Padding="10,4"
+                                                       HasShadow="False"
+                                                       IsVisible="{Binding HasLevel}">
+                                                    <Label Text="{Binding Level}"
+                                                           FontSize="12"
+                                                           TextColor="#7C4DFF" />
+                                                </Frame>
+
+                                                <Frame BackgroundColor="#F0EAFE"
+                                                       CornerRadius="12"
+                                                       Padding="10,4"
+                                                       HasShadow="False"
+                                                       IsVisible="{Binding HasRemoteMode}">
+                                                    <Label Text="{Binding RemoteMode}"
+                                                           FontSize="12"
+                                                           TextColor="#7C4DFF" />
+                                                </Frame>
+
+                                            </HorizontalStackLayout>
+
+                                            <Label Text="{Binding SalaryDisplay}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#111827"
+                                                   IsVisible="{Binding HasSalary}" />
+
+                                            <Frame BackgroundColor="#FAF9FF"
+                                                   BorderColor="#EEEAF8"
+                                                   CornerRadius="16"
+                                                   Padding="12"
+                                                   HasShadow="False"
+                                                   IsVisible="{Binding HasRequiredSkills}">
+
+                                                <VerticalStackLayout Spacing="6">
+                                                    <Label Text="Compétences recherchées"
+                                                           FontSize="12"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#8581A6" />
+
+                                                    <Label Text="{Binding RequiredSkills}"
+                                                           FontSize="13"
+                                                           TextColor="#5F5A75"
+                                                           LineBreakMode="WordWrap" />
+                                                </VerticalStackLayout>
+                                            </Frame>
+
+                                        </VerticalStackLayout>
+
+
+                                    </Frame>
+
+                                    <Button Text="Modifier"
+                                            HeightRequest="38"
+                                            BackgroundColor="Transparent"
+                                            BorderColor="#DED8F5"
+                                            BorderWidth="1"
+                                            TextColor="#111827"
+                                            FontAttributes="Bold"
+                                            CornerRadius="12"
+                                            Clicked="Edit_Clicked"
+                                            CommandParameter="{Binding .}" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </Grid>
 </ContentPage>

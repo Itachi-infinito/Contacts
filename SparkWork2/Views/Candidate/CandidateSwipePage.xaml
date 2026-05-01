@@ -8,6 +8,7 @@
 
     <Grid RowDefinitions="Auto,*,Auto">
 
+        <!-- HEADER -->
         <Grid Grid.Row="0"
               BackgroundColor="White"
               Padding="28,26,28,0"
@@ -102,6 +103,7 @@
             </Grid>
         </Grid>
 
+        <!-- CARD AREA -->
         <Grid Grid.Row="1">
 
             <ScrollView x:Name="cardScrollView"
@@ -131,6 +133,7 @@
 
                         <Grid RowDefinitions="220,Auto,Auto">
 
+                            <!-- IMAGE -->
                             <Grid Grid.Row="0">
                                 <Frame CornerRadius="0"
                                        Padding="0"
@@ -191,11 +194,9 @@
                                                      HorizontalOptions="Center"
                                                      VerticalOptions="End"
                                                      Margin="0,0,0,42" />
-
                                         </Grid>
                                     </Grid>
                                 </Frame>
-
 
                                 <Frame Padding="10,6"
                                        BackgroundColor="White"
@@ -242,6 +243,7 @@
                                              Clicked="ToggleDetails_Clicked" />
                             </Grid>
 
+                            <!-- MAIN INFO -->
                             <VerticalStackLayout x:Name="offerInfoSection"
                                                  Grid.Row="1"
                                                  Padding="20,16,20,24"
@@ -250,7 +252,8 @@
                                 <Label x:Name="lblTitle"
                                        FontSize="20"
                                        FontAttributes="Bold"
-                                       TextColor="#111827" />
+                                       TextColor="#111827"
+                                       LineBreakMode="WordWrap" />
 
                                 <Label x:Name="lblCompany"
                                        FontSize="14"
@@ -260,18 +263,77 @@
                                        FontSize="13"
                                        TextColor="#7D7898" />
 
-                                <Frame x:Name="contractTypeBadge"
-                                       BackgroundColor="#F0EAFE"
-                                       CornerRadius="12"
-                                       Padding="9,3"
+                                <Label x:Name="lblSalary"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827"
+                                       IsVisible="False" />
+
+                                <FlexLayout Direction="Row"
+                                            Wrap="Wrap"
+                                            AlignItems="Center"
+                                            JustifyContent="Start">
+
+                                    <Frame x:Name="contractTypeBadge"
+                                           BackgroundColor="#F0EAFE"
+                                           CornerRadius="12"
+                                           Padding="9,3"
+                                           Margin="0,0,8,8"
+                                           HasShadow="False">
+                                        <Label x:Name="lblContractType"
+                                               FontSize="11"
+                                               TextColor="#7C4DFF" />
+                                    </Frame>
+
+                                    <Frame x:Name="levelBadge"
+                                           BackgroundColor="#F0EAFE"
+                                           CornerRadius="12"
+                                           Padding="9,3"
+                                           Margin="0,0,8,8"
+                                           HasShadow="False"
+                                           IsVisible="False">
+                                        <Label x:Name="lblLevel"
+                                               FontSize="11"
+                                               TextColor="#7C4DFF" />
+                                    </Frame>
+
+                                    <Frame x:Name="remoteBadge"
+                                           BackgroundColor="#F0EAFE"
+                                           CornerRadius="12"
+                                           Padding="9,3"
+                                           Margin="0,0,8,8"
+                                           HasShadow="False"
+                                           IsVisible="False">
+                                        <Label x:Name="lblRemoteMode"
+                                               FontSize="11"
+                                               TextColor="#7C4DFF" />
+                                    </Frame>
+                                </FlexLayout>
+
+                                <Frame x:Name="skillsPreviewCard"
+                                       BackgroundColor="#FAF9FF"
+                                       BorderColor="#EEEAF8"
+                                       CornerRadius="16"
+                                       Padding="12"
                                        HasShadow="False"
-                                       HorizontalOptions="Start">
-                                    <Label x:Name="lblContractType"
-                                           FontSize="11"
-                                           TextColor="#7C4DFF" />
+                                       IsVisible="False">
+
+                                    <VerticalStackLayout Spacing="6">
+                                        <Label Text="Compétences"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               TextColor="#8581A6" />
+
+                                        <Label x:Name="lblSkillsPreview"
+                                               FontSize="13"
+                                               TextColor="#5F5A75"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2" />
+                                    </VerticalStackLayout>
                                 </Frame>
                             </VerticalStackLayout>
 
+                            <!-- EXPANDED DETAILS -->
                             <VerticalStackLayout x:Name="expandedDetailsSection"
                                                  Grid.Row="2"
                                                  IsVisible="False"
@@ -296,8 +358,51 @@
                                 <Label x:Name="lblDetailContractType"
                                        TextColor="#374151" />
 
+                                <Label x:Name="lblDetailSalary"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+                                <Label x:Name="lblDetailLevel"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+                                <Label x:Name="lblDetailRemoteMode"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+                                <VerticalStackLayout x:Name="requiredSkillsDetailSection"
+                                                     Spacing="6"
+                                                     IsVisible="False">
+
+                                    <Label Text="Compétences obligatoires"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+
+                                    <Label x:Name="lblDetailRequiredSkills"
+                                           FontSize="13"
+                                           LineBreakMode="WordWrap"
+                                           TextColor="#5F5A75" />
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout x:Name="niceSkillsDetailSection"
+                                                     Spacing="6"
+                                                     IsVisible="False">
+
+                                    <Label Text="Compétences bonus"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+
+                                    <Label x:Name="lblDetailNiceToHaveSkills"
+                                           FontSize="13"
+                                           LineBreakMode="WordWrap"
+                                           TextColor="#5F5A75" />
+                                </VerticalStackLayout>
+
                                 <VerticalStackLayout x:Name="descriptionSection"
                                                      Spacing="6">
+
                                     <Label Text="Description"
                                            FontSize="15"
                                            FontAttributes="Bold"
@@ -320,6 +425,7 @@
                 </VerticalStackLayout>
             </ScrollView>
 
+            <!-- EMPTY STATE -->
             <VerticalStackLayout x:Name="emptyStateSection"
                                  IsVisible="False"
                                  Spacing="14"
@@ -344,6 +450,7 @@
             </VerticalStackLayout>
         </Grid>
 
+        <!-- ACTIONS -->
         <Grid x:Name="actionsGrid"
               Grid.Row="2"
               ColumnDefinitions="*,*"

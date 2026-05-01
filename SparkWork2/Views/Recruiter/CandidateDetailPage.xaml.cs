@@ -1,4 +1,5 @@
 using SparkWork2.Repositories;
+using SparkWork2.Views.Shared;
 
 namespace SparkWork2.Views.Recruiter;
 
@@ -38,7 +39,7 @@ public partial class CandidateDetailPage : ContentPage
 
         if (user == null)
         {
-            await DisplayAlert("Unavailable", "This account no longer exists.", "OK");
+            await DisplayAlert("Indisponible", "Ce compte n'existe plus.", "OK");
             await Shell.Current.GoToAsync("..");
             return;
         }
@@ -48,21 +49,87 @@ public partial class CandidateDetailPage : ContentPage
 
         if (candidate == null)
         {
-            await DisplayAlert("Unavailable", "This profile no longer exists.", "OK");
+            await DisplayAlert("Indisponible", "Ce profil n'existe plus.", "OK");
             await Shell.Current.GoToAsync("..");
             return;
         }
 
-        currentCandidateName = candidate.FullName;
+        var fullName = string.IsNullOrWhiteSpace(candidate.FullName)
+            ? user.FullName
+            : candidate.FullName;
 
-        lblFullName.Text = candidate.FullName;
-        lblTitle.Text = candidate.Title;
-        lblLocation.Text = candidate.Location;
-        lblAbout.Text = candidate.About;
-        lblEmail.Text = candidate.Email;
+        currentCandidateName = fullName;
+
+        lblFullName.Text = fullName;
+        lblTitle.Text = string.IsNullOrWhiteSpace(candidate.Title)
+            ? "Titre non renseigné"
+            : candidate.Title;
+        lblLocation.Text = string.IsNullOrWhiteSpace(candidate.Location)
+            ? "Localisation non renseignée"
+            : candidate.Location;
+        lblAbout.Text = string.IsNullOrWhiteSpace(candidate.About)
+            ? "Ce candidat n'a pas encore ajouté de description."
+            : candidate.About;
+        lblEmail.Text = string.IsNullOrWhiteSpace(candidate.Email)
+            ? user.Email
+            : candidate.Email;
+
+        lblCandidateInitials.Text = BuildInitials(fullName);
+
+        if (!string.IsNullOrWhiteSpace(candidate.PhotoPath) && File.Exists(candidate.PhotoPath))
+        {
+            imgCandidatePhoto.Source = ImageSource.FromFile(candidate.PhotoPath);
+            candidatePhotoFrame.IsVisible = true;
+            candidatePlaceholderFrame.IsVisible = false;
+        }
+        else
+        {
+            imgCandidatePhoto.Source = null;
+            candidatePhotoFrame.IsVisible = false;
+            candidatePlaceholderFrame.IsVisible = true;
+        }
     }
 
-    private async void Back_Tapped(object sender, TappedEventArgs e)
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "?";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
+
+    private async void Contact_Clicked(object sender, EventArgs e)
+    {
+        if (currentCandidateId <= 0)
+            return;
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(ConversationDetailPage)}" +
+            $"?participantId={currentCandidateId}" +
+            $"&participantName={Uri.EscapeDataString(currentCandidateName)}");
+    }
+
+    private async void Discover_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+    }
+
+    private async void Messages_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
+    }
+
+    private async void Stats_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterMatchesPage)}");
+    }
+
+    private async void Back_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("..");
     }

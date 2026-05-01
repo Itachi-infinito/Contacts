@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using SQLite;
+﻿using SQLite;
 
 namespace SparkWork2.Models;
 
@@ -17,4 +13,16 @@ public class CandidateProfile
     public string About { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string? PhotoPath { get; set; }
+
+    public string Skills { get; set; } = string.Empty;
+    public string DesiredContractType { get; set; } = string.Empty;
+    public string ExperienceLevel { get; set; } = string.Empty;
+
+    public int DesiredSalaryMin { get; set; }
+    public int DesiredSalaryMax { get; set; }
+
+    public int MaxDistanceKm { get; set; } = 25;
+
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
 }

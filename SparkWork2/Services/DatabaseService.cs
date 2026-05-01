@@ -23,11 +23,60 @@ public class DatabaseService
         await _database.CreateTableAsync<Message>();
         await _database.CreateTableAsync<CandidateJobLike>();
         await _database.CreateTableAsync<RecruiterCandidateLike>();
+
+        await RunMigrations();
     }
 
     public async Task<SQLiteAsyncConnection> GetConnectionAsync()
     {
         await Init();
         return _database!;
+    }
+
+    private async Task RunMigrations()
+    {
+        if (_database == null)
+            return;
+
+        await AddColumnIfMissing("JobOffer", "Address", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("JobOffer", "Latitude", "REAL DEFAULT 0");
+        await AddColumnIfMissing("JobOffer", "Longitude", "REAL DEFAULT 0");
+        await AddColumnIfMissing("JobOffer", "SalaryMin", "INTEGER DEFAULT 0");
+        await AddColumnIfMissing("JobOffer", "SalaryMax", "INTEGER DEFAULT 0");
+        await AddColumnIfMissing("JobOffer", "RequiredSkills", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("JobOffer", "NiceToHaveSkills", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("JobOffer", "RemoteMode", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("JobOffer", "Level", "TEXT DEFAULT ''");
+
+        await AddColumnIfMissing("CandidateProfile", "Skills", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "DesiredContractType", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "ExperienceLevel", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "DesiredSalaryMin", "INTEGER DEFAULT 0");
+        await AddColumnIfMissing("CandidateProfile", "DesiredSalaryMax", "INTEGER DEFAULT 0");
+        await AddColumnIfMissing("CandidateProfile", "MaxDistanceKm", "INTEGER DEFAULT 25");
+        await AddColumnIfMissing("CandidateProfile", "Latitude", "REAL DEFAULT 0");
+        await AddColumnIfMissing("CandidateProfile", "Longitude", "REAL DEFAULT 0");
+    }
+
+    private async Task AddColumnIfMissing(string tableName, string columnName, string columnDefinition)
+    {
+        if (_database == null)
+            return;
+
+        var columns = await _database.QueryAsync<TableColumnInfo>($"PRAGMA table_info({tableName})");
+
+        bool exists = columns.Any(column =>
+            string.Equals(column.Name, columnName, StringComparison.OrdinalIgnoreCase));
+
+        if (exists)
+            return;
+
+        await _database.ExecuteAsync(
+            $"ALTER TABLE {tableName} ADD COLUMN {columnName} {columnDefinition}");
+    }
+
+    private class TableColumnInfo
+    {
+        public string Name { get; set; } = string.Empty;
     }
 }

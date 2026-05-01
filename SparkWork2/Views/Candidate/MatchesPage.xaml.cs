@@ -146,6 +146,16 @@ public partial class MatchesPage : ContentPage
             card.ScaleTo(1, 260, Easing.SpringOut)
         );
     }
+    private async void Offer_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button button &&
+            button.CommandParameter is CandidateMatchDashboardItem match)
+        {
+            await Shell.Current.GoToAsync(
+                $"{nameof(JobOfferDetailPage)}?id={match.JobOfferId}");
+        }
+    }
+
 }
 
 public class CandidateMatchDashboardItem
