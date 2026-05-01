@@ -35,6 +35,8 @@ public static class MauiProgram
         builder.Services.AddTransient<CandidateSwipePage>();
         builder.Services.AddTransient<CandidateJobLikeRepository>();
         builder.Services.AddTransient<CandidateDetailPage>();
+        builder.Services.AddSingleton<CompatibilityService>();
+
 
         builder.Services.AddSingleton<DatabaseService>();
 

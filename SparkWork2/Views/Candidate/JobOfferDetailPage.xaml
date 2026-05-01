@@ -216,6 +216,81 @@
                         </VerticalStackLayout>
                     </Grid>
                 </Frame>
+                <Frame x:Name="compatibilityCard"
+                        CornerRadius="22"
+                        Padding="18"
+                        BackgroundColor="White"
+                        BorderColor="#EEEAF8"
+                        HasShadow="False"
+                        IsVisible="False">
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Compatibilité"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+
+                            <Label x:Name="lblCompatibilityScore"
+                                   Grid.Column="1"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF" />
+                        </Grid>
+
+                        <ProgressBar x:Name="compatibilityProgress"
+                                     Progress="0"
+                                     ProgressColor="#7C4DFF"
+                                     BackgroundColor="#E7E2F5"
+                                     HeightRequest="6" />
+
+                        <VerticalStackLayout x:Name="matchedRequiredSkillsSection"
+                                             Spacing="5"
+                                             IsVisible="False">
+                            <Label Text="Compétences obligatoires trouvées"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#10B981" />
+
+                            <Label x:Name="lblMatchedRequiredSkills"
+                                   FontSize="13"
+                                   TextColor="#5F5A75"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout x:Name="missingRequiredSkillsSection"
+                                             Spacing="5"
+                                             IsVisible="False">
+                            <Label Text="Compétences obligatoires manquantes"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#E11D48" />
+
+                            <Label x:Name="lblMissingRequiredSkills"
+                                   FontSize="13"
+                                   TextColor="#5F5A75"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout x:Name="matchedNiceSkillsSection"
+                                             Spacing="5"
+                                             IsVisible="False">
+                            <Label Text="Compétences bonus trouvées"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF" />
+
+                            <Label x:Name="lblMatchedNiceSkills"
+                                   FontSize="13"
+                                   TextColor="#5F5A75"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+
                 <Frame x:Name="salaryCard"
                        CornerRadius="22"
                        Padding="18"
@@ -236,6 +311,19 @@
                                TextColor="#7C4DFF" />
                     </VerticalStackLayout>
                 </Frame>
+                <Button x:Name="btnOpenMaps"
+                        Text="Voir l'itinéraire"
+                        HeightRequest="52"
+                        BackgroundColor="White"
+                        BorderColor="#DED8F5"
+                        BorderWidth="1"
+                        TextColor="#111827"
+                        FontAttributes="Bold"
+                        CornerRadius="14"
+                        IsVisible="False"
+                        Clicked="OpenMaps_Clicked" />
+
+
 
                 <Frame x:Name="skillsCard"
                        CornerRadius="22"

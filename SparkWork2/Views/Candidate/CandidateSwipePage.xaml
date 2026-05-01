@@ -268,6 +268,20 @@
                                        FontAttributes="Bold"
                                        TextColor="#111827"
                                        IsVisible="False" />
+                                <Frame x:Name="compatibilityBadge"
+                                       BackgroundColor="#F0EAFE"
+                                       CornerRadius="14"
+                                       Padding="10,5"
+                                       HasShadow="False"
+                                       HorizontalOptions="Start"
+                                       IsVisible="False">
+
+                                    <Label x:Name="lblCompatibility"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#7C4DFF" />
+                                </Frame>
+
 
                                 <FlexLayout Direction="Row"
                                             Wrap="Wrap"

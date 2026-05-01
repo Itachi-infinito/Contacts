@@ -3,6 +3,9 @@ using SparkWork2.Models;
 using SparkWork2.Repositories;
 using SparkWork2.Services;
 using SparkWork2.Views.Shared;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices.Sensors;
+
 
 namespace SparkWork2.Views.Recruiter;
 
@@ -10,6 +13,9 @@ public partial class AddJobOfferPage : ContentPage
 {
     private readonly JobOfferRepository _jobOfferRepository;
     private readonly SessionService _sessionService;
+    private double _selectedLatitude;
+    private double _selectedLongitude;
+
     private void ClearForm()
     {
         entryTitle.Text = string.Empty;
@@ -24,6 +30,10 @@ public partial class AddJobOfferPage : ContentPage
         entryRemoteMode.Text = string.Empty;
         entryRequiredSkills.Text = string.Empty;
         entryNiceToHaveSkills.Text = string.Empty;
+        _selectedLatitude = 0;
+        _selectedLongitude = 0;
+        UpdateOfferCoordinatesLabel();
+
 
     }
 
@@ -118,7 +128,10 @@ public partial class AddJobOfferPage : ContentPage
             Level = level,
             RemoteMode = remoteMode,
             RequiredSkills = requiredSkills,
-            NiceToHaveSkills = niceToHaveSkills
+            NiceToHaveSkills = niceToHaveSkills,
+            Latitude = _selectedLatitude,
+            Longitude = _selectedLongitude
+            
         };
 
 
@@ -141,6 +154,59 @@ public partial class AddJobOfferPage : ContentPage
     private async void Cancel_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("..");
+    }
+    private async void UseOfferLocation_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Localisation", "L'autorisation de localisation est nécessaire.", "OK");
+                return;
+            }
+
+            var request = new GeolocationRequest(
+                GeolocationAccuracy.Medium,
+                TimeSpan.FromSeconds(10));
+
+            var location = await Geolocation.Default.GetLocationAsync(request);
+
+            if (location == null)
+            {
+                await DisplayAlert("Localisation", "Impossible de récupérer la position.", "OK");
+                return;
+            }
+
+            _selectedLatitude = location.Latitude;
+            _selectedLongitude = location.Longitude;
+
+            UpdateOfferCoordinatesLabel();
+
+            await DisplayAlert("Localisation", "Position enregistrée pour cette offre.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erreur", $"Impossible de récupérer la position : {ex.Message}", "OK");
+        }
+    }
+
+    private void UpdateOfferCoordinatesLabel()
+    {
+        if (_selectedLatitude == 0 && _selectedLongitude == 0)
+        {
+            lblOfferCoordinates.Text = "Position de l'offre non définie";
+            return;
+        }
+
+        lblOfferCoordinates.Text =
+            $"Position définie : {_selectedLatitude:F4}, {_selectedLongitude:F4}";
     }
 
 }

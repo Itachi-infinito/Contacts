@@ -169,6 +169,21 @@
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
+                        <Button x:Name="btnUseOfferLocation"
+                                Text="Utiliser ma position pour cette offre"
+                                HeightRequest="46"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
+                                FontAttributes="Bold"
+                                CornerRadius="14"
+                                Clicked="UseOfferLocation_Clicked" />
+
+                        <Label x:Name="lblOfferCoordinates"
+                               Text="Position de l'offre non définie"
+                               FontSize="12"
+                               TextColor="#8B86A3"
+                               HorizontalTextAlignment="Center" />
+
 
                         <VerticalStackLayout Spacing="7">
                             <Label Text="Type de contrat"

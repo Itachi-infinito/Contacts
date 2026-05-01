@@ -14,6 +14,9 @@ public partial class CandidateSwipePage : ContentPage
     private readonly MatchRepository _matchRepository;
     private readonly RecruiterCandidateLikeRepository _recruiterCandidateLikeRepository;
     private readonly SessionService _sessionService;
+    private readonly CandidateProfileRepository _candidateProfileRepository;
+    private readonly CompatibilityService _compatibilityService;
+
 
     private List<JobOffer> _jobOffers = new();
     private int _currentIndex = 0;
@@ -28,7 +31,10 @@ public partial class CandidateSwipePage : ContentPage
         JobOfferRepository jobOfferRepository,
         MatchRepository matchRepository,
         RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
+        CandidateProfileRepository candidateProfileRepository,
+        CompatibilityService compatibilityService,
         SessionService sessionService)
+
     {
         InitializeComponent();
 
@@ -37,6 +43,9 @@ public partial class CandidateSwipePage : ContentPage
         _matchRepository = matchRepository;
         _recruiterCandidateLikeRepository = recruiterCandidateLikeRepository;
         _sessionService = sessionService;
+        _candidateProfileRepository = candidateProfileRepository;
+        _compatibilityService = compatibilityService;
+
     }
 
     protected override async void OnAppearing()
@@ -112,6 +121,8 @@ public partial class CandidateSwipePage : ContentPage
 
         lblSalary.Text = GetSalaryDisplay(currentOffer);
         lblSalary.IsVisible = currentOffer.SalaryMin > 0 || currentOffer.SalaryMax > 0;
+        _ = UpdateCompatibilityBadge(currentOffer);
+
 
         contractTypeBadge.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.ContractType);
         lblContractType.Text = currentOffer.ContractType;
@@ -410,6 +421,41 @@ public partial class CandidateSwipePage : ContentPage
 
         return string.Empty;
     }
+    private async Task UpdateCompatibilityBadge(JobOffer currentOffer)
+    {
+        if (!_sessionService.IsLoggedIn)
+        {
+            compatibilityBadge.IsVisible = false;
+            return;
+        }
+
+        var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
+            _sessionService.CurrentUserId,
+            _sessionService.CurrentUserName,
+            _sessionService.CurrentUserEmail);
+
+        int score = _compatibilityService.CalculateScore(candidateProfile, currentOffer);
+
+        compatibilityBadge.IsVisible = true;
+        lblCompatibility.Text = $"Compatibilité {score}%";
+
+        if (score >= 75)
+        {
+            compatibilityBadge.BackgroundColor = Color.FromArgb("#ECFDF5");
+            lblCompatibility.TextColor = Color.FromArgb("#10B981");
+        }
+        else if (score >= 45)
+        {
+            compatibilityBadge.BackgroundColor = Color.FromArgb("#F0EAFE");
+            lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
+        }
+        else
+        {
+            compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
+            lblCompatibility.TextColor = Color.FromArgb("#E11D48");
+        }
+    }
+
 
 
 

@@ -404,6 +404,21 @@
                                        BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
+                        <Button x:Name="btnUseCurrentLocation"
+                                Text="Utiliser ma position actuelle"
+                                HeightRequest="46"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
+                                FontAttributes="Bold"
+                                CornerRadius="14"
+                                Clicked="UseCurrentLocation_Clicked" />
+
+                        <Label x:Name="lblCurrentCoordinates"
+                               Text="Position non définie"
+                               FontSize="12"
+                               TextColor="#8B86A3"
+                               HorizontalTextAlignment="Center" />
+
 
                     </VerticalStackLayout>
                 </Frame>

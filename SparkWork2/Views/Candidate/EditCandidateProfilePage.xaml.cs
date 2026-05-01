@@ -4,6 +4,9 @@ using Microsoft.Maui.Storage;
 using SparkWork2.Models;
 using SparkWork2.Repositories;
 using SparkWork2.Services;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices.Sensors;
+
 
 namespace SparkWork2.Views.Candidate;
 
@@ -14,6 +17,10 @@ public partial class EditCandidateProfilePage : ContentPage
 
     private string? _selectedPhotoPath;
     private CandidateProfile? _currentProfile;
+    private double _selectedLatitude;
+    private double _selectedLongitude;
+
+
 
     public EditCandidateProfilePage(
         CandidateProfileRepository candidateProfileRepository,
@@ -40,6 +47,7 @@ public partial class EditCandidateProfilePage : ContentPage
             _sessionService.CurrentUserName,
             _sessionService.CurrentUserEmail);
 
+
         entryFullName.Text = _currentProfile.FullName;
         entryTitle.Text = _currentProfile.Title;
         entryLocation.Text = _currentProfile.Location;
@@ -51,6 +59,12 @@ public partial class EditCandidateProfilePage : ContentPage
         entryDesiredSalaryMin.Text = _currentProfile.DesiredSalaryMin > 0 ? _currentProfile.DesiredSalaryMin.ToString() : string.Empty;
         entryDesiredSalaryMax.Text = _currentProfile.DesiredSalaryMax > 0 ? _currentProfile.DesiredSalaryMax.ToString() : string.Empty;
         entryMaxDistanceKm.Text = _currentProfile.MaxDistanceKm > 0 ? _currentProfile.MaxDistanceKm.ToString() : "25";
+
+        _selectedLatitude = _currentProfile.Latitude;
+        _selectedLongitude = _currentProfile.Longitude;
+
+        UpdateCoordinatesLabel();
+
 
 
         var initials = BuildInitials(_currentProfile.FullName);
@@ -158,7 +172,8 @@ public partial class EditCandidateProfilePage : ContentPage
         _currentProfile.DesiredSalaryMin = desiredSalaryMin;
         _currentProfile.DesiredSalaryMax = desiredSalaryMax;
         _currentProfile.MaxDistanceKm = maxDistanceKm;
-
+        _currentProfile.Latitude = _selectedLatitude;
+        _currentProfile.Longitude = _selectedLongitude;
 
         await _candidateProfileRepository.UpdateCandidateProfileAsync(_currentProfile);
 
@@ -217,4 +232,59 @@ public partial class EditCandidateProfilePage : ContentPage
             await DisplayAlert("Erreur", $"Impossible de sélectionner la photo : {ex.Message}", "OK");
         }
     }
+
+    private async void UseCurrentLocation_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Localisation", "L'autorisation de localisation est nécessaire.", "OK");
+                return;
+            }
+
+            var request = new GeolocationRequest(
+                GeolocationAccuracy.Medium,
+                TimeSpan.FromSeconds(10));
+
+            var location = await Geolocation.Default.GetLocationAsync(request);
+
+            if (location == null)
+            {
+                await DisplayAlert("Localisation", "Impossible de récupérer ta position.", "OK");
+                return;
+            }
+
+            _selectedLatitude = location.Latitude;
+            _selectedLongitude = location.Longitude;
+
+            UpdateCoordinatesLabel();
+
+            await DisplayAlert("Localisation", "Position enregistrée pour ton profil.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erreur", $"Impossible de récupérer la position : {ex.Message}", "OK");
+        }
+    }
+
+    private void UpdateCoordinatesLabel()
+    {
+        if (_selectedLatitude == 0 && _selectedLongitude == 0)
+        {
+            lblCurrentCoordinates.Text = "Position non définie";
+            return;
+        }
+
+        lblCurrentCoordinates.Text =
+            $"Position définie : {_selectedLatitude:F4}, {_selectedLongitude:F4}";
+    }
+
 }
