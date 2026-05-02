@@ -262,6 +262,12 @@
                                 <Label x:Name="lblLocation"
                                        FontSize="13"
                                        TextColor="#7D7898" />
+                                <Label x:Name="lblDistance"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#7C4DFF"
+                                       IsVisible="False" />
+
 
                                 <Label x:Name="lblSalary"
                                        FontSize="14"

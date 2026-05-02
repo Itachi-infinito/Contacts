@@ -39,6 +39,8 @@ public static class MauiProgram
 
 
         builder.Services.AddSingleton<DatabaseService>();
+        builder.Services.AddSingleton<DistanceService>();
+
 
         builder.Services.AddTransient<EditRecruiterProfilePage>();
 

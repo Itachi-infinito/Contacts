@@ -13,6 +13,14 @@ public partial class RecruiterSwipePage : ContentPage
     private readonly RecruiterCandidateLikeRepository _recruiterCandidateLikeRepository;
     private readonly CandidateProfileRepository _candidateProfileRepository;
     private readonly SessionService _sessionService;
+    private readonly DistanceService _distanceService;
+    private readonly CompatibilityService _compatibilityService;
+    private List<JobOffer> _recruiterOffers = new();
+    private JobOffer? _selectedJobOffer;
+    private bool _isLoadingOfferFilter;
+
+
+
 
     private List<CandidateProfile> _candidates = new();
     private int _currentIndex;
@@ -30,7 +38,11 @@ public partial class RecruiterSwipePage : ContentPage
         MatchRepository matchRepository,
         RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
         CandidateProfileRepository candidateProfileRepository,
+        DistanceService distanceService,
+        CompatibilityService compatibilityService,
+
         SessionService sessionService)
+
     {
         InitializeComponent();
 
@@ -40,15 +52,21 @@ public partial class RecruiterSwipePage : ContentPage
         _recruiterCandidateLikeRepository = recruiterCandidateLikeRepository;
         _candidateProfileRepository = candidateProfileRepository;
         _sessionService = sessionService;
+        _distanceService = distanceService;
+        _compatibilityService = compatibilityService;
+
+
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        await LoadRecruiterOffers();
         await LoadCandidates();
         await ShowPendingMatchAnimationIfNeeded();
-
     }
+
 
     private async Task LoadCandidates()
     {
@@ -65,6 +83,17 @@ public partial class RecruiterSwipePage : ContentPage
             .Where(candidate => candidate.CandidateId != _sessionService.CurrentUserId)
             .Where(candidate => !recruiterLikes.Any(like => like.CandidateUserId == candidate.CandidateId))
             .ToList();
+        if (_selectedJobOffer != null)
+        {
+            _candidates = _candidates
+                .OrderByDescending(candidate =>
+                    _compatibilityService.CalculateScore(candidate, _selectedJobOffer))
+                .ToList();
+
+            lblOfferFilterHint.Text =
+                $"Trié par compatibilité avec {_selectedJobOffer.Title}.";
+        }
+
 
         _currentIndex = 0;
         ShowCurrentCandidate();
@@ -100,8 +129,9 @@ public partial class RecruiterSwipePage : ContentPage
             : _currentCandidate.Title;
 
         var location = string.IsNullOrWhiteSpace(_currentCandidate.Location)
-            ? "Paris"
+            ? "Localisation non renseignée"
             : _currentCandidate.Location;
+
 
         var about = string.IsNullOrWhiteSpace(_currentCandidate.About)
             ? "Profil candidat disponible pour une nouvelle opportunité."
@@ -110,7 +140,14 @@ public partial class RecruiterSwipePage : ContentPage
         lblFullName.Text = fullName;
         lblTitle.Text = title;
         lblLocation.Text = location;
-        lblSalaryLocation.Text = $"💰 52–60k€ · {location}";
+        UpdateCandidateBadges(_currentCandidate);
+        UpdateCandidateDetailFields(_currentCandidate);
+
+        UpdateCandidatePreferences(_currentCandidate);
+        _ = UpdateBestCompatibility(_currentCandidate);
+
+        _ = UpdateDistanceToNearestOffer(_currentCandidate);
+
 
         lblDetailFullName.Text = fullName;
         lblDetailTitle.Text = title;
@@ -415,6 +452,221 @@ public partial class RecruiterSwipePage : ContentPage
             $"?participantId={pendingMatch.CandidateUserId}" +
             $"&participantName={Uri.EscapeDataString(pendingMatch.CandidateName)}");
     }
+    private void UpdateCandidateBadges(CandidateProfile candidate)
+    {
+        skillsBadgesLayout.Children.Clear();
 
+        var skills = SplitValues(candidate.Skills)
+            .Take(4)
+            .ToList();
+
+        skillsBadgesLayout.IsVisible = skills.Any();
+
+        foreach (var skill in skills)
+        {
+            var badge = new Frame
+            {
+                BackgroundColor = Color.FromArgb("#F0EAFE"),
+                CornerRadius = 12,
+                Padding = new Thickness(9, 3),
+                HasShadow = false,
+                Margin = new Thickness(0, 0, 8, 8),
+                Content = new Label
+                {
+                    Text = skill,
+                    FontSize = 11,
+                    TextColor = Color.FromArgb("#7C4DFF")
+                }
+            };
+
+            skillsBadgesLayout.Children.Add(badge);
+        }
+    }
+
+    private void UpdateCandidatePreferences(CandidateProfile candidate)
+    {
+        var parts = new List<string>();
+
+        string salary = GetDesiredSalaryDisplay(candidate);
+        if (!string.IsNullOrWhiteSpace(salary))
+            parts.Add($"Salaire souhaité : {salary}");
+
+        if (!string.IsNullOrWhiteSpace(candidate.DesiredContractType))
+            parts.Add(candidate.DesiredContractType);
+
+        if (!string.IsNullOrWhiteSpace(candidate.ExperienceLevel))
+            parts.Add(candidate.ExperienceLevel);
+
+        lblCandidatePreferences.Text = string.Join(" · ", parts);
+        lblCandidatePreferences.IsVisible = parts.Any();
+    }
+
+    private void UpdateCandidateDetailFields(CandidateProfile candidate)
+    {
+        lblDetailSkills.Text = $"Compétences : {candidate.Skills}";
+        lblDetailSkills.IsVisible = !string.IsNullOrWhiteSpace(candidate.Skills);
+
+        lblDetailDesiredContractType.Text = $"Contrat recherché : {candidate.DesiredContractType}";
+        lblDetailDesiredContractType.IsVisible = !string.IsNullOrWhiteSpace(candidate.DesiredContractType);
+
+        lblDetailExperienceLevel.Text = $"Niveau : {candidate.ExperienceLevel}";
+        lblDetailExperienceLevel.IsVisible = !string.IsNullOrWhiteSpace(candidate.ExperienceLevel);
+
+        string salary = GetDesiredSalaryDisplay(candidate);
+        lblDetailDesiredSalary.Text = $"Salaire souhaité : {salary}";
+        lblDetailDesiredSalary.IsVisible = !string.IsNullOrWhiteSpace(salary);
+    }
+
+    private string GetDesiredSalaryDisplay(CandidateProfile candidate)
+    {
+        if (candidate.DesiredSalaryMin > 0 && candidate.DesiredSalaryMax > 0)
+            return $"{candidate.DesiredSalaryMin} - {candidate.DesiredSalaryMax} €";
+
+        if (candidate.DesiredSalaryMin > 0)
+            return $"À partir de {candidate.DesiredSalaryMin} €";
+
+        if (candidate.DesiredSalaryMax > 0)
+            return $"Jusqu'à {candidate.DesiredSalaryMax} €";
+
+        return string.Empty;
+    }
+
+    private List<string> SplitValues(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return new List<string>();
+
+        return value
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+    private async Task UpdateDistanceToNearestOffer(CandidateProfile candidate)
+    {
+        lblDistanceToOffer.IsVisible = false;
+        lblDetailDistanceToOffer.IsVisible = false;
+
+        if (!_sessionService.IsLoggedIn)
+            return;
+
+        var recruiterOffers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(
+            _sessionService.CurrentUserId);
+
+        var offersWithDistance = recruiterOffers
+            .Where(offer => _distanceService.CanCalculateDistance(candidate, offer))
+            .Select(offer => new
+            {
+                Offer = offer,
+                Distance = _distanceService.CalculateDistanceKm(candidate, offer)
+            })
+            .OrderBy(x => x.Distance)
+            .ToList();
+
+        if (!offersWithDistance.Any())
+            return;
+
+        var nearest = offersWithDistance.First();
+        string distanceText = nearest.Distance < 1
+            ? $"À moins de 1 km de l'offre {nearest.Offer.Title}"
+            : $"À environ {Math.Round(nearest.Distance)} km de l'offre {nearest.Offer.Title}";
+
+        lblDistanceToOffer.Text = distanceText;
+        lblDistanceToOffer.IsVisible = true;
+
+        lblDetailDistanceToOffer.Text = $"Distance : {distanceText}";
+        lblDetailDistanceToOffer.IsVisible = true;
+    }
+    private async Task UpdateBestCompatibility(CandidateProfile candidate)
+    {
+        compatibilityBadge.IsVisible = false;
+        lblDetailCompatibility.IsVisible = false;
+
+        if (!_sessionService.IsLoggedIn)
+            return;
+
+        var recruiterOffers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(
+            _sessionService.CurrentUserId);
+
+        if (!recruiterOffers.Any())
+            return;
+
+        var bestMatch = recruiterOffers
+            .Select(offer => new
+            {
+                Offer = offer,
+                Score = _compatibilityService.CalculateScore(candidate, offer)
+            })
+            .OrderByDescending(x => x.Score)
+            .First();
+
+        compatibilityBadge.IsVisible = true;
+        lblCompatibility.Text = $"Compatibilité {bestMatch.Score}%";
+
+        lblDetailCompatibility.Text =
+            $"Meilleure compatibilité : {bestMatch.Score}% avec l'offre {bestMatch.Offer.Title}";
+
+        lblDetailCompatibility.IsVisible = true;
+
+        if (bestMatch.Score >= 75)
+        {
+            compatibilityBadge.BackgroundColor = Color.FromArgb("#ECFDF5");
+            lblCompatibility.TextColor = Color.FromArgb("#10B981");
+        }
+        else if (bestMatch.Score >= 45)
+        {
+            compatibilityBadge.BackgroundColor = Color.FromArgb("#F0EAFE");
+            lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
+        }
+        else
+        {
+            compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
+            lblCompatibility.TextColor = Color.FromArgb("#E11D48");
+        }
+    }
+    private async Task LoadRecruiterOffers()
+    {
+        if (!_sessionService.IsLoggedIn)
+            return;
+
+        _isLoadingOfferFilter = true;
+
+        _recruiterOffers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(
+            _sessionService.CurrentUserId);
+
+        offerFilterPicker.ItemsSource = null;
+        offerFilterPicker.ItemsSource = _recruiterOffers;
+
+        offerFilterCard.IsVisible = _recruiterOffers.Any();
+        lblOfferFilterHint.Text = _recruiterOffers.Any()
+            ? "Choisis une offre pour trier les candidats."
+            : "Crée une offre pour obtenir un score plus précis.";
+
+        _isLoadingOfferFilter = false;
+    }
+
+    private async void OfferFilterPicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (_isLoadingOfferFilter)
+            return;
+
+        _selectedJobOffer = offerFilterPicker.SelectedItem as JobOffer;
+        await LoadCandidates();
+    }
+
+    private async void ClearOfferFilter_Clicked(object sender, EventArgs e)
+    {
+        _isLoadingOfferFilter = true;
+
+        offerFilterPicker.SelectedItem = null;
+        offerFilterPicker.SelectedIndex = -1;
+        _selectedJobOffer = null;
+
+        _isLoadingOfferFilter = false;
+
+        lblOfferFilterHint.Text = "Toutes les offres sont prises en compte.";
+        await LoadCandidates();
+    }
 
 }

@@ -109,6 +109,46 @@
 
                 <VerticalStackLayout Spacing="16"
                                      HorizontalOptions="Center">
+                    <Frame x:Name="offerFilterCard"
+                           WidthRequest="320"
+                           CornerRadius="20"
+                           Padding="14"
+                           BackgroundColor="White"
+                           BorderColor="#EEEAF8"
+                           HasShadow="False">
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Offre de référence"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Picker x:Name="offerFilterPicker"
+                                        Title="Toutes mes offres"
+                                        ItemDisplayBinding="{Binding Title}"
+                                        SelectedIndexChanged="OfferFilterPicker_SelectedIndexChanged"
+                                        TextColor="#111827"
+                                        TitleColor="#A6A0C0" />
+
+                                <Button Grid.Column="1"
+                                        Text="Toutes"
+                                        HeightRequest="38"
+                                        Padding="12,0"
+                                        BackgroundColor="#F0EAFE"
+                                        TextColor="#7C4DFF"
+                                        FontAttributes="Bold"
+                                        CornerRadius="12"
+                                        Clicked="ClearOfferFilter_Clicked" />
+                            </Grid>
+
+                            <Label x:Name="lblOfferFilterHint"
+                                   Text="Les candidats seront triés par compatibilité."
+                                   FontSize="12"
+                                   TextColor="#8B86A3" />
+                        </VerticalStackLayout>
+                    </Frame>
+
 
                     <Frame x:Name="candidateCard"
                            WidthRequest="320"
@@ -241,39 +281,39 @@
                                 <Label x:Name="lblLocation"
                                        IsVisible="False" />
 
-                                <HorizontalStackLayout Spacing="8">
-                                    <Frame BackgroundColor="#F0EAFE"
-                                           CornerRadius="12"
-                                           Padding="9,3"
-                                           HasShadow="False">
-                                        <Label Text="Figma"
-                                               FontSize="11"
-                                               TextColor="#7C4DFF" />
-                                    </Frame>
+                                <FlexLayout x:Name="skillsBadgesLayout"
+                                            Direction="Row"
+                                            Wrap="Wrap"
+                                            AlignItems="Center"
+                                            JustifyContent="Start"
+                                            IsVisible="False" />
+                                
 
-                                    <Frame BackgroundColor="#F0EAFE"
-                                           CornerRadius="12"
-                                           Padding="9,3"
-                                           HasShadow="False">
-                                        <Label Text="Design Sys."
-                                               FontSize="11"
-                                               TextColor="#7C4DFF" />
-                                    </Frame>
-
-                                    <Frame BackgroundColor="#F0EAFE"
-                                           CornerRadius="12"
-                                           Padding="9,3"
-                                           HasShadow="False">
-                                        <Label Text="UX"
-                                               FontSize="11"
-                                               TextColor="#7C4DFF" />
-                                    </Frame>
-                                </HorizontalStackLayout>
-
-                                <Label x:Name="lblSalaryLocation"
-                                       Text="💰 50–62k€ · Nantes"
+                                <Label x:Name="lblCandidatePreferences"
                                        FontSize="13"
-                                       TextColor="#111827" />
+                                       TextColor="#111827"
+                                       IsVisible="False" />
+                                <Frame x:Name="compatibilityBadge"
+                                       BackgroundColor="#F0EAFE"
+                                       CornerRadius="14"
+                                       Padding="10,5"
+                                       HasShadow="False"
+                                       HorizontalOptions="Start"
+                                       IsVisible="False">
+
+                                    <Label x:Name="lblCompatibility"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#7C4DFF" />
+                                </Frame>
+
+                                <Label x:Name="lblDistanceToOffer"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#7C4DFF"
+                                       IsVisible="False" />
+
+
                             </VerticalStackLayout>
 
                             <VerticalStackLayout x:Name="expandedDetailsSection"
@@ -299,6 +339,30 @@
 
                                 <Label x:Name="lblDetailLocation"
                                        TextColor="#374151" />
+                                <Label x:Name="lblDetailSkills"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+                                <Label x:Name="lblDetailDesiredContractType"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+                                <Label x:Name="lblDetailExperienceLevel"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+                                <Label x:Name="lblDetailDesiredSalary"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+                                <Label x:Name="lblDetailDistanceToOffer"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+                                <Label x:Name="lblDetailCompatibility"
+                                       TextColor="#374151"
+                                       IsVisible="False" />
+
+
+
 
                                 <VerticalStackLayout x:Name="aboutSection"
                                                      Spacing="6">

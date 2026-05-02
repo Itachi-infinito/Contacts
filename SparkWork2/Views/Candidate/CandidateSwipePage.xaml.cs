@@ -16,6 +16,8 @@ public partial class CandidateSwipePage : ContentPage
     private readonly SessionService _sessionService;
     private readonly CandidateProfileRepository _candidateProfileRepository;
     private readonly CompatibilityService _compatibilityService;
+    private readonly DistanceService _distanceService;
+
 
 
     private List<JobOffer> _jobOffers = new();
@@ -33,6 +35,7 @@ public partial class CandidateSwipePage : ContentPage
         RecruiterCandidateLikeRepository recruiterCandidateLikeRepository,
         CandidateProfileRepository candidateProfileRepository,
         CompatibilityService compatibilityService,
+        DistanceService distanceService,
         SessionService sessionService)
 
     {
@@ -45,6 +48,8 @@ public partial class CandidateSwipePage : ContentPage
         _sessionService = sessionService;
         _candidateProfileRepository = candidateProfileRepository;
         _compatibilityService = compatibilityService;
+        _distanceService = distanceService;
+
 
     }
 
@@ -122,6 +127,8 @@ public partial class CandidateSwipePage : ContentPage
         lblSalary.Text = GetSalaryDisplay(currentOffer);
         lblSalary.IsVisible = currentOffer.SalaryMin > 0 || currentOffer.SalaryMax > 0;
         _ = UpdateCompatibilityBadge(currentOffer);
+        _ = UpdateDistanceLabel(currentOffer);
+
 
 
         contractTypeBadge.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.ContractType);
@@ -454,6 +461,24 @@ public partial class CandidateSwipePage : ContentPage
             compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
             lblCompatibility.TextColor = Color.FromArgb("#E11D48");
         }
+    }
+    private async Task UpdateDistanceLabel(JobOffer currentOffer)
+    {
+        if (!_sessionService.IsLoggedIn)
+        {
+            lblDistance.IsVisible = false;
+            return;
+        }
+
+        var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
+            _sessionService.CurrentUserId,
+            _sessionService.CurrentUserName,
+            _sessionService.CurrentUserEmail);
+
+        string distanceDisplay = _distanceService.GetDistanceDisplay(candidateProfile, currentOffer);
+
+        lblDistance.IsVisible = !string.IsNullOrWhiteSpace(distanceDisplay);
+        lblDistance.Text = distanceDisplay;
     }
 
 
