@@ -19,16 +19,23 @@ public partial class EditCandidateProfilePage : ContentPage
     private CandidateProfile? _currentProfile;
     private double _selectedLatitude;
     private double _selectedLongitude;
+    private readonly SkillCatalogService _skillCatalogService;
+    private readonly List<string> _selectedSkills = new();
+
 
 
 
     public EditCandidateProfilePage(
         CandidateProfileRepository candidateProfileRepository,
-        SessionService sessionService)
+        SessionService sessionService,
+        SkillCatalogService skillCatalogService)
+
     {
         InitializeComponent();
         _candidateProfileRepository = candidateProfileRepository;
         _sessionService = sessionService;
+        _skillCatalogService = skillCatalogService;
+
     }
 
     protected override async void OnAppearing()
@@ -53,7 +60,16 @@ public partial class EditCandidateProfilePage : ContentPage
         entryLocation.Text = _currentProfile.Location;
         entryEmail.Text = _currentProfile.Email;
         editorAbout.Text = _currentProfile.About;
-        entrySkills.Text = _currentProfile.Skills;
+
+        entryExperienceTitle1.Text = _currentProfile.ExperienceTitle1;
+        entryExperienceCompany1.Text = _currentProfile.ExperienceCompany1;
+        entryExperiencePeriod1.Text = _currentProfile.ExperiencePeriod1;
+
+        entryExperienceTitle2.Text = _currentProfile.ExperienceTitle2;
+        entryExperienceCompany2.Text = _currentProfile.ExperienceCompany2;
+        entryExperiencePeriod2.Text = _currentProfile.ExperiencePeriod2;
+
+
         entryDesiredContractType.Text = _currentProfile.DesiredContractType;
         entryExperienceLevel.Text = _currentProfile.ExperienceLevel;
         entryDesiredSalaryMin.Text = _currentProfile.DesiredSalaryMin > 0 ? _currentProfile.DesiredSalaryMin.ToString() : string.Empty;
@@ -62,8 +78,14 @@ public partial class EditCandidateProfilePage : ContentPage
 
         _selectedLatitude = _currentProfile.Latitude;
         _selectedLongitude = _currentProfile.Longitude;
-
         UpdateCoordinatesLabel();
+
+        skillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
+
+        _selectedSkills.Clear();
+        _selectedSkills.AddRange(_skillCatalogService.ParseSkills(_currentProfile.Skills));
+        RefreshSelectedSkillsLayout();
+
 
 
 
@@ -100,9 +122,17 @@ public partial class EditCandidateProfilePage : ContentPage
         string location = entryLocation.Text?.Trim() ?? string.Empty;
         string email = entryEmail.Text?.Trim() ?? string.Empty;
         string about = editorAbout.Text?.Trim() ?? string.Empty;
-        string skills = entrySkills.Text?.Trim() ?? string.Empty;
+        string skills = _skillCatalogService.FormatSkills(_selectedSkills);
         string desiredContractType = entryDesiredContractType.Text?.Trim() ?? string.Empty;
         string experienceLevel = entryExperienceLevel.Text?.Trim() ?? string.Empty;
+        string experienceTitle1 = entryExperienceTitle1.Text?.Trim() ?? string.Empty;
+        string experienceCompany1 = entryExperienceCompany1.Text?.Trim() ?? string.Empty;
+        string experiencePeriod1 = entryExperiencePeriod1.Text?.Trim() ?? string.Empty;
+
+        string experienceTitle2 = entryExperienceTitle2.Text?.Trim() ?? string.Empty;
+        string experienceCompany2 = entryExperienceCompany2.Text?.Trim() ?? string.Empty;
+        string experiencePeriod2 = entryExperiencePeriod2.Text?.Trim() ?? string.Empty;
+
 
         int.TryParse(entryDesiredSalaryMin.Text?.Trim(), out int desiredSalaryMin);
         int.TryParse(entryDesiredSalaryMax.Text?.Trim(), out int desiredSalaryMax);
@@ -174,6 +204,14 @@ public partial class EditCandidateProfilePage : ContentPage
         _currentProfile.MaxDistanceKm = maxDistanceKm;
         _currentProfile.Latitude = _selectedLatitude;
         _currentProfile.Longitude = _selectedLongitude;
+        _currentProfile.ExperienceTitle1 = experienceTitle1;
+        _currentProfile.ExperienceCompany1 = experienceCompany1;
+        _currentProfile.ExperiencePeriod1 = experiencePeriod1;
+
+        _currentProfile.ExperienceTitle2 = experienceTitle2;
+        _currentProfile.ExperienceCompany2 = experienceCompany2;
+        _currentProfile.ExperiencePeriod2 = experiencePeriod2;
+
 
         await _candidateProfileRepository.UpdateCandidateProfileAsync(_currentProfile);
 
@@ -285,6 +323,83 @@ public partial class EditCandidateProfilePage : ContentPage
 
         lblCurrentCoordinates.Text =
             $"Position définie : {_selectedLatitude:F4}, {_selectedLongitude:F4}";
+    }
+    private void AddSkill_Clicked(object sender, EventArgs e)
+    {
+        if (skillPicker.SelectedItem is not string selectedSkill)
+            return;
+
+        if (_selectedSkills.Any(skill =>
+            string.Equals(skill, selectedSkill, StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        _selectedSkills.Add(selectedSkill);
+        skillPicker.SelectedItem = null;
+
+        RefreshSelectedSkillsLayout();
+    }
+
+    private void RefreshSelectedSkillsLayout()
+    {
+        selectedSkillsLayout.Children.Clear();
+
+        lblSkillsEmpty.IsVisible = !_selectedSkills.Any();
+
+        foreach (var skill in _selectedSkills)
+        {
+            var badge = new Frame
+            {
+                BackgroundColor = Color.FromArgb("#F0EAFE"),
+                CornerRadius = 14,
+                Padding = new Thickness(10, 4),
+                Margin = new Thickness(0, 0, 8, 8),
+                HasShadow = false,
+                Content = new HorizontalStackLayout
+                {
+                    Spacing = 6,
+                    Children =
+                {
+                    new Label
+                    {
+                        Text = skill,
+                        FontSize = 12,
+                        TextColor = Color.FromArgb("#7C4DFF"),
+                        VerticalTextAlignment = TextAlignment.Center
+                    },
+                    new Label
+                    {
+                        Text = "×",
+                        FontSize = 14,
+                        FontAttributes = FontAttributes.Bold,
+                        TextColor = Color.FromArgb("#7C4DFF"),
+                        VerticalTextAlignment = TextAlignment.Center,
+                        BindingContext = skill,
+                        GestureRecognizers =
+                        {
+                            new TapGestureRecognizer
+                            {
+                                Command = new Command<string>(RemoveSkill),
+                                CommandParameter = skill
+                            }
+                        }
+                    }
+                }
+                }
+            };
+
+            selectedSkillsLayout.Children.Add(badge);
+        }
+    }
+
+    private void RemoveSkill(string? skill)
+    {
+        if (string.IsNullOrWhiteSpace(skill))
+            return;
+
+        _selectedSkills.RemoveAll(x =>
+            string.Equals(x, skill, StringComparison.OrdinalIgnoreCase));
+
+        RefreshSelectedSkillsLayout();
     }
 
 }

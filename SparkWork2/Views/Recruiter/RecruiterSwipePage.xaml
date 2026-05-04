@@ -14,7 +14,7 @@
               RowDefinitions="Auto,Auto"
               ColumnDefinitions="*,Auto">
 
-            <Label Text="SparkWork"
+            <Label Text="Candidats"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="#7C4DFF"
@@ -118,7 +118,7 @@
                            HasShadow="False">
 
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Offre de référence"
+                            <Label Text="Offre utilisée pour le matching"
                                    FontSize="13"
                                    FontAttributes="Bold"
                                    TextColor="#8581A6" />

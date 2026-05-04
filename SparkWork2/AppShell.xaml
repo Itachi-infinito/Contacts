@@ -21,13 +21,14 @@
     </FlyoutItem>
 
     <!-- CANDIDATE -->
-    <FlyoutItem Title="Discover Jobs"
-                Route="candidateHome"
-                FlyoutItemIsVisible="False">
+    <FlyoutItem Title="Home"
+            Route="candidateHome"
+            FlyoutItemIsVisible="False">
         <ShellContent
-            Route="CandidateSwipePage"
-            ContentTemplate="{DataTemplate candidate:CandidateSwipePage}" />
+        Route="CandidateHomePage"
+        ContentTemplate="{DataTemplate candidate:CandidateHomePage}" />
     </FlyoutItem>
+
 
     <FlyoutItem Title="My Matches"
                 Route="candidateMatches"
@@ -38,13 +39,14 @@
     </FlyoutItem>
 
     <!-- RECRUITER -->
-    <FlyoutItem Title="Discover Candidates"
-                Route="recruiterHome"
-                FlyoutItemIsVisible="False">
+    <FlyoutItem Title="Home"
+            Route="recruiterHome"
+            FlyoutItemIsVisible="False">
         <ShellContent
-            Route="RecruiterSwipePage"
-            ContentTemplate="{DataTemplate recruiter:RecruiterSwipePage}" />
+        Route="RecruiterHomePage"
+        ContentTemplate="{DataTemplate recruiter:RecruiterHomePage}" />
     </FlyoutItem>
+
     <FlyoutItem Title="My Job Offers"
             Route="recruiterJobOffers"
             FlyoutItemIsVisible="False">

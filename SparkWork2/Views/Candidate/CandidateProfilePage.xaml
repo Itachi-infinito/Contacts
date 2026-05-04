@@ -4,131 +4,51 @@
              x:Class="SparkWork2.Views.Candidate.CandidateProfilePage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#F7F5FC">
+             BackgroundColor="White">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="*,Auto">
 
-        <!-- HEADER -->
-        <Grid Grid.Row="0"
-              BackgroundColor="White"
-              Padding="28,26,28,0"
-              RowDefinitions="Auto,Auto"
-              ColumnDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="24,28,24,24"
+                                 Spacing="18">
 
-            <Label Text="SparkWork"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="#7C4DFF"
-                   VerticalOptions="Center" />
-
-            <Frame Grid.Column="1"
-                   HeightRequest="54"
-                   WidthRequest="54"
-                   CornerRadius="27"
-                   Padding="0"
-                   HasShadow="False"
-                   HorizontalOptions="End"
-                   VerticalOptions="Center">
-                <Frame.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#7C4DFF" Offset="0.0" />
-                        <GradientStop Color="#D34C88" Offset="1.0" />
-                    </LinearGradientBrush>
-                </Frame.Background>
-
-                <Label x:Name="lblHeaderInitials"
-                       Text="ME"
-                       TextColor="White"
-                       FontAttributes="Bold"
-                       FontSize="16"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Frame>
-
-            <Grid Grid.Row="1"
-                  Grid.ColumnSpan="2"
-                  ColumnDefinitions="*,*,*"
-                  Margin="0,24,0,0"
-                  HeightRequest="42">
-
-                <Label Text="DÉCOUVRIR"
-                       Grid.Column="0"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Discover_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <Label Text="MESSAGES"
-                       Grid.Column="1"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Messages_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <Label Text="STATS"
-                       Grid.Column="2"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Stats_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </Grid>
-        </Grid>
-
-        <!-- CONTENT -->
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="20,24,20,28"
-                                 Spacing="16">
-
-                <Grid ColumnDefinitions="*,Auto"
-                      Margin="0,0,0,2">
-
+                <Grid ColumnDefinitions="*,Auto">
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="MON PROFIL"
-                               FontSize="16"
+                        <Label Text="Profil"
+                               FontSize="28"
                                FontAttributes="Bold"
-                               TextColor="#8581A6" />
+                               TextColor="#111827" />
 
-                        <Label Text="Les recruteurs verront ces informations."
+                        <Label Text="Votre vitrine auprès des recruteurs"
                                FontSize="13"
                                TextColor="#8B86A3" />
                     </VerticalStackLayout>
 
-                    <Button Grid.Column="1"
-                            Text="Modifier"
-                            HeightRequest="38"
-                            Padding="16,0"
-                            BackgroundColor="#7C4DFF"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            FontSize="13"
-                            CornerRadius="12"
-                            Clicked="EditProfile_Clicked" />
+                    <Frame Grid.Column="1"
+                           WidthRequest="52"
+                           HeightRequest="52"
+                           CornerRadius="26"
+                           Padding="0"
+                           HasShadow="False">
+
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+
+                        <Label x:Name="lblHeaderInitials"
+                               Text="ME"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
                 </Grid>
-                <Button Text="Paramètres"
-                        HeightRequest="46"
-                        BackgroundColor="White"
-                        BorderColor="#DED8F5"
-                        BorderWidth="1"
-                        TextColor="#111827"
-                        FontAttributes="Bold"
-                        CornerRadius="14"
-                        Clicked="Settings_Clicked" />
 
-
-                <!-- HERO PROFILE -->
-                <Frame CornerRadius="24"
+                <Frame CornerRadius="26"
                        Padding="20"
                        BackgroundColor="White"
                        BorderColor="#EEEAF8"
@@ -137,16 +57,15 @@
                     <VerticalStackLayout Spacing="16"
                                          HorizontalOptions="Center">
 
-                        <Grid WidthRequest="112"
-                              HeightRequest="112">
+                        <Grid WidthRequest="116"
+                              HeightRequest="116">
 
                             <Frame x:Name="profilePlaceholderFrame"
-                                   WidthRequest="112"
-                                   HeightRequest="112"
-                                   CornerRadius="56"
+                                   WidthRequest="116"
+                                   HeightRequest="116"
+                                   CornerRadius="58"
                                    Padding="0"
-                                   HasShadow="False"
-                                   IsVisible="True">
+                                   HasShadow="False">
                                 <Frame.Background>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                         <GradientStop Color="#7C4DFF" Offset="0.0" />
@@ -164,13 +83,14 @@
                             </Frame>
 
                             <Frame x:Name="profilePhotoFrame"
-                                   WidthRequest="112"
-                                   HeightRequest="112"
-                                   CornerRadius="56"
+                                   WidthRequest="116"
+                                   HeightRequest="116"
+                                   CornerRadius="58"
                                    Padding="0"
                                    HasShadow="False"
                                    IsClippedToBounds="True"
                                    IsVisible="False">
+
                                 <Image x:Name="imgProfilePhoto"
                                        Aspect="AspectFill" />
                             </Frame>
@@ -191,45 +111,31 @@
                                    HorizontalTextAlignment="Center" />
 
                             <Label x:Name="lblLocation"
-                                   FontSize="14"
+                                   FontSize="13"
                                    TextColor="#8581A6"
                                    HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
 
-                        <HorizontalStackLayout Spacing="8"
-                                               HorizontalOptions="Center">
-
-                            <Frame BackgroundColor="#F0EAFE"
-                                   CornerRadius="12"
-                                   Padding="10,4"
-                                   HasShadow="False">
-                                <Label Text="Disponible"
-                                       FontSize="12"
-                                       TextColor="#7C4DFF" />
-                            </Frame>
-
-                            <Frame BackgroundColor="#F0EAFE"
-                                   CornerRadius="12"
-                                   Padding="10,4"
-                                   HasShadow="False">
-                                <Label Text="Profil actif"
-                                       FontSize="12"
-                                       TextColor="#7C4DFF" />
-                            </Frame>
-                        </HorizontalStackLayout>
+                        <Button Text="Modifier le profil"
+                                HeightRequest="46"
+                                Padding="22,0"
+                                BackgroundColor="#7C4DFF"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="16"
+                                Clicked="EditProfile_Clicked" />
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- ABOUT -->
-                <Frame CornerRadius="20"
+                <Frame CornerRadius="22"
                        Padding="18"
                        BackgroundColor="White"
                        BorderColor="#EEEAF8"
                        HasShadow="False">
 
-                    <VerticalStackLayout Spacing="10">
+                    <VerticalStackLayout Spacing="12">
                         <Label Text="À propos"
-                               FontSize="17"
+                               FontSize="18"
                                FontAttributes="Bold"
                                TextColor="#111827" />
 
@@ -240,8 +146,133 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- CONTACT -->
-                <Frame CornerRadius="20"
+                <Frame CornerRadius="22"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Compétences horeca"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
+
+                        <FlexLayout x:Name="skillsLayout"
+                                    Wrap="Wrap"
+                                    Direction="Row"
+                                    AlignItems="Start"
+                                    JustifyContent="Start" />
+
+                        <Label x:Name="lblNoSkills"
+                               Text="Aucune compétence renseignée."
+                               FontSize="13"
+                               TextColor="#8B86A3"
+                               IsVisible="False" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame CornerRadius="22"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="Préférences"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
+
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="12">
+
+                            <Frame CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Contrat"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+
+                                    <Label x:Name="lblDesiredContractType"
+                                           Text="Non renseigné"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Niveau"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+
+                                    <Label x:Name="lblExperienceLevel"
+                                           Text="Non renseigné"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="12">
+
+                            <Frame CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Salaire"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+
+                                    <Label x:Name="lblDesiredSalary"
+                                           Text="Non renseigné"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Distance"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+
+                                    <Label x:Name="lblMaxDistance"
+                                           Text="Non renseignée"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame CornerRadius="22"
                        Padding="18"
                        BackgroundColor="White"
                        BorderColor="#EEEAF8"
@@ -250,16 +281,18 @@
                     <VerticalStackLayout Spacing="14">
 
                         <Label Text="Informations"
-                               FontSize="17"
+                               FontSize="18"
                                FontAttributes="Bold"
                                TextColor="#111827" />
 
                         <Grid ColumnDefinitions="Auto,*"
                               ColumnSpacing="12">
+
                             <Label Text="Email"
                                    FontSize="14"
                                    FontAttributes="Bold"
                                    TextColor="#8581A6" />
+
                             <Label Grid.Column="1"
                                    x:Name="lblEmail"
                                    FontSize="14"
@@ -273,10 +306,12 @@
 
                         <Grid ColumnDefinitions="Auto,*"
                               ColumnSpacing="12">
+
                             <Label Text="Statut"
                                    FontSize="14"
                                    FontAttributes="Bold"
                                    TextColor="#8581A6" />
+
                             <Label Grid.Column="1"
                                    Text="Visible par les recruteurs"
                                    FontSize="14"
@@ -286,52 +321,48 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- COMPLETENESS -->
-                <Frame CornerRadius="20"
-                       Padding="18"
-                       BackgroundColor="White"
-                       BorderColor="#EEEAF8"
-                       HasShadow="False">
-
-                    <VerticalStackLayout Spacing="12">
-                        <Label Text="Complétude du profil"
-                               FontSize="17"
-                               FontAttributes="Bold"
-                               TextColor="#111827" />
-
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Infos générales"
-                                   FontSize="14"
-                                   TextColor="#8581A6" />
-                            <Label Grid.Column="1"
-                                   Text="100%"
-                                   FontSize="14"
-                                   TextColor="#8581A6" />
-                        </Grid>
-
-                        <ProgressBar Progress="1"
-                                     ProgressColor="#D34C88"
-                                     BackgroundColor="#E7E2F5"
-                                     HeightRequest="5" />
-
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Description"
-                                   FontSize="14"
-                                   TextColor="#8581A6" />
-                            <Label Grid.Column="1"
-                                   Text="80%"
-                                   FontSize="14"
-                                   TextColor="#8581A6" />
-                        </Grid>
-
-                        <ProgressBar Progress="0.8"
-                                     ProgressColor="#D34C88"
-                                     BackgroundColor="#E7E2F5"
-                                     HeightRequest="5" />
-                    </VerticalStackLayout>
-                </Frame>
-
+                <Button Text="Paramètres"
+                        HeightRequest="50"
+                        BackgroundColor="White"
+                        BorderColor="#DED8F5"
+                        BorderWidth="1"
+                        TextColor="#111827"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        Clicked="Settings_Clicked" />
             </VerticalStackLayout>
         </ScrollView>
+
+        <Grid Grid.Row="1"
+              BackgroundColor="White"
+              Padding="18,8,18,18"
+              ColumnDefinitions="*,*,*,*">
+
+            <Button Text="Accueil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Home_Clicked" />
+
+            <Button Grid.Column="1"
+                    Text="Découvrir"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Discover_Clicked" />
+
+            <Button Grid.Column="2"
+                    Text="Messages"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Messages_Clicked" />
+
+            <Button Grid.Column="3"
+                    Text="Profil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#7C4DFF" />
+        </Grid>
     </Grid>
 </ContentPage>

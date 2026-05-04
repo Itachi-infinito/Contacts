@@ -56,10 +56,19 @@ public partial class CandidateSwipePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await LoadJobOffers();
-        await ShowPendingMatchAnimationIfNeeded();
 
+        try
+        {
+            await LoadJobOffers();
+            await ShowPendingMatchAnimationIfNeeded();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erreur", ex.Message, "OK");
+        }
     }
+
+
 
     private async Task LoadJobOffers()
     {
@@ -104,7 +113,6 @@ public partial class CandidateSwipePage : ContentPage
             lblSalary.IsVisible = false;
 
             btnImageExpandCollapse.IsVisible = false;
-            btnHeaderExpandCollapse.IsVisible = false;
             descriptionSection.IsVisible = false;
             expandedDetailsSection.IsVisible = false;
 
@@ -121,8 +129,14 @@ public partial class CandidateSwipePage : ContentPage
 
         lblTitle.Text = currentOffer.Title;
         lblCompany.Text = currentOffer.CompanyName;
+        lblCompanyLogoInitials.Text = BuildInitials(currentOffer.CompanyName);
         lblLocation.Text = currentOffer.Location;
         lblDescription.Text = currentOffer.Description;
+        lblShortDescription.Text = currentOffer.Description;
+        lblShortDescription.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.Description);
+        
+
+
 
         lblSalary.Text = GetSalaryDisplay(currentOffer);
         lblSalary.IsVisible = currentOffer.SalaryMin > 0 || currentOffer.SalaryMax > 0;
@@ -140,12 +154,11 @@ public partial class CandidateSwipePage : ContentPage
         remoteBadge.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.RemoteMode);
         lblRemoteMode.Text = currentOffer.RemoteMode;
 
-        string skillsPreview = !string.IsNullOrWhiteSpace(currentOffer.RequiredSkills)
-            ? currentOffer.RequiredSkills
-            : currentOffer.NiceToHaveSkills;
+        string skillsPreview = BuildSkillsPreview(currentOffer);
 
         skillsPreviewCard.IsVisible = !string.IsNullOrWhiteSpace(skillsPreview);
         lblSkillsPreview.Text = skillsPreview;
+
 
         lblDetailCompany.Text = $"Entreprise : {currentOffer.CompanyName}";
         lblDetailLocation.Text = $"Lieu : {currentOffer.Location}";
@@ -166,12 +179,14 @@ public partial class CandidateSwipePage : ContentPage
         niceSkillsDetailSection.IsVisible = !string.IsNullOrWhiteSpace(currentOffer.NiceToHaveSkills);
         lblDetailNiceToHaveSkills.Text = currentOffer.NiceToHaveSkills;
 
-        imgJob.Source = null;
-        imgJob.IsVisible = false;
-        imgJob.Opacity = 0;
+        //imgJob.Source = null;
+        //imgJob.IsVisible = false;
+        //imgJob.Opacity = 0;
+        imgJob.Source = "horeca_default.jpg";
+        imgJob.IsVisible = true;
+        imgJob.Opacity = 1;
 
         btnImageExpandCollapse.IsVisible = true;
-        btnHeaderExpandCollapse.IsVisible = false;
         descriptionSection.IsVisible = true;
         expandedDetailsSection.IsVisible = false;
     }
@@ -198,8 +213,6 @@ public partial class CandidateSwipePage : ContentPage
         btnImageExpandCollapse.IsVisible = true;
         btnImageExpandCollapse.Rotation = 0;
 
-        btnHeaderExpandCollapse.IsVisible = false;
-        btnHeaderExpandCollapse.Rotation = 0;
     }
 
     private async Task ToggleDetailsAsync()
@@ -212,8 +225,6 @@ public partial class CandidateSwipePage : ContentPage
             _isExpanded = true;
 
             btnImageExpandCollapse.IsVisible = false;
-            btnHeaderExpandCollapse.IsVisible = true;
-            btnHeaderExpandCollapse.Rotation = 180;
 
             expandedDetailsSection.IsVisible = true;
             await expandedDetailsSection.FadeTo(1, 180);
@@ -226,8 +237,6 @@ public partial class CandidateSwipePage : ContentPage
             await expandedDetailsSection.FadeTo(0, 150);
             expandedDetailsSection.IsVisible = false;
 
-            btnHeaderExpandCollapse.Rotation = 0;
-            btnHeaderExpandCollapse.IsVisible = false;
 
             btnImageExpandCollapse.IsVisible = true;
             await cardScrollView.ScrollToAsync(jobCard, ScrollToPosition.Start, true);
@@ -375,10 +384,11 @@ public partial class CandidateSwipePage : ContentPage
     {
         Shell.Current.FlyoutIsPresented = true;
     }
-    private async void Discover_Tapped(object sender, TappedEventArgs e)
+    private async void Discover_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
     }
+
 
     private async void Messages_Tapped(object sender, TappedEventArgs e)
     {
@@ -430,58 +440,136 @@ public partial class CandidateSwipePage : ContentPage
     }
     private async Task UpdateCompatibilityBadge(JobOffer currentOffer)
     {
-        if (!_sessionService.IsLoggedIn)
+        try
+        {
+            if (!_sessionService.IsLoggedIn)
+            {
+                compatibilityBadge.IsVisible = false;
+                return;
+            }
+
+            var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
+                _sessionService.CurrentUserId,
+                _sessionService.CurrentUserName,
+                _sessionService.CurrentUserEmail);
+
+            int score = _compatibilityService.CalculateScore(candidateProfile, currentOffer);
+
+            compatibilityBadge.IsVisible = true;
+            lblCompatibility.Text = $"Compatibilité {score}%";
+            matchTipCard.IsVisible = true;
+
+            lblMatchTip.Text = score >= 75
+                ? "Votre profil correspond très bien à cette offre."
+                : score >= 45
+                    ? "Cette offre peut vous correspondre, surtout si vous complétez vos compétences."
+                    : "Cette offre est moins proche de votre profil actuel.";
+
+
+            if (score >= 75)
+            {
+                compatibilityBadge.BackgroundColor = Color.FromArgb("#ECFDF5");
+                lblCompatibility.TextColor = Color.FromArgb("#10B981");
+            }
+            else if (score >= 45)
+            {
+                compatibilityBadge.BackgroundColor = Color.FromArgb("#F0EAFE");
+                lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
+            }
+            else
+            {
+                compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
+                lblCompatibility.TextColor = Color.FromArgb("#E11D48");
+            }
+        }
+        catch (Exception ex)
         {
             compatibilityBadge.IsVisible = false;
-            return;
-        }
-
-        var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
-            _sessionService.CurrentUserId,
-            _sessionService.CurrentUserName,
-            _sessionService.CurrentUserEmail);
-
-        int score = _compatibilityService.CalculateScore(candidateProfile, currentOffer);
-
-        compatibilityBadge.IsVisible = true;
-        lblCompatibility.Text = $"Compatibilité {score}%";
-
-        if (score >= 75)
-        {
-            compatibilityBadge.BackgroundColor = Color.FromArgb("#ECFDF5");
-            lblCompatibility.TextColor = Color.FromArgb("#10B981");
-        }
-        else if (score >= 45)
-        {
-            compatibilityBadge.BackgroundColor = Color.FromArgb("#F0EAFE");
-            lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
-        }
-        else
-        {
-            compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
-            lblCompatibility.TextColor = Color.FromArgb("#E11D48");
+            System.Diagnostics.Debug.WriteLine($"Compatibility error: {ex}");
         }
     }
+
     private async Task UpdateDistanceLabel(JobOffer currentOffer)
     {
-        if (!_sessionService.IsLoggedIn)
+        try
+        {
+            if (!_sessionService.IsLoggedIn)
+            {
+                lblDistance.IsVisible = false;
+                return;
+            }
+
+            var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
+                _sessionService.CurrentUserId,
+                _sessionService.CurrentUserName,
+                _sessionService.CurrentUserEmail);
+
+            string distanceDisplay = _distanceService.GetDistanceDisplay(candidateProfile, currentOffer);
+
+            lblDistance.IsVisible = !string.IsNullOrWhiteSpace(distanceDisplay);
+            lblDistance.Text = distanceDisplay;
+        }
+        catch (Exception ex)
         {
             lblDistance.IsVisible = false;
-            return;
+            System.Diagnostics.Debug.WriteLine($"Distance error: {ex}");
         }
+    }
 
-        var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
-            _sessionService.CurrentUserId,
-            _sessionService.CurrentUserName,
-            _sessionService.CurrentUserEmail);
+    private async void Home_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateHomePage)}");
+    }
 
-        string distanceDisplay = _distanceService.GetDistanceDisplay(candidateProfile, currentOffer);
+    private async void Messages_Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
+    }
 
-        lblDistance.IsVisible = !string.IsNullOrWhiteSpace(distanceDisplay);
-        lblDistance.Text = distanceDisplay;
+    private async void Profile_Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
+    }
+
+    private static string BuildSkillsPreview(JobOffer offer)
+    {
+        var source = !string.IsNullOrWhiteSpace(offer.RequiredSkills)
+            ? offer.RequiredSkills
+            : offer.NiceToHaveSkills;
+
+        if (string.IsNullOrWhiteSpace(source))
+            return string.Empty;
+
+        var skills = source
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(skill => !string.IsNullOrWhiteSpace(skill))
+            .ToList();
+
+        var visibleSkills = skills.Take(3).ToList();
+
+        if (skills.Count > 3)
+            return $"{string.Join(", ", visibleSkills)} +{skills.Count - 3}";
+
+        return string.Join(", ", visibleSkills);
     }
 
 
+    private async void Image_Tapped(object sender, TappedEventArgs e)
+    {
+        await ToggleDetailsAsync();
+    }
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "SW";
 
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
+ 
 
 }

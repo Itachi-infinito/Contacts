@@ -56,6 +56,15 @@ public class DatabaseService
         await AddColumnIfMissing("CandidateProfile", "MaxDistanceKm", "INTEGER DEFAULT 25");
         await AddColumnIfMissing("CandidateProfile", "Latitude", "REAL DEFAULT 0");
         await AddColumnIfMissing("CandidateProfile", "Longitude", "REAL DEFAULT 0");
+
+        await AddColumnIfMissing("CandidateProfile", "ExperienceTitle1", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "ExperienceCompany1", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "ExperiencePeriod1", "TEXT DEFAULT ''");
+
+        await AddColumnIfMissing("CandidateProfile", "ExperienceTitle2", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "ExperienceCompany2", "TEXT DEFAULT ''");
+        await AddColumnIfMissing("CandidateProfile", "ExperiencePeriod2", "TEXT DEFAULT ''");
+
     }
 
     private async Task AddColumnIfMissing(string tableName, string columnName, string columnDefinition)

@@ -51,11 +51,13 @@ public partial class LoginPage : ContentPage
 
         if (string.Equals(user.Role, "Candidate", StringComparison.OrdinalIgnoreCase))
         {
-            await appShell.GoToAsync($"//{nameof(CandidateSwipePage)}");
+            await appShell.GoToAsync($"//{nameof(CandidateHomePage)}");
+
         }
         else
         {
-            await appShell.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+            await appShell.GoToAsync($"//{nameof(RecruiterHomePage)}");
+
         }
     }
 

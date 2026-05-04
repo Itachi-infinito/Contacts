@@ -20,6 +20,9 @@ public partial class CandidateHomePage : ContentPage
 
     protected override async void OnAppearing()
     {
+        lblGreeting.Text = $"Bonjour, {_sessionService.CurrentUserName}";
+        lblInitials.Text = BuildInitials(_sessionService.CurrentUserName);
+
         base.OnAppearing();
 
         if (_isCheckingPendingMatch || !_sessionService.IsLoggedIn)
@@ -49,8 +52,10 @@ public partial class CandidateHomePage : ContentPage
 
     private async void BrowseJobOffers_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(JobOfferListPage));
+        await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
+
     }
+
 
     private async void Matches_Clicked(object sender, EventArgs e)
     {
@@ -71,4 +76,18 @@ public partial class CandidateHomePage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(MessagesPage));
     }
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "ME";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
+
+
 }

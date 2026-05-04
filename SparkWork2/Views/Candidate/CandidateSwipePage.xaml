@@ -4,39 +4,37 @@
              x:Class="SparkWork2.Views.Candidate.CandidateSwipePage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#F7F5FC">
+             BackgroundColor="White">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
 
         <!-- HEADER -->
         <Grid Grid.Row="0"
               BackgroundColor="White"
-              Padding="28,26,28,0"
+              Padding="20,24,20,8"
               RowDefinitions="Auto,Auto"
+              RowSpacing="14"
               ColumnDefinitions="*,Auto">
 
-            <Label Text="SparkWork"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="#7C4DFF"
-                   VerticalOptions="Center" />
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Découvrir"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#111827" />
 
-            <ImageButton x:Name="btnHeaderExpandCollapse"
-                         Grid.Column="1"
-                         Source="arrow_down.png"
-                         IsVisible="False"
-                         BackgroundColor="Transparent"
-                         Clicked="ToggleDetails_Clicked" />
+                <Label Text="Offres horeca recommandées pour vous"
+                       FontSize="13"
+                       TextColor="#8B86A3" />
+            </VerticalStackLayout>
 
             <Frame Grid.Column="1"
-                   HeightRequest="54"
-                   WidthRequest="54"
-                   CornerRadius="27"
+                   HeightRequest="52"
+                   WidthRequest="52"
+                   CornerRadius="26"
                    Padding="0"
                    HasShadow="False"
-                   HorizontalOptions="End"
                    VerticalOptions="Center">
-
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Profile_Tapped" />
                 </Frame.GestureRecognizers>
@@ -56,52 +54,40 @@
                        VerticalTextAlignment="Center" />
             </Frame>
 
-            <Grid Grid.Row="1"
-                  Grid.ColumnSpan="2"
-                  ColumnDefinitions="*,*,*"
-                  Margin="0,24,0,0"
-                  HeightRequest="42">
+            <HorizontalStackLayout Grid.Row="1"
+                                   Grid.ColumnSpan="2"
+                                   Spacing="10">
+                <Frame BackgroundColor="#7C4DFF"
+                       CornerRadius="16"
+                       Padding="14,7"
+                       HasShadow="False">
+                    <Label Text="Pour vous"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                </Frame>
 
-                <Label Text="DÉCOUVRIR"
-                       Grid.Column="0"
-                       FontSize="15"
-                       TextColor="#7C4DFF"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Discover_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
+                <Frame BackgroundColor="#F5F3FF"
+                       CornerRadius="16"
+                       Padding="14,7"
+                       HasShadow="False">
+                    <Label Text="Récents"
+                           FontSize="12"
+                           TextColor="#5F5A75" />
+                </Frame>
 
-                <Label Text="MESSAGES"
-                       Grid.Column="1"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Messages_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <Label Text="STATS"
-                       Grid.Column="2"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Stats_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <BoxView Grid.Column="0"
-                         HeightRequest="3"
-                         Color="#7C4DFF"
-                         VerticalOptions="End"
-                         Margin="14,0,14,0" />
-            </Grid>
+                <Frame BackgroundColor="#F5F3FF"
+                       CornerRadius="16"
+                       Padding="14,7"
+                       HasShadow="False">
+                    <Label Text="À proximité"
+                           FontSize="12"
+                           TextColor="#5F5A75" />
+                </Frame>
+            </HorizontalStackLayout>
         </Grid>
+
+
 
         <!-- CARD AREA -->
         <Grid Grid.Row="1">
@@ -135,175 +121,189 @@
 
                             <!-- IMAGE -->
                             <Grid Grid.Row="0">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Image_Tapped" />
+                                </Grid.GestureRecognizers>
+
                                 <Frame CornerRadius="0"
                                        Padding="0"
                                        HasShadow="False"
                                        IsClippedToBounds="True">
 
-                                    <Frame.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#C4B5FD" Offset="0.0" />
-                                            <GradientStop Color="#A78BFA" Offset="1.0" />
-                                        </LinearGradientBrush>
-                                    </Frame.Background>
-
                                     <Grid>
                                         <Image x:Name="imgJob"
+                                               Source="horeca_default.jpg"
                                                Aspect="AspectFill"
-                                               Opacity="0"
-                                               IsVisible="False" />
+                                               Opacity="1"
+                                               IsVisible="True" />
 
-                                        <Grid x:Name="jobPlaceholderIllustration">
+                                        <BoxView BackgroundColor="#12000000" />
+                                        <Frame Padding="10,6"
+                                               BackgroundColor="White"
+                                               CornerRadius="12"
+                                               HasShadow="False"
+                                               Margin="16,16,0,0"
+                                               HorizontalOptions="Start"
+                                               VerticalOptions="Start"
+                                               Opacity="{Binding Source={x:Reference lblLikeOverlay}, Path=Opacity}">
+                                            <Label x:Name="lblLikeOverlay"
+                                                   Text="LIKE"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#10B981"
+                                                   Opacity="0" />
+                                        </Frame>
 
-                                            <Ellipse WidthRequest="130"
-                                                     HeightRequest="130"
-                                                     Fill="#7C4DFF"
-                                                     Opacity="0.22"
-                                                     HorizontalOptions="Center"
-                                                     VerticalOptions="Center"
-                                                     Margin="0,-18,0,0" />
+                                        <Frame Padding="10,6"
+                                               BackgroundColor="White"
+                                               CornerRadius="12"
+                                               HasShadow="False"
+                                               Margin="0,16,16,0"
+                                               HorizontalOptions="End"
+                                               VerticalOptions="Start"
+                                               Opacity="{Binding Source={x:Reference lblNopeOverlay}, Path=Opacity}">
+                                            <Label x:Name="lblNopeOverlay"
+                                                   Text="SKIP"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#EF4444"
+                                                   Opacity="0" />
+                                        </Frame>
 
-                                            <Ellipse WidthRequest="78"
-                                                     HeightRequest="78"
-                                                     Fill="#FFFFFF"
-                                                     Opacity="0.92"
-                                                     HorizontalOptions="Center"
-                                                     VerticalOptions="Center"
-                                                     Margin="0,-76,0,0" />
 
-                                            <Ellipse WidthRequest="52"
-                                                     HeightRequest="52"
-                                                     Fill="#7C4DFF"
-                                                     Opacity="0.75"
-                                                     HorizontalOptions="Center"
-                                                     VerticalOptions="Center"
-                                                     Margin="0,-76,0,0" />
+                                        <Frame x:Name="compatibilityBadge"
+                                               BackgroundColor="#7C4DFF"
+                                               CornerRadius="18"
+                                               Padding="12,8"
+                                               HasShadow="True"
+                                               Margin="0,14,14,0"
+                                               HorizontalOptions="End"
+                                               VerticalOptions="Start"
+                                               IsVisible="False">
 
-                                            <Ellipse WidthRequest="172"
-                                                     HeightRequest="70"
-                                                     Fill="#8B5CF6"
-                                                     Opacity="0.22"
-                                                     HorizontalOptions="Center"
-                                                     VerticalOptions="End"
-                                                     Margin="0,0,0,36" />
+                                            <Label x:Name="lblCompatibility"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalTextAlignment="Center" />
+                                        </Frame>
 
-                                            <Ellipse WidthRequest="116"
-                                                     HeightRequest="46"
-                                                     Fill="#FFFFFF"
-                                                     Opacity="0.22"
-                                                     HorizontalOptions="Center"
-                                                     VerticalOptions="End"
-                                                     Margin="0,0,0,42" />
-                                        </Grid>
+                                        <Button x:Name="btnImageExpandCollapse"
+                                                Text="Détails"
+                                                HeightRequest="34"
+                                                Padding="14,0"
+                                                BackgroundColor="White"
+                                                TextColor="#7C4DFF"
+                                                FontAttributes="Bold"
+                                                FontSize="12"
+                                                CornerRadius="14"
+                                                Margin="0,0,14,14"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="End"
+                                                Clicked="ToggleDetails_Clicked" />
                                     </Grid>
                                 </Frame>
-
-                                <Frame Padding="10,6"
-                                       BackgroundColor="White"
-                                       CornerRadius="12"
-                                       HasShadow="False"
-                                       Margin="18,18,0,0"
-                                       HorizontalOptions="Start"
-                                       VerticalOptions="Start"
-                                       Opacity="{Binding Source={x:Reference lblLikeOverlay}, Path=Opacity}">
-
-                                    <Label x:Name="lblLikeOverlay"
-                                           Text="LIKE"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           TextColor="#10B981"
-                                           Opacity="0" />
-                                </Frame>
-
-                                <Frame Padding="10,6"
-                                       BackgroundColor="White"
-                                       CornerRadius="12"
-                                       HasShadow="False"
-                                       Margin="0,18,18,0"
-                                       HorizontalOptions="End"
-                                       VerticalOptions="Start"
-                                       Opacity="{Binding Source={x:Reference lblNopeOverlay}, Path=Opacity}">
-
-                                    <Label x:Name="lblNopeOverlay"
-                                           Text="SKIP"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           TextColor="#EF4444"
-                                           Opacity="0" />
-                                </Frame>
-
-                                <ImageButton x:Name="btnImageExpandCollapse"
-                                             Source="arrow_down.png"
-                                             HeightRequest="28"
-                                             WidthRequest="28"
-                                             BackgroundColor="Transparent"
-                                             Margin="0,0,16,16"
-                                             HorizontalOptions="End"
-                                             VerticalOptions="End"
-                                             Clicked="ToggleDetails_Clicked" />
                             </Grid>
+
+
 
                             <!-- MAIN INFO -->
                             <VerticalStackLayout x:Name="offerInfoSection"
                                                  Grid.Row="1"
-                                                 Padding="20,16,20,24"
-                                                 Spacing="7">
+                                                 Padding="18,16,18,18"
+                                                 Spacing="13">
 
-                                <Label x:Name="lblTitle"
-                                       FontSize="20"
-                                       FontAttributes="Bold"
-                                       TextColor="#111827"
-                                       LineBreakMode="WordWrap" />
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                        ColumnSpacing="12">
 
-                                <Label x:Name="lblCompany"
-                                       FontSize="14"
-                                       TextColor="#7C4DFF" />
+                                    <Frame WidthRequest="52"
+                                           HeightRequest="52"
+                                           CornerRadius="14"
+                                           Padding="0"
+                                           BackgroundColor="#111827"
+                                           HasShadow="False">
 
-                                <Label x:Name="lblLocation"
-                                       FontSize="13"
-                                       TextColor="#7D7898" />
-                                <Label x:Name="lblDistance"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#7C4DFF"
-                                       IsVisible="False" />
+                                        <Label x:Name="lblCompanyLogoInitials"
+                                               Text="SW"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Frame>
 
+                                    <VerticalStackLayout Grid.Column="1"
+                                                        Spacing="3"
+                                                        VerticalOptions="Center">
 
-                                <Label x:Name="lblSalary"
-                                       FontSize="14"
-                                       FontAttributes="Bold"
-                                       TextColor="#111827"
-                                       IsVisible="False" />
-                                <Frame x:Name="compatibilityBadge"
-                                       BackgroundColor="#F0EAFE"
-                                       CornerRadius="14"
-                                       Padding="10,5"
-                                       HasShadow="False"
-                                       HorizontalOptions="Start"
-                                       IsVisible="False">
+                                        <Label x:Name="lblTitle"
+                                               FontSize="21"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
 
-                                    <Label x:Name="lblCompatibility"
-                                           FontSize="12"
-                                           FontAttributes="Bold"
-                                           TextColor="#7C4DFF" />
-                                </Frame>
+                                        <Label x:Name="lblCompany"
+                                               FontSize="14"
+                                               TextColor="#7C4DFF"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                    </VerticalStackLayout>
 
+                                    <Frame Grid.Column="2"
+                                           x:Name="contractTypeBadge"
+                                           BackgroundColor="#ECFDF5"
+                                           CornerRadius="13"
+                                           Padding="10,4"
+                                           HasShadow="False"
+                                           VerticalOptions="Center">
+
+                                        <Label x:Name="lblContractType"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               TextColor="#10B981" />
+                                    </Frame>
+                                </Grid>
 
                                 <FlexLayout Direction="Row"
                                             Wrap="Wrap"
                                             AlignItems="Center"
                                             JustifyContent="Start">
 
-                                    <Frame x:Name="contractTypeBadge"
-                                           BackgroundColor="#F0EAFE"
-                                           CornerRadius="12"
-                                           Padding="9,3"
-                                           Margin="0,0,8,8"
-                                           HasShadow="False">
-                                        <Label x:Name="lblContractType"
-                                               FontSize="11"
-                                               TextColor="#7C4DFF" />
-                                    </Frame>
+                                    <Label Text="📍"
+                                           FontSize="13"
+                                           Margin="0,0,4,8" />
+
+                                    <Label x:Name="lblLocation"
+                                           FontSize="13"
+                                           TextColor="#5F5A75"
+                                           Margin="0,0,14,8" />
+
+                                    <Label Text="↔"
+                                           FontSize="13"
+                                           Margin="0,0,4,8" />
+
+                                    <Label x:Name="lblDistance"
+                                           FontSize="13"
+                                           TextColor="#5F5A75"
+                                           Margin="0,0,14,8"
+                                           IsVisible="False" />
+
+                                    <Label Text="💶"
+                                           FontSize="13"
+                                           Margin="0,0,4,8" />
+
+                                    <Label x:Name="lblSalary"
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827"
+                                           Margin="0,0,14,8"
+                                           IsVisible="False" />
+                                </FlexLayout>
+                                <FlexLayout Direction="Row"
+                                            Wrap="Wrap"
+                                            AlignItems="Center"
+                                            JustifyContent="Start">
 
                                     <Frame x:Name="levelBadge"
                                            BackgroundColor="#F0EAFE"
@@ -330,8 +330,15 @@
                                     </Frame>
                                 </FlexLayout>
 
+
+                                <Label x:Name="lblShortDescription"
+                                       FontSize="13"
+                                       TextColor="#5F5A75"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="2" />
+
                                 <Frame x:Name="skillsPreviewCard"
-                                       BackgroundColor="#FAF9FF"
+                                        BackgroundColor="#FAF9FF"
                                        BorderColor="#EEEAF8"
                                        CornerRadius="16"
                                        Padding="12"
@@ -339,7 +346,7 @@
                                        IsVisible="False">
 
                                     <VerticalStackLayout Spacing="6">
-                                        <Label Text="Compétences"
+                                        <Label Text="Compétences principales"
                                                FontSize="12"
                                                FontAttributes="Bold"
                                                TextColor="#8581A6" />
@@ -352,6 +359,9 @@
                                     </VerticalStackLayout>
                                 </Frame>
                             </VerticalStackLayout>
+
+
+
 
                             <!-- EXPANDED DETAILS -->
                             <VerticalStackLayout x:Name="expandedDetailsSection"
@@ -436,6 +446,45 @@
                             </VerticalStackLayout>
                         </Grid>
                     </Frame>
+                    <Frame x:Name="matchTipCard"
+                           WidthRequest="326"
+                           BackgroundColor="#FAF9FF"
+                           BorderColor="#EEEAF8"
+                           CornerRadius="18"
+                           Padding="14"
+                           HasShadow="False"
+                           IsVisible="False">
+
+                        <Grid ColumnDefinitions="Auto,*,Auto"
+                             ColumnSpacing="12">
+
+                            <Label Text="✦"
+                                   FontSize="22"
+                                   TextColor="#7C4DFF"
+                                   VerticalTextAlignment="Center" />
+
+                            <VerticalStackLayout Grid.Column="1"
+                                                Spacing="2">
+
+                                <Label Text="Astuce match"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#7C4DFF" />
+
+                                <Label x:Name="lblMatchTip"
+                                       FontSize="13"
+                                       TextColor="#5F5A75"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="2"
+                                   Text="›"
+                                   FontSize="24"
+                                   TextColor="#7C4DFF"
+                                   VerticalTextAlignment="Center" />
+                        </Grid>
+                    </Frame>
+
 
                     <Label x:Name="lblSwipeHint"
                            Text="← Passer    •    Liker →"
@@ -472,53 +521,63 @@
 
         <!-- ACTIONS -->
         <Grid x:Name="actionsGrid"
-              Grid.Row="2"
-              ColumnDefinitions="*,*"
-              ColumnSpacing="28"
-              Padding="90,0,90,36"
-              HorizontalOptions="Fill">
+                Grid.Row="2"
+                ColumnDefinitions="*,*"
+                ColumnSpacing="12"
+                Padding="34,0,34,14">
 
-            <Frame Grid.Column="0"
-                   HeightRequest="58"
-                   WidthRequest="58"
-                   CornerRadius="10"
-                   Padding="0"
-                   BackgroundColor="White"
-                   HasShadow="True"
-                   HorizontalOptions="Center">
-                <Frame.Shadow>
-                    <Shadow Brush="#35EF4D7A"
-                            Offset="0,10"
-                            Radius="18" />
-                </Frame.Shadow>
+            <Button Text="Passer"
+                    HeightRequest="50"
+                    BackgroundColor="White"
+                    BorderColor="#DED8F5"
+                    BorderWidth="1"
+                    TextColor="#111827"
+                    FontAttributes="Bold"
+                    CornerRadius="16"
+                    Clicked="Reject_Clicked" />
 
-                <Button Text="×"
-                        FontSize="24"
-                        TextColor="#111827"
-                        BackgroundColor="Transparent"
-                        Clicked="Reject_Clicked" />
-            </Frame>
-
-            <Frame Grid.Column="1"
-                   HeightRequest="58"
-                   WidthRequest="64"
-                   CornerRadius="10"
-                   Padding="0"
-                   BackgroundColor="White"
-                   HasShadow="True"
-                   HorizontalOptions="Center">
-                <Frame.Shadow>
-                    <Shadow Brush="#456FD6A5"
-                            Offset="0,12"
-                            Radius="22" />
-                </Frame.Shadow>
-
-                <Button Text="♥"
-                        FontSize="22"
-                        TextColor="#111827"
-                        BackgroundColor="Transparent"
-                        Clicked="Like_Clicked" />
-            </Frame>
+            <Button Grid.Column="1"
+                    Text="Postuler"
+                    HeightRequest="50"
+                    BackgroundColor="#7C4DFF"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="16"
+                    Clicked="Like_Clicked" />
         </Grid>
+
+        <!-- BOTTOM NAV -->
+        <Grid Grid.Row="3"
+              BackgroundColor="White"
+              Padding="18,8,18,18"
+              ColumnDefinitions="*,*,*,*">
+
+            <Button Text="Accueil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Home_Clicked" />
+
+            <Button Grid.Column="1"
+                    Text="Découvrir"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#7C4DFF" />
+
+            <Button Grid.Column="2"
+                    Text="Messages"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Messages_Button_Clicked" />
+
+            <Button Grid.Column="3"
+                    Text="Profil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Profile_Button_Clicked" />
+        </Grid>
+
     </Grid>
 </ContentPage>

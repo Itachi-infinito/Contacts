@@ -2,65 +2,233 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Candidate.CandidateHomePage"
+             Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#1ABC9C">
+             BackgroundColor="#F7F5FC">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="20">
+    <Grid RowDefinitions="*,Auto">
 
-            <Label Text="Candidate Home"
-                   FontSize="30"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalTextAlignment="Center" />
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="24,28,24,24" Spacing="20">
 
-            <Label Text="Welcome to your candidate space."
-                   FontSize="16"
-                   TextColor="White"
-                   HorizontalTextAlignment="Center" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="4">
+                        <Label x:Name="lblGreeting"
+                               Text="Bonjour"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
 
-            <Button Text="Browse Job Offers"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
+                        <Label Text="Prêt à trouver ta prochaine opportunité ?"
+                               FontSize="13"
+                               TextColor="#8B86A3" />
+                    </VerticalStackLayout>
+
+                    <Frame Grid.Column="1"
+                           WidthRequest="52"
+                           HeightRequest="52"
+                           CornerRadius="26"
+                           Padding="0"
+                           HasShadow="False">
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+
+                        <Label x:Name="lblInitials"
+                               Text="ME"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
+
+                <Frame CornerRadius="18"
+                       Padding="14"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                        <Label Text="⌕"
+                               FontSize="18"
+                               TextColor="#8B86A3"
+                               VerticalTextAlignment="Center" />
+
+                        <Label Grid.Column="1"
+                               Text="Rechercher un poste, une compétence..."
+                               FontSize="13"
+                               TextColor="#A6A0C0"
+                               VerticalTextAlignment="Center" />
+
+                        <Button Grid.Column="2"
+                                Text="Filtres"
+                                HeightRequest="36"
+                                Padding="12,0"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                CornerRadius="12" />
+                    </Grid>
+                </Frame>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Frame CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Compatibilité"
+                                   FontSize="13"
+                                   TextColor="#8581A6" />
+                            <Label Text="85%"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+                            <Label Text="sur les offres récentes"
+                                   FontSize="11"
+                                   TextColor="#10B981" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Grid.Column="1" CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Distance"
+                                   FontSize="13"
+                                   TextColor="#8581A6" />
+                            <Label Text="25 km"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+                            <Label Text="préférence active"
+                                   FontSize="11"
+                                   TextColor="#7C4DFF" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="Recommandé pour toi"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827" />
+                                <Label Text="Offres horeca selon ton profil"
+                                       FontSize="12"
+                                       TextColor="#8B86A3" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Voir"
+                                    HeightRequest="34"
+                                    Padding="14,0"
+                                    BackgroundColor="#7C4DFF"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    CornerRadius="12"
+                                    Clicked="BrowseJobOffers_Clicked" />
+                        </Grid>
+
+                        <Frame CornerRadius="18"
+                               Padding="14"
+                               BackgroundColor="#FAF9FF"
+                               BorderColor="#EEEAF8"
+                               HasShadow="False">
+
+                            <VerticalStackLayout Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="Serveur polyvalent"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+
+                                    <Label Grid.Column="1"
+                                           Text="85%"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="#10B981" />
+                                </Grid>
+
+                                <Label Text="Bruxelles · CDI · À moins de 1 km"
+                                       FontSize="13"
+                                       TextColor="#5F5A75" />
+
+                                <HorizontalStackLayout Spacing="8">
+                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
+                                        <Label Text="Service en salle" FontSize="11" TextColor="#7C4DFF" />
+                                    </Frame>
+
+                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
+                                        <Label Text="HACCP" FontSize="11" TextColor="#7C4DFF" />
+                                    </Frame>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Text="Découvrir"
+                            HeightRequest="52"
+                            BackgroundColor="#7C4DFF"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="16"
+                            Clicked="BrowseJobOffers_Clicked" />
+
+                    <Button Grid.Column="1"
+                            Text="Mes matchs"
+                            HeightRequest="52"
+                            BackgroundColor="White"
+                            BorderColor="#DED8F5"
+                            BorderWidth="1"
+                            TextColor="#111827"
+                            FontAttributes="Bold"
+                            CornerRadius="16"
+                            Clicked="Matches_Clicked" />
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="1"
+              BackgroundColor="White"
+              Padding="18,8,18,18"
+              ColumnDefinitions="*,*,*,*">
+
+            <Button Text="Accueil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#7C4DFF" />
+
+            <Button Grid.Column="1"
+                    Text="Découvrir"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
                     Clicked="BrowseJobOffers_Clicked" />
 
-            <Button Text="My Matches"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="Matches_Clicked" />
-
-            <Button Text="Messages"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
+            <Button Grid.Column="2"
+                    Text="Messages"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
                     Clicked="Messages_Clicked" />
 
-            <Button Text="My Profile"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="CandidateProfile_Clicked" />
-
-            <Button Text="Settings"
-                    HeightRequest="55"
+            <Button Grid.Column="3"
+                    Text="Profil"
+                    FontSize="11"
                     BackgroundColor="Transparent"
-                    BorderColor="White"
-                    BorderWidth="2"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="Settings_Clicked" />
-
-        </VerticalStackLayout>
-    </ScrollView>
+                    TextColor="#8B86A3"
+                    Clicked="CandidateProfile_Clicked" />
+        </Grid>
+    </Grid>
 </ContentPage>

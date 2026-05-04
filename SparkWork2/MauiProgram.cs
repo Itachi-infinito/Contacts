@@ -69,6 +69,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<SessionService>();
         builder.Services.AddTransient<SplashPage>();
+        builder.Services.AddSingleton<SkillCatalogService>();
+
 
         builder.Services.AddTransient<UserRepository>();
 

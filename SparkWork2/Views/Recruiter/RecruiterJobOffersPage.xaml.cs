@@ -119,10 +119,11 @@ public partial class RecruiterJobOffersPage : ContentPage
         await Shell.Current.GoToAsync($"//{nameof(RecruiterMatchesPage)}");
     }
 
-    private async void Profile_Tapped(object sender, TappedEventArgs e)
+    private async void Profile_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
     }
+
 
     private async void JobOfferCard_Loaded(object sender, EventArgs e)
     {
@@ -151,12 +152,30 @@ public partial class RecruiterJobOffersPage : ContentPage
 
         await bubble.ScaleTo(1, 220, Easing.SpringOut);
     }
+    private async void Profile_Tapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
+    }
 
     private async Task BubbleTapAnimation(Frame bubble)
     {
         await bubble.ScaleTo(0.88, 70, Easing.CubicIn);
         await bubble.ScaleTo(1.0, 140, Easing.SpringOut);
     }
-    
+    private async void Home_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterHomePage)}");
+    }
+    private async void Discover_Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+    }
+
+    private async void Messages_Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
+    }
+
+
 
 }

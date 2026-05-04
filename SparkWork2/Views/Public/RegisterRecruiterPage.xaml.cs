@@ -111,7 +111,8 @@ public partial class RegisterRecruiterPage : ContentPage
         Application.Current.MainPage = appShell;
         appShell.UpdateFlyoutByRole();
 
-        await appShell.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await appShell.GoToAsync($"//{nameof(RecruiterHomePage)}");
+
     }
 
     private static bool IsValidEmail(string email)

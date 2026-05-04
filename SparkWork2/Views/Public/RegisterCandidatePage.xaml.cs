@@ -111,7 +111,8 @@ public partial class RegisterCandidatePage : ContentPage
         Application.Current.MainPage = appShell;
         appShell.UpdateFlyoutByRole();
 
-        await appShell.GoToAsync($"//{nameof(CandidateSwipePage)}");
+        await Shell.Current.GoToAsync($"//{nameof(CandidateHomePage)}");
+
     }
 
     private static bool IsValidEmail(string email)

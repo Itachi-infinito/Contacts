@@ -153,6 +153,8 @@ public partial class RecruiterSwipePage : ContentPage
         lblDetailTitle.Text = title;
         lblDetailLocation.Text = location;
         lblAbout.Text = about;
+        UpdateExperienceSection(_currentCandidate);
+
 
         SetCandidateImage(_currentCandidate);
         aboutSection.IsVisible = true;
@@ -668,5 +670,35 @@ public partial class RecruiterSwipePage : ContentPage
         lblOfferFilterHint.Text = "Toutes les offres sont prises en compte.";
         await LoadCandidates();
     }
+
+    private void UpdateExperienceSection(CandidateProfile candidate)
+    {
+        bool hasExperience1 =
+            !string.IsNullOrWhiteSpace(candidate.ExperienceTitle1) ||
+            !string.IsNullOrWhiteSpace(candidate.ExperienceCompany1) ||
+            !string.IsNullOrWhiteSpace(candidate.ExperiencePeriod1);
+
+        bool hasExperience2 =
+            !string.IsNullOrWhiteSpace(candidate.ExperienceTitle2) ||
+            !string.IsNullOrWhiteSpace(candidate.ExperienceCompany2) ||
+            !string.IsNullOrWhiteSpace(candidate.ExperiencePeriod2);
+
+        experienceSection.IsVisible = hasExperience1 || hasExperience2;
+
+        experience1Layout.IsVisible = hasExperience1;
+        lblExperienceTitle1.Text = candidate.ExperienceTitle1;
+        lblExperienceCompany1.Text = string.IsNullOrWhiteSpace(candidate.ExperienceCompany1)
+            ? string.Empty
+            : $"@ {candidate.ExperienceCompany1}";
+        lblExperiencePeriod1.Text = candidate.ExperiencePeriod1;
+
+        experience2Layout.IsVisible = hasExperience2;
+        lblExperienceTitle2.Text = candidate.ExperienceTitle2;
+        lblExperienceCompany2.Text = string.IsNullOrWhiteSpace(candidate.ExperienceCompany2)
+            ? string.Empty
+            : $"@ {candidate.ExperienceCompany2}";
+        lblExperiencePeriod2.Text = candidate.ExperiencePeriod2;
+    }
+
 
 }

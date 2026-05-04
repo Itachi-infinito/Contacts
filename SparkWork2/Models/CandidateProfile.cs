@@ -25,4 +25,12 @@ public class CandidateProfile
 
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+
+    public string ExperienceTitle1 { get; set; } = string.Empty;
+    public string ExperienceCompany1 { get; set; } = string.Empty;
+    public string ExperiencePeriod1 { get; set; } = string.Empty;
+
+    public string ExperienceTitle2 { get; set; } = string.Empty;
+    public string ExperienceCompany2 { get; set; } = string.Empty;
+    public string ExperiencePeriod2 { get; set; } = string.Empty;
 }

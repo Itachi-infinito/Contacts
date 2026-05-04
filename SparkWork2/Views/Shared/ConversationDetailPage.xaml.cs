@@ -115,7 +115,7 @@ public partial class ConversationDetailPage : ContentPage
         _isSending = false;
     }
 
-    private async void Back_Tapped(object sender, TappedEventArgs e)
+    private async void Back_Clicked(object sender, EventArgs e)
     {
         var route = string.IsNullOrWhiteSpace(ReturnRoute)
             ? nameof(MessagesPage)
@@ -123,6 +123,7 @@ public partial class ConversationDetailPage : ContentPage
 
         await Shell.Current.GoToAsync($"//{route}");
     }
+
 
     private static string BuildInitials(string value)
     {

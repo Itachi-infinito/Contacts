@@ -322,47 +322,99 @@
                                FontAttributes="Bold"
                                TextColor="#111827" />
 
-                        <VerticalStackLayout Spacing="7">
+                        <VerticalStackLayout Spacing="10">
                             <Label Text="Compétences obligatoires"
                                    FontSize="13"
                                    FontAttributes="Bold"
                                    TextColor="#8581A6" />
 
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryRequiredSkills"
-                                       Placeholder="Ex: C#, SQL, MAUI"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
-                            </Frame>
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="8">
+
+                                <Frame BackgroundColor="#FAF9FF"
+                                       BorderColor="#EEEAF8"
+                                       CornerRadius="14"
+                                       Padding="10,0"
+                                       HasShadow="False">
+
+                                    <Picker x:Name="requiredSkillPicker"
+                                            Title="Choisir une compétence"
+                                            TextColor="#111827"
+                                            TitleColor="#A6A0C0" />
+                                </Frame>
+
+                                <Button Grid.Column="1"
+                                        Text="+"
+                                        WidthRequest="46"
+                                        HeightRequest="46"
+                                        BackgroundColor="#7C4DFF"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="14"
+                                        Clicked="AddRequiredSkill_Clicked" />
+                            </Grid>
+
+                            <FlexLayout x:Name="selectedRequiredSkillsLayout"
+                                        Direction="Row"
+                                        Wrap="Wrap"
+                                        AlignItems="Center"
+                                        JustifyContent="Start" />
+
+                            <Label x:Name="lblRequiredSkillsEmpty"
+                                   Text="Aucune compétence obligatoire sélectionnée."
+                                   FontSize="12"
+                                   TextColor="#8B86A3" />
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="7">
+                        <VerticalStackLayout Spacing="10">
                             <Label Text="Compétences bonus"
                                    FontSize="13"
                                    FontAttributes="Bold"
                                    TextColor="#8581A6" />
 
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryNiceToHaveSkills"
-                                       Placeholder="Ex: Azure, API, Git"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
-                            </Frame>
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="8">
+
+                                <Frame BackgroundColor="#FAF9FF"
+                                        BorderColor="#EEEAF8"
+                                        CornerRadius="14"
+                                        Padding="10,0"
+                                        HasShadow="False">
+
+                                    <Picker x:Name="niceSkillPicker"
+                                            Title="Choisir une compétence"
+                                            TextColor="#111827"
+                                            TitleColor="#A6A0C0" />
+                                </Frame>
+
+                                <Button Grid.Column="1"
+                                        Text="+"
+                                        WidthRequest="46"
+                                        HeightRequest="46"
+                                        BackgroundColor="#7C4DFF"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="14"
+                                        Clicked="AddNiceSkill_Clicked" />
+                            </Grid>
+
+                            <FlexLayout x:Name="selectedNiceSkillsLayout"
+                                        Direction="Row"
+                                        Wrap="Wrap"
+                                        AlignItems="Center"
+                                        JustifyContent="Start" />
+
+                            <Label x:Name="lblNiceSkillsEmpty"
+                                   Text="Aucune compétence bonus sélectionnée."
+                                   FontSize="12"
+                                   TextColor="#8B86A3" />
                         </VerticalStackLayout>
 
-                        <Label Text="Sépare les compétences par des virgules."
+
+                        <Label Text="Les compétences viennent du catalogue horeca."
                                FontSize="12"
                                TextColor="#8B86A3" />
+
                     </VerticalStackLayout>
                 </Frame>
 

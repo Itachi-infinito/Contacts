@@ -15,6 +15,11 @@ public partial class AddJobOfferPage : ContentPage
     private readonly SessionService _sessionService;
     private double _selectedLatitude;
     private double _selectedLongitude;
+    private readonly SkillCatalogService _skillCatalogService;
+
+    private readonly List<string> _selectedRequiredSkills = new();
+    private readonly List<string> _selectedNiceSkills = new();
+
 
     private void ClearForm()
     {
@@ -28,8 +33,15 @@ public partial class AddJobOfferPage : ContentPage
         entrySalaryMax.Text = string.Empty;
         entryLevel.Text = string.Empty;
         entryRemoteMode.Text = string.Empty;
-        entryRequiredSkills.Text = string.Empty;
-        entryNiceToHaveSkills.Text = string.Empty;
+        _selectedRequiredSkills.Clear();
+        _selectedNiceSkills.Clear();
+
+        requiredSkillPicker.SelectedItem = null;
+        niceSkillPicker.SelectedItem = null;
+
+        RefreshRequiredSkillsLayout();
+        RefreshNiceSkillsLayout();
+
         _selectedLatitude = 0;
         _selectedLongitude = 0;
         UpdateOfferCoordinatesLabel();
@@ -43,6 +55,14 @@ public partial class AddJobOfferPage : ContentPage
 
         _jobOfferRepository = MauiProgram.Services.GetRequiredService<JobOfferRepository>();
         _sessionService = MauiProgram.Services.GetRequiredService<SessionService>();
+        _skillCatalogService = MauiProgram.Services.GetRequiredService<SkillCatalogService>();
+
+        requiredSkillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
+        niceSkillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
+
+        RefreshRequiredSkillsLayout();
+        RefreshNiceSkillsLayout();
+
     }
 
     private async void Save_Clicked(object sender, EventArgs e)
@@ -55,8 +75,9 @@ public partial class AddJobOfferPage : ContentPage
         string address = entryAddress.Text?.Trim() ?? string.Empty;
         string level = entryLevel.Text?.Trim() ?? string.Empty;
         string remoteMode = entryRemoteMode.Text?.Trim() ?? string.Empty;
-        string requiredSkills = entryRequiredSkills.Text?.Trim() ?? string.Empty;
-        string niceToHaveSkills = entryNiceToHaveSkills.Text?.Trim() ?? string.Empty;
+        string requiredSkills = _skillCatalogService.FormatSkills(_selectedRequiredSkills);
+        string niceToHaveSkills = _skillCatalogService.FormatSkills(_selectedNiceSkills);
+
 
         int.TryParse(entrySalaryMin.Text?.Trim(), out int salaryMin);
         int.TryParse(entrySalaryMax.Text?.Trim(), out int salaryMax);
@@ -208,5 +229,122 @@ public partial class AddJobOfferPage : ContentPage
         lblOfferCoordinates.Text =
             $"Position définie : {_selectedLatitude:F4}, {_selectedLongitude:F4}";
     }
+    private void AddRequiredSkill_Clicked(object sender, EventArgs e)
+    {
+        if (requiredSkillPicker.SelectedItem is not string selectedSkill)
+            return;
+
+        if (_selectedRequiredSkills.Any(skill =>
+            string.Equals(skill, selectedSkill, StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        _selectedRequiredSkills.Add(selectedSkill);
+        requiredSkillPicker.SelectedItem = null;
+
+        RefreshRequiredSkillsLayout();
+    }
+
+    private void AddNiceSkill_Clicked(object sender, EventArgs e)
+    {
+        if (niceSkillPicker.SelectedItem is not string selectedSkill)
+            return;
+
+        if (_selectedNiceSkills.Any(skill =>
+            string.Equals(skill, selectedSkill, StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        _selectedNiceSkills.Add(selectedSkill);
+        niceSkillPicker.SelectedItem = null;
+
+        RefreshNiceSkillsLayout();
+    }
+
+    private void RefreshRequiredSkillsLayout()
+    {
+        selectedRequiredSkillsLayout.Children.Clear();
+        lblRequiredSkillsEmpty.IsVisible = !_selectedRequiredSkills.Any();
+
+        foreach (var skill in _selectedRequiredSkills)
+        {
+            selectedRequiredSkillsLayout.Children.Add(CreateSkillBadge(skill, RemoveRequiredSkill));
+        }
+    }
+
+    private void RefreshNiceSkillsLayout()
+    {
+        selectedNiceSkillsLayout.Children.Clear();
+        lblNiceSkillsEmpty.IsVisible = !_selectedNiceSkills.Any();
+
+        foreach (var skill in _selectedNiceSkills)
+        {
+            selectedNiceSkillsLayout.Children.Add(CreateSkillBadge(skill, RemoveNiceSkill));
+        }
+    }
+
+    private Frame CreateSkillBadge(string skill, Action<string?> removeAction)
+    {
+        return new Frame
+        {
+            BackgroundColor = Color.FromArgb("#F0EAFE"),
+            CornerRadius = 14,
+            Padding = new Thickness(10, 4),
+            Margin = new Thickness(0, 0, 8, 8),
+            HasShadow = false,
+            Content = new HorizontalStackLayout
+            {
+                Spacing = 6,
+                Children =
+            {
+                new Label
+                {
+                    Text = skill,
+                    FontSize = 12,
+                    TextColor = Color.FromArgb("#7C4DFF"),
+                    VerticalTextAlignment = TextAlignment.Center
+                },
+                new Label
+                {
+                    Text = "×",
+                    FontSize = 14,
+                    FontAttributes = FontAttributes.Bold,
+                    TextColor = Color.FromArgb("#7C4DFF"),
+                    VerticalTextAlignment = TextAlignment.Center,
+                    BindingContext = skill,
+                    GestureRecognizers =
+                    {
+                        new TapGestureRecognizer
+                        {
+                            Command = new Command<string>(removeAction),
+                            CommandParameter = skill
+                        }
+                    }
+                }
+            }
+            }
+        };
+    }
+
+    private void RemoveRequiredSkill(string? skill)
+    {
+        if (string.IsNullOrWhiteSpace(skill))
+            return;
+
+        _selectedRequiredSkills.RemoveAll(x =>
+            string.Equals(x, skill, StringComparison.OrdinalIgnoreCase));
+
+        RefreshRequiredSkillsLayout();
+    }
+
+    private void RemoveNiceSkill(string? skill)
+    {
+        if (string.IsNullOrWhiteSpace(skill))
+            return;
+
+        _selectedNiceSkills.RemoveAll(x =>
+            string.Equals(x, skill, StringComparison.OrdinalIgnoreCase));
+
+        RefreshNiceSkillsLayout();
+    }
+
 
 }

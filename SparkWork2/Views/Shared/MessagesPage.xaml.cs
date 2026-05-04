@@ -1,6 +1,8 @@
 using SparkWork2.Models;
 using SparkWork2.Repositories;
 using SparkWork2.Services;
+using SparkWork2.Views.Candidate;
+using SparkWork2.Views.Recruiter;
 
 namespace SparkWork2.Views.Shared;
 
@@ -19,7 +21,24 @@ public partial class MessagesPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        UpdateHeader();
+        UpdateBottomNavigation();
+
         await LoadMessages();
+    }
+
+    private void UpdateHeader()
+    {
+        lblHeaderInitials.Text = BuildInitials(_sessionService.CurrentUserName);
+    }
+
+    private void UpdateBottomNavigation()
+    {
+        bool isRecruiter = _sessionService.CurrentUserRole == "Recruiter";
+
+        recruiterBottomNav.IsVisible = isRecruiter;
+        candidateBottomNav.IsVisible = !isRecruiter;
     }
 
     private async Task LoadMessages()
@@ -46,27 +65,7 @@ public partial class MessagesPage : ContentPage
     private async void Message_Tapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is ConversationItem selectedConversation)
-        {
             await OpenConversationAsync(selectedConversation);
-        }
-    }
-
-    private async void OpenConversation_Clicked(object sender, EventArgs e)
-    {
-        if (sender is Button button &&
-            button.CommandParameter is ConversationItem selectedConversation)
-        {
-            await OpenConversationAsync(selectedConversation);
-        }
-    }
-
-    private async void DeleteConversation_Clicked(object sender, EventArgs e)
-    {
-        if (sender is not ImageButton button ||
-            button.CommandParameter is not ConversationItem selectedConversation)
-            return;
-
-        await ConfirmAndDeleteConversationAsync(selectedConversation);
     }
 
     private async void ConversationBubble_Tapped(object sender, TappedEventArgs e)
@@ -91,7 +90,7 @@ public partial class MessagesPage : ContentPage
 
     private async Task ConfirmAndDeleteConversationAsync(ConversationItem selectedConversation)
     {
-        var popup = new DeleteConfirmationPopup("Remove this conversation?");
+        var popup = new DeleteConfirmationPopup("Supprimer cette conversation ?");
         await Navigation.PushModalAsync(popup);
 
         bool confirmed = await popup.CompletionSource.Task;
@@ -116,9 +115,6 @@ public partial class MessagesPage : ContentPage
         if (sender is not VisualElement bubble)
             return;
 
-        if (Math.Abs(bubble.Scale - 1) < 0.01)
-            return;
-
         await bubble.ScaleTo(1, 220, Easing.SpringOut);
     }
 
@@ -139,24 +135,53 @@ public partial class MessagesPage : ContentPage
         );
     }
 
-    private async void Discover_Tapped(object sender, TappedEventArgs e)
+    private async void Home_Clicked(object sender, EventArgs e)
     {
         if (_sessionService.CurrentUserRole == "Recruiter")
-            await Shell.Current.GoToAsync($"//{nameof(SparkWork2.Views.Recruiter.RecruiterSwipePage)}");
+            await Shell.Current.GoToAsync($"//{nameof(RecruiterHomePage)}");
         else
-            await Shell.Current.GoToAsync($"//{nameof(SparkWork2.Views.Candidate.CandidateSwipePage)}");
+            await Shell.Current.GoToAsync($"//{nameof(CandidateHomePage)}");
     }
 
-    private async void Stats_Tapped(object sender, TappedEventArgs e)
+    private async void Discover_Clicked(object sender, EventArgs e)
     {
         if (_sessionService.CurrentUserRole == "Recruiter")
-            await Shell.Current.GoToAsync($"//{nameof(SparkWork2.Views.Recruiter.RecruiterMatchesPage)}");
+            await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
         else
-            await Shell.Current.GoToAsync($"//{nameof(SparkWork2.Views.Candidate.MatchesPage)}");
+            await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
     }
 
-    private void Menu_Clicked(object sender, EventArgs e)
+    private async void AddOffer_Clicked(object sender, EventArgs e)
     {
-        Shell.Current.FlyoutIsPresented = true;
+        await Shell.Current.GoToAsync(nameof(AddJobOfferPage));
+    }
+
+    private async void Profile_Clicked(object sender, EventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
+        else
+            await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
+    }
+
+    private async void Profile_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
+        else
+            await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "ME";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
     }
 }

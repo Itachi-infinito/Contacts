@@ -2,87 +2,326 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SparkWork2.Views.Recruiter.RecruiterHomePage"
+             Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#1ABC9C">
+             BackgroundColor="White">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="20">
+    <Grid RowDefinitions="*,Auto">
 
-            <Label Text="Recruiter Home"
-                   FontSize="30"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalTextAlignment="Center" />
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="24,28,24,24" Spacing="20">
 
-            <Label Text="Welcome to your recruiter space."
-                   FontSize="16"
-                   TextColor="White"
-                   HorizontalTextAlignment="Center" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="4">
+                        <Label x:Name="lblGreeting"
+                               Text="Bonjour"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
 
-            <Button Text="Browse Candidates"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="BrowseCandidates_Clicked" />
+                        <Label Text="Prêt à trouver votre prochain talent ?"
+                               FontSize="13"
+                               TextColor="#8B86A3" />
+                    </VerticalStackLayout>
 
-            <Button Text="My Job Offers"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="JobOffers_Clicked" />
-            <Button Text="Add Job Offer"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="AddJobOffer_Clicked" />
-            <Button Text="Likes Received"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="LikesReceived_Clicked" />
+                    <Frame Grid.Column="1"
+                           WidthRequest="52"
+                           HeightRequest="52"
+                           CornerRadius="26"
+                           Padding="0"
+                           HasShadow="False">
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
 
-            <Button Text="My Matches"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="Matches_Clicked" />
+                        <Label x:Name="lblInitials"
+                               Text="AL"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
 
-            <Button Text="Messages"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="Messages_Clicked" />
+                <Frame CornerRadius="18"
+                       Padding="14"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                        <Label Text="⌕"
+                               FontSize="18"
+                               TextColor="#8B86A3"
+                               VerticalTextAlignment="Center" />
 
-            <Button Text="My Profile"
-                    HeightRequest="55"
-                    BackgroundColor="White"
-                    TextColor="#1ABC9C"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="RecruiterProfile_Clicked" />
+                        <Label Grid.Column="1"
+                               Text="Rechercher un candidat, une compétence..."
+                               FontSize="13"
+                               TextColor="#A6A0C0"
+                               VerticalTextAlignment="Center" />
 
-            <Button Text="Settings"
-                    HeightRequest="55"
-                    BackgroundColor="Transparent"
-                    BorderColor="White"
-                    BorderWidth="2"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    CornerRadius="12"
-                    Clicked="Settings_Clicked" />
+                        <Button Grid.Column="2"
+                                Text="Filtres"
+                                HeightRequest="36"
+                                Padding="12,0"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                CornerRadius="12" />
+                    </Grid>
+                </Frame>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Frame CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Candidats"
+                                   FontSize="13"
+                                   TextColor="#8581A6" />
+                            <Label x:Name="lblCandidatesCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+                            <Label Text="compatibles cette semaine"
+                                   FontSize="11"
+                                   TextColor="#10B981" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Grid.Column="1" CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Matchs"
+                                   FontSize="13"
+                                   TextColor="#8581A6" />
+                            <Label x:Name="lblMatchesCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+                            <Label Text="nouveaux échanges"
+                                   FontSize="11"
+                                   TextColor="#7C4DFF" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="Candidat recommandé"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827" />
+                                <Label Text="Profil horeca compatible avec vos offres"
+                                       FontSize="12"
+                                       TextColor="#8B86A3" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Voir"
+                                    HeightRequest="34"
+                                    Padding="14,0"
+                                    BackgroundColor="#7C4DFF"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    CornerRadius="12"
+                                    Clicked="BrowseCandidates_Clicked" />
+                        </Grid>
+
+                        <Frame CornerRadius="18"
+                               Padding="14"
+                               BackgroundColor="#FAF9FF"
+                               BorderColor="#EEEAF8"
+                               HasShadow="False">
+
+                            <VerticalStackLayout Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label x:Name="lblRecommendedCandidateName"
+                                           Text="Aucun candidat"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+
+                                    <Label Grid.Column="1"
+                                           x:Name="lblRecommendedCandidateScore"
+                                           Text="0%"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="#10B981" />
+                                </Grid>
+
+                                <Label x:Name="lblRecommendedCandidateInfo"
+                                       Text="Crée une offre pour obtenir une recommandation"
+                                       FontSize="13"
+                                       TextColor="#5F5A75" />
+
+                                <HorizontalStackLayout Spacing="8">
+                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
+                                        <Label Text="Service en salle" FontSize="11" TextColor="#7C4DFF" />
+                                    </Frame>
+
+                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
+                                        <Label Text="Encaissement" FontSize="11" TextColor="#7C4DFF" />
+                                    </Frame>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Postes actifs"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+
+                            <Button Grid.Column="1"
+                                    Text="Tout voir"
+                                    HeightRequest="34"
+                                    Padding="12,0"
+                                    BackgroundColor="#F0EAFE"
+                                    TextColor="#7C4DFF"
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    CornerRadius="12"
+                                    Clicked="JobOffers_Clicked" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                            <Frame WidthRequest="42"
+                                   HeightRequest="42"
+                                   CornerRadius="21"
+                                   Padding="0"
+                                   BackgroundColor="#111827"
+                                   HasShadow="False">
+                                <Label Text="H"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Frame>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label x:Name="lblActiveOfferTitle"
+                                       Text="Aucune offre active"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827" />
+                                <Label x:Name="lblActiveOfferInfo"
+                                       Text="Publie une offre pour commencer"
+                                       FontSize="12"
+                                       TextColor="#8B86A3" />
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="2"
+                                   x:Name="lblActiveOfferCandidates"
+                                   Text="0 profil"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF"
+                                   VerticalTextAlignment="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Button Text="Mes offres"
+                        HeightRequest="52"
+                        BackgroundColor="#7C4DFF"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        Clicked="JobOffers_Clicked" />
+
+                <Button Grid.Column="1"
+                        Text="Matchs"
+                        HeightRequest="52"
+                        BackgroundColor="White"
+                        BorderColor="#DED8F5"
+                        BorderWidth="1"
+                        TextColor="#111827"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        Clicked="Matches_Clicked" />
+            </Grid>
+
 
         </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <Grid Grid.Row="1"
+                BackgroundColor="White"
+                Padding="18,8,18,18"
+                ColumnDefinitions="*,*,Auto,*,*">
+
+            <Button Text="Accueil"
+                    Grid.Column="0"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#7C4DFF" />
+
+            <Button Grid.Column="1"
+                    Text="Découvrir"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="BrowseCandidates_Clicked" />
+
+            <Frame Grid.Column="2"
+                    WidthRequest="50"
+                   HeightRequest="50"
+                   CornerRadius="25"
+                   Padding="0"
+                   BackgroundColor="#7C4DFF"
+                   HasShadow="True"
+                   Margin="8,0">
+                <Frame.Shadow>
+                    <Shadow Brush="#557C4DFF"
+                            Offset="0,8"
+                            Radius="18" />
+                </Frame.Shadow>
+
+                <Button Text="+"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        Clicked="AddJobOffer_Clicked" />
+            </Frame>
+
+            <Button Grid.Column="3"
+                    Text="Messages"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Messages_Clicked" />
+
+            <Button Grid.Column="4"
+                    Text="Profil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="RecruiterProfile_Clicked" />
+        </Grid>
+
+    </Grid>
 </ContentPage>

@@ -4,124 +4,89 @@
              x:Class="SparkWork2.Views.Shared.MessagesPage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#F7F5FC">
+             BackgroundColor="White">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="*,Auto">
 
-        <!-- HEADER -->
         <Grid Grid.Row="0"
-              BackgroundColor="White"
-              Padding="28,26,28,0"
-              RowDefinitions="Auto,Auto"
-              ColumnDefinitions="*,Auto">
+              RowDefinitions="Auto,Auto,*"
+              RowSpacing="18"
+              Padding="24,28,24,16">
 
-            <Label Text="SparkWork"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="#7C4DFF"
-                   VerticalOptions="Center" />
-
-            <Frame Grid.Column="1"
-                   HeightRequest="54"
-                   WidthRequest="54"
-                   CornerRadius="27"
-                   Padding="0"
-                   HasShadow="False"
-                   HorizontalOptions="End"
-                   VerticalOptions="Center">
-                <Frame.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#7C4DFF" Offset="0.0" />
-                        <GradientStop Color="#D34C88" Offset="1.0" />
-                    </LinearGradientBrush>
-                </Frame.Background>
-
-                <Label Text="ME"
-                       TextColor="White"
-                       FontAttributes="Bold"
-                       FontSize="16"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Frame>
-
-            <Grid Grid.Row="1"
-                  Grid.ColumnSpan="2"
-                  ColumnDefinitions="*,*,*"
-                  Margin="0,24,0,0"
-                  HeightRequest="42">
-
-                <Label Text="DÉCOUVRIR"
-                       Grid.Column="0"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Discover_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <Label Text="MESSAGES"
-                       Grid.Column="1"
-                       FontSize="15"
-                       TextColor="#7C4DFF"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-
-                <Label Text="STATS"
-                       Grid.Column="2"
-                       FontSize="15"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Stats_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <BoxView Grid.Column="1"
-                         HeightRequest="3"
-                         Color="#7C4DFF"
-                         VerticalOptions="End"
-                         Margin="14,0,14,0" />
-            </Grid>
-        </Grid>
-
-        <!-- CONTENT -->
-        <Grid Grid.Row="1"
-              RowDefinitions="Auto,*"
-              Padding="28,34,28,20">
-
+            <!-- HEADER -->
             <Grid Grid.Row="0"
-                  ColumnDefinitions="*,Auto"
-                  Margin="0,0,0,18">
+                  ColumnDefinitions="*,Auto">
 
-                <Label Text="Conversations"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       TextColor="#111827"
-                       VerticalOptions="Center" />
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Messages"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#111827" />
+
+                    <Label Text="Retrouvez vos conversations récentes"
+                           FontSize="13"
+                           TextColor="#8B86A3" />
+                </VerticalStackLayout>
 
                 <Frame Grid.Column="1"
-                       BackgroundColor="#7C4DFF"
-                       CornerRadius="16"
-                       Padding="12,4"
-                       HasShadow="False"
-                       VerticalOptions="Center">
-                    <Label Text="new"
-                           FontSize="13"
+                       WidthRequest="52"
+                       HeightRequest="52"
+                       CornerRadius="26"
+                       Padding="0"
+                       HasShadow="False">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Profile_Tapped" />
+                    </Frame.GestureRecognizers>
+
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7C4DFF" Offset="0.0" />
+                            <GradientStop Color="#D34C88" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+
+                    <Label x:Name="lblHeaderInitials"
+                           Text="ME"
+                           TextColor="White"
                            FontAttributes="Bold"
-                           TextColor="White" />
+                           FontSize="16"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
                 </Frame>
             </Grid>
 
-            <CollectionView Grid.Row="1"
+            <!-- SEARCH -->
+            <Frame Grid.Row="1"
+                   CornerRadius="18"
+                   Padding="14"
+                   BackgroundColor="White"
+                   BorderColor="#EEEAF8"
+                   HasShadow="False">
+
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="10">
+
+                    <Label Text="⌕"
+                           FontSize="18"
+                           TextColor="#8B86A3"
+                           VerticalTextAlignment="Center" />
+
+                    <Label Grid.Column="1"
+                           Text="Rechercher une conversation..."
+                           FontSize="13"
+                           TextColor="#A6A0C0"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </Frame>
+
+            <!-- CONVERSATIONS -->
+            <CollectionView Grid.Row="2"
                             x:Name="messagesCollection"
                             SelectionMode="None">
 
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="14" />
+                                       ItemSpacing="12" />
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.EmptyView>
@@ -135,23 +100,24 @@
                                Padding="0"
                                BackgroundColor="#F0EAFE"
                                HasShadow="False">
-                            <Label Text="💬"
+
+                            <Label Text="✉"
                                    FontSize="34"
+                                   TextColor="#7C4DFF"
                                    HorizontalTextAlignment="Center"
                                    VerticalTextAlignment="Center" />
                         </Frame>
 
-                        <Label Text="No conversations yet"
+                        <Label Text="Aucune conversation"
                                FontSize="20"
                                FontAttributes="Bold"
                                TextColor="#111827"
                                HorizontalTextAlignment="Center" />
 
-                        <Label Text="Your messages will appear here."
+                        <Label Text="Vos messages apparaîtront ici."
                                FontSize="13"
                                TextColor="#8B86A3"
                                HorizontalTextAlignment="Center" />
-
                     </VerticalStackLayout>
                 </CollectionView.EmptyView>
 
@@ -162,16 +128,17 @@
                             <SwipeView.RightItems>
                                 <SwipeItems Mode="Reveal">
                                     <SwipeItemView>
-                                        <Grid WidthRequest="130"
+                                        <Grid WidthRequest="118"
                                               ColumnDefinitions="*,*"
-                                              ColumnSpacing="10"
+                                              ColumnSpacing="8"
                                               VerticalOptions="Center">
 
                                             <Frame Grid.Column="0"
-                                                   WidthRequest="50"
-                                                   HeightRequest="50"
-                                                   CornerRadius="25"
+                                                   WidthRequest="48"
+                                                   HeightRequest="48"
+                                                   CornerRadius="24"
                                                    Padding="0"
+                                                   Scale="0.92"
                                                    BackgroundColor="#F0EAFE"
                                                    HasShadow="False"
                                                    BindingContext="{Binding .}"
@@ -181,17 +148,18 @@
                                                 </Frame.GestureRecognizers>
 
                                                 <Label Text="✉"
-                                                       FontSize="20"
+                                                       FontSize="18"
                                                        TextColor="#7C4DFF"
                                                        HorizontalTextAlignment="Center"
                                                        VerticalTextAlignment="Center" />
                                             </Frame>
 
                                             <Frame Grid.Column="1"
-                                                   WidthRequest="50"
-                                                   HeightRequest="50"
-                                                   CornerRadius="25"
+                                                   WidthRequest="48"
+                                                   HeightRequest="48"
+                                                   CornerRadius="24"
                                                    Padding="0"
+                                                   Scale="0.92"
                                                    BackgroundColor="#FFF1F4"
                                                    HasShadow="False"
                                                    BindingContext="{Binding .}"
@@ -211,91 +179,178 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
 
-                            <Grid Padding="4,14"
-                                  ColumnDefinitions="Auto,*,Auto"
-                                  ColumnSpacing="14"
-                                  Loaded="MessageCard_Loaded"
-                                  Opacity="0"
-                                  TranslationY="12"
-                                  Scale="0.985">
+                            <Frame CornerRadius="22"
+                                   Padding="14"
+                                   BackgroundColor="White"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False"
+                                   Opacity="0"
+                                   TranslationY="12"
+                                   Scale="0.985"
+                                   Loaded="MessageCard_Loaded">
 
-                                <Frame Grid.Column="0"
-                                       WidthRequest="58"
-                                       HeightRequest="58"
-                                       CornerRadius="29"
-                                       Padding="0"
-                                       HasShadow="False"
-                                       VerticalOptions="Center">
-                                    <Frame.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#7C4DFF" Offset="0.0" />
-                                            <GradientStop Color="#D34C88" Offset="1.0" />
-                                        </LinearGradientBrush>
-                                    </Frame.Background>
-
-                                    <Grid>
-                                        <Ellipse WidthRequest="34"
-                                                 HeightRequest="34"
-                                                 Fill="White"
-                                                 Opacity="0.45"
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="Center"
-                                                 Margin="0,-12,0,0" />
-
-                                        <Ellipse WidthRequest="48"
-                                                 HeightRequest="26"
-                                                 Fill="White"
-                                                 Opacity="0.30"
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="End"
-                                                 Margin="0,0,0,8" />
-                                    </Grid>
-                                </Frame>
-
-                                <VerticalStackLayout Grid.Column="1"
-                                                     Spacing="3"
-                                                     VerticalOptions="Center">
-
-                                    <Label Text="{Binding ParticipantName}"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           TextColor="#111827"
-                                           LineBreakMode="TailTruncation"
-                                           MaxLines="1" />
-
-                                    <Label Text="{Binding LastMessage}"
-                                           FontSize="14"
-                                           TextColor="#5F5A75"
-                                           LineBreakMode="TailTruncation"
-                                           MaxLines="1" />
-                                </VerticalStackLayout>
-
-                                <VerticalStackLayout Grid.Column="2"
-                                                     Spacing="4"
-                                                     VerticalOptions="Center"
-                                                     HorizontalOptions="End">
-
-                                    <Label Text="{Binding LastMessageDate, StringFormat='{0:HH:mm}'}"
-                                           FontSize="13"
-                                           TextColor="#111827"
-                                           HorizontalTextAlignment="End" />
-
-                                    <Ellipse WidthRequest="8"
-                                             HeightRequest="8"
-                                             Fill="#7C4DFF"
-                                             HorizontalOptions="End" />
-                                </VerticalStackLayout>
-
-                                <Grid.GestureRecognizers>
+                                <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="Message_Tapped"
                                                           CommandParameter="{Binding .}" />
-                                </Grid.GestureRecognizers>
-                            </Grid>
+                                </Frame.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      ColumnSpacing="12">
+
+                                    <Frame WidthRequest="54"
+                                           HeightRequest="54"
+                                           CornerRadius="27"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           VerticalOptions="Center">
+
+                                        <Frame.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                                <GradientStop Color="#D34C88" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </Frame.Background>
+
+                                        <Label Text="{Binding ParticipantName, StringFormat='{0}'}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center"
+                                               MaxLines="1" />
+                                    </Frame>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="3"
+                                                         VerticalOptions="Center">
+
+                                        <Label Text="{Binding ParticipantName}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+
+                                        <Label Text="{Binding LastMessage}"
+                                               FontSize="13"
+                                               TextColor="#5F5A75"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="2"
+                                                         Spacing="5"
+                                                         VerticalOptions="Center"
+                                                         HorizontalOptions="End">
+
+                                        <Label Text="{Binding LastMessageDate, StringFormat='{0:HH:mm}'}"
+                                               FontSize="12"
+                                               TextColor="#8B86A3"
+                                               HorizontalTextAlignment="End" />
+
+                                        <Ellipse WidthRequest="8"
+                                                 HeightRequest="8"
+                                                 Fill="#7C4DFF"
+                                                 HorizontalOptions="End" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
                         </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-
             </CollectionView>
+        </Grid>
+
+        <!-- CANDIDATE NAV -->
+        <Grid x:Name="candidateBottomNav"
+              Grid.Row="1"
+              BackgroundColor="White"
+              Padding="18,8,18,18"
+              ColumnDefinitions="*,*,*,*">
+
+            <Button Text="Accueil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Home_Clicked" />
+
+            <Button Grid.Column="1"
+                    Text="Découvrir"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Discover_Clicked" />
+
+            <Button Grid.Column="2"
+                    Text="Messages"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#7C4DFF" />
+
+            <Button Grid.Column="3"
+                    Text="Profil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Profile_Clicked" />
+        </Grid>
+
+        <!-- RECRUITER NAV -->
+        <Grid x:Name="recruiterBottomNav"
+              Grid.Row="1"
+              IsVisible="False"
+              BackgroundColor="White"
+              Padding="18,8,18,18"
+              ColumnDefinitions="*,*,Auto,*,*">
+
+            <Button Text="Accueil"
+                    Grid.Column="0"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Home_Clicked" />
+
+            <Button Grid.Column="1"
+                    Text="Découvrir"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Discover_Clicked" />
+
+            <Frame Grid.Column="2"
+                   WidthRequest="50"
+                   HeightRequest="50"
+                   CornerRadius="25"
+                   Padding="0"
+                   BackgroundColor="#7C4DFF"
+                   HasShadow="True"
+                   Margin="8,0">
+                <Frame.Shadow>
+                    <Shadow Brush="#557C4DFF"
+                            Offset="0,8"
+                            Radius="18" />
+                </Frame.Shadow>
+
+                <Button Text="+"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        Clicked="AddOffer_Clicked" />
+            </Frame>
+
+            <Button Grid.Column="3"
+                    Text="Messages"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#7C4DFF" />
+
+            <Button Grid.Column="4"
+                    Text="Profil"
+                    FontSize="11"
+                    BackgroundColor="Transparent"
+                    TextColor="#8B86A3"
+                    Clicked="Profile_Clicked" />
         </Grid>
     </Grid>
 </ContentPage>

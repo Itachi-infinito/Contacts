@@ -268,6 +268,114 @@
                         </Frame>
                     </VerticalStackLayout>
                 </Frame>
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <Label Text="Expérience professionnelle"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="#111827" />
+
+                        <Label Text="Ajoute jusqu'à deux expériences visibles par les recruteurs."
+                               FontSize="12"
+                               TextColor="#8B86A3" />
+
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Expérience 1"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperienceTitle1"
+                                       Placeholder="Ex: Serveur polyvalent"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperienceCompany1"
+                                       Placeholder="Ex: Brasserie Louise"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperiencePeriod1"
+                                       Placeholder="Ex: 2023 - Aujourd'hui"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <BoxView HeightRequest="1"
+                                 Color="#EEEAF8" />
+
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Expérience 2"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    TextColor="#8581A6" />
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperienceTitle2"
+                                       Placeholder="Ex: Commis de salle"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperienceCompany2"
+                                       Placeholder="Ex: Hôtel Central"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+
+                            <Frame BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   CornerRadius="14"
+                                   Padding="14,4"
+                                   HasShadow="False">
+                                <Entry x:Name="entryExperiencePeriod2"
+                                       Placeholder="Ex: 2021 - 2023"
+                                       PlaceholderColor="#A6A0C0"
+                                       TextColor="#111827"
+                                       BackgroundColor="Transparent" />
+                            </Frame>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
 
                 <Frame CornerRadius="24"
                        Padding="18"
@@ -282,28 +390,50 @@
                                FontAttributes="Bold"
                                TextColor="#111827" />
 
-                        <VerticalStackLayout Spacing="7">
-                            <Label Text="Compétences"
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Compétences horeca"
                                    FontSize="13"
                                    FontAttributes="Bold"
                                    TextColor="#8581A6" />
 
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entrySkills"
-                                       Placeholder="Ex: C#, SQL, MAUI, Git"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
-                            </Frame>
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="8">
 
-                            <Label Text="Sépare les compétences par des virgules."
+                                <Frame BackgroundColor="#FAF9FF"
+                                       BorderColor="#EEEAF8"
+                                       CornerRadius="14"
+                                       Padding="10,0"
+                                       HasShadow="False">
+
+                                    <Picker x:Name="skillPicker"
+                                            Title="Choisir une compétence"
+                                            TextColor="#111827"
+                                            TitleColor="#A6A0C0" />
+                                </Frame>
+
+                                <Button Grid.Column="1"
+                                        Text="+"
+                                        WidthRequest="46"
+                                        HeightRequest="46"
+                                        BackgroundColor="#7C4DFF"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="14"
+                                        Clicked="AddSkill_Clicked" />
+                            </Grid>
+
+                            <FlexLayout x:Name="selectedSkillsLayout"
+                                        Direction="Row"
+                                        Wrap="Wrap"
+                                        AlignItems="Center"
+                                        JustifyContent="Start" />
+
+                            <Label x:Name="lblSkillsEmpty"
+                                   Text="Aucune compétence sélectionnée."
                                    FontSize="12"
                                    TextColor="#8B86A3" />
                         </VerticalStackLayout>
+
 
                         <VerticalStackLayout Spacing="7">
                             <Label Text="Contrat recherché"
