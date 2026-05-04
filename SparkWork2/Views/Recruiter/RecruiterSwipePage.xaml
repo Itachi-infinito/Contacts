@@ -376,6 +376,45 @@
                                            LineBreakMode="WordWrap"
                                            TextColor="#5F5A75" />
                                 </VerticalStackLayout>
+                                <VerticalStackLayout x:Name="experienceSection"
+                                                     Spacing="10"
+                                                     IsVisible="False">
+                                    <BoxView HeightRequest="1"
+                                             Color="#EEEAF8"
+                                             Margin="0,4,0,0" />
+                                    <Label Text="Expériences"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                    <VerticalStackLayout x:Name="experience1Layout"
+                                                         Spacing="2"
+                                                         IsVisible="False">
+                                        <Label x:Name="lblExperienceTitle1"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827" />
+                                        <Label x:Name="lblExperienceCompany1"
+                                               FontSize="12"
+                                               TextColor="#7C4DFF" />
+                                        <Label x:Name="lblExperiencePeriod1"
+                                               FontSize="11"
+                                               TextColor="#8B86A3" />
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout x:Name="experience2Layout"
+                                                         Spacing="2"
+                                                         IsVisible="False">
+                                        <Label x:Name="lblExperienceTitle2"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827" />
+                                        <Label x:Name="lblExperienceCompany2"
+                                               FontSize="12"
+                                               TextColor="#7C4DFF" />
+                                        <Label x:Name="lblExperiencePeriod2"
+                                               FontSize="11"
+                                               TextColor="#8B86A3" />
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Grid>
                     </Frame>
