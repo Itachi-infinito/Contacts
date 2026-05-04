@@ -23,7 +23,7 @@
             <ImageButton x:Name="btnHeaderExpandCollapse"
                          Grid.Column="1"
                          Source="arrow_down.png"
-                         IsVisible="False"
+                         IsVisible="False"git push -u origin claude/project-review-4hsre
                          BackgroundColor="Transparent"
                          Clicked="ToggleDetails_Clicked" />
 
