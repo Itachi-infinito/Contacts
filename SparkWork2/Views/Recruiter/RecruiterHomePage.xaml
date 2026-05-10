@@ -171,6 +171,7 @@
 
                             <!-- Progress bar -->
                             <Grid x:Name="recommendedProgressContainer"
+                                  WidthRequest="260"
                                   HeightRequest="6"
                                   IsVisible="False">
                                 <Frame BackgroundColor="#EEEAF8"
