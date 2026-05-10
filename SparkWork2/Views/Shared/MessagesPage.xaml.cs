@@ -146,9 +146,11 @@ public partial class MessagesPage : ContentPage
     private async void Discover_Clicked(object sender, EventArgs e)
     {
         if (_sessionService.CurrentUserRole == "Recruiter")
-            await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+            await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
         else
-            await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+            await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
+
     }
 
     private async void AddOffer_Clicked(object sender, EventArgs e)

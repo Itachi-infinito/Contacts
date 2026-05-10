@@ -6,11 +6,16 @@ namespace SparkWork2.Repositories;
 public class MatchRepository
 {
     private readonly DatabaseService _databaseService;
+    private readonly MessageRepository _messageRepository;
 
-    public MatchRepository(DatabaseService databaseService)
+    public MatchRepository(
+        DatabaseService databaseService,
+        MessageRepository messageRepository)
     {
         _databaseService = databaseService;
+        _messageRepository = messageRepository;
     }
+
 
     public async Task<List<Match>> GetMatchesAsync(int userId)
     {
@@ -56,6 +61,20 @@ public class MatchRepository
         };
 
         await db.InsertAsync(match);
+        await _messageRepository.AddMessageAsync(
+            0,
+            candidateUserId,
+            "SparkWork",
+            candidateName,
+            $"Vous avez un match avec {jobOffer.CompanyName} pour le poste {jobOffer.Title} !");
+
+        await _messageRepository.AddMessageAsync(
+            0,
+            recruiterUserId,
+            "SparkWork",
+            jobOffer.CompanyName,
+            $"Vous avez un match avec {candidateName} pour le poste {jobOffer.Title} !");
+
         return true;
     }
 

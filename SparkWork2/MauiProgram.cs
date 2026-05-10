@@ -36,6 +36,8 @@ public static class MauiProgram
         builder.Services.AddTransient<CandidateJobLikeRepository>();
         builder.Services.AddTransient<CandidateDetailPage>();
         builder.Services.AddSingleton<CompatibilityService>();
+        builder.Services.AddTransient<CandidateHomePage>();
+
 
 
         builder.Services.AddSingleton<DatabaseService>();
@@ -43,6 +45,9 @@ public static class MauiProgram
 
 
         builder.Services.AddTransient<EditRecruiterProfilePage>();
+
+        builder.Services.AddSingleton<GeocodingService>();
+
 
         builder.Services.AddTransient<JobOfferRepository>();
         builder.Services.AddTransient<JobOfferDetailPage>();

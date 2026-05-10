@@ -62,10 +62,20 @@ public partial class RecruiterSwipePage : ContentPage
     {
         base.OnAppearing();
 
-        await LoadRecruiterOffers();
-        await LoadCandidates();
-        await ShowPendingMatchAnimationIfNeeded();
+        try
+        {
+            await LoadRecruiterOffers();
+            await LoadCandidates();
+            await ShowPendingMatchAnimationIfNeeded();
+        }
+
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"RecruiterSwipePage error: {ex}");
+            await DisplayAlert("Erreur", ex.Message, "OK");
+        }
     }
+
 
 
     private async Task LoadCandidates()
@@ -106,7 +116,9 @@ public partial class RecruiterSwipePage : ContentPage
 
         if (_candidates.Count == 0 || _currentIndex >= _candidates.Count)
         {
-            ShowEmptyState("No more candidates right now.");
+            ShowEmptyState("Revenez bientôt pour découvrir de nouveaux candidats.");
+
+
             return;
         }
 
@@ -324,7 +336,9 @@ public partial class RecruiterSwipePage : ContentPage
 
         var added = await _recruiterCandidateLikeRepository.AddLikeAsync(
             _sessionService.CurrentUserId,
-            likedCandidate.CandidateId);
+            likedCandidate.CandidateId,
+            false);
+
 
         var matchedOffer = await _candidateJobLikeRepository.GetFirstLikedOfferOfRecruiterAsync(
             likedCandidate.CandidateId,
@@ -367,15 +381,24 @@ public partial class RecruiterSwipePage : ContentPage
 
     private async void Like_Clicked(object sender, EventArgs e)
     {
-        if (_currentCandidate == null || _isAnimating)
-            return;
+        try
+        {
+            if (_currentCandidate == null || _isAnimating)
+                return;
 
-        lblLikeOverlay.Opacity = 1;
-        lblNopeOverlay.Opacity = 0;
+            lblLikeOverlay.Opacity = 1;
+            lblNopeOverlay.Opacity = 0;
 
-        await AnimateCardOutAsync(true);
-        await PerformLikeAsync();
+            await AnimateCardOutAsync(true);
+            await PerformLikeAsync();
+        }
+        catch (Exception ex)
+        {
+            _isAnimating = false;
+            await DisplayAlert("Erreur like", ex.Message, "OK");
+        }
     }
+
 
     private async void Reject_Clicked(object sender, EventArgs e)
     {
@@ -400,7 +423,8 @@ public partial class RecruiterSwipePage : ContentPage
     }
     private async void Discover_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
     }
 
     private async void Messages_Tapped(object sender, TappedEventArgs e)
@@ -422,18 +446,17 @@ public partial class RecruiterSwipePage : ContentPage
         if (!string.IsNullOrWhiteSpace(candidate.PhotoPath) && File.Exists(candidate.PhotoPath))
         {
             imgCandidate.Source = ImageSource.FromFile(candidate.PhotoPath);
-            imgCandidate.Opacity = 1;
-            imgCandidate.IsVisible = true;
-            candidatePlaceholderIllustration.IsVisible = false;
         }
         else
         {
-            imgCandidate.Source = null;
-            imgCandidate.Opacity = 0;
-            imgCandidate.IsVisible = false;
-            candidatePlaceholderIllustration.IsVisible = true;
+            imgCandidate.Source = "candidate_default.jpg";
         }
+
+        imgCandidate.Opacity = 1;
+        imgCandidate.IsVisible = true;
+        candidatePlaceholderIllustration.IsVisible = false;
     }
+
 
     private async Task ShowPendingMatchAnimationIfNeeded()
     {
@@ -458,26 +481,30 @@ public partial class RecruiterSwipePage : ContentPage
     {
         skillsBadgesLayout.Children.Clear();
 
-        var skills = SplitValues(candidate.Skills)
-            .Take(4)
+        var badges = SplitValues(candidate.Skills)
+            .Take(2)
             .ToList();
 
-        skillsBadgesLayout.IsVisible = skills.Any();
+        if (!string.IsNullOrWhiteSpace(candidate.DesiredContractType))
+            badges.Add(candidate.DesiredContractType);
 
-        foreach (var skill in skills)
+        skillsBadgesLayout.IsVisible = badges.Any();
+
+        foreach (var badgeText in badges)
         {
             var badge = new Frame
             {
-                BackgroundColor = Color.FromArgb("#F0EAFE"),
-                CornerRadius = 12,
-                Padding = new Thickness(9, 3),
+                BackgroundColor = Color.FromArgb("#FAF9FF"),
+                BorderColor = Color.FromArgb("#CFC4FF"),
+                CornerRadius = 8,
+                Padding = new Thickness(12, 5),
                 HasShadow = false,
                 Margin = new Thickness(0, 0, 8, 8),
                 Content = new Label
                 {
-                    Text = skill,
-                    FontSize = 11,
-                    TextColor = Color.FromArgb("#7C4DFF")
+                    Text = badgeText,
+                    FontSize = 13,
+                    TextColor = Color.FromArgb("#5F4ACB")
                 }
             };
 
@@ -485,23 +512,18 @@ public partial class RecruiterSwipePage : ContentPage
         }
     }
 
+
     private void UpdateCandidatePreferences(CandidateProfile candidate)
     {
-        var parts = new List<string>();
-
         string salary = GetDesiredSalaryDisplay(candidate);
-        if (!string.IsNullOrWhiteSpace(salary))
-            parts.Add($"Salaire souhaité : {salary}");
 
-        if (!string.IsNullOrWhiteSpace(candidate.DesiredContractType))
-            parts.Add(candidate.DesiredContractType);
+        lblCandidatePreferences.Text = string.IsNullOrWhiteSpace(salary)
+            ? string.Empty
+            : $"Salaire souhaité : {salary}";
 
-        if (!string.IsNullOrWhiteSpace(candidate.ExperienceLevel))
-            parts.Add(candidate.ExperienceLevel);
-
-        lblCandidatePreferences.Text = string.Join(" · ", parts);
-        lblCandidatePreferences.IsVisible = parts.Any();
+        lblCandidatePreferences.IsVisible = !string.IsNullOrWhiteSpace(salary);
     }
+
 
     private void UpdateCandidateDetailFields(CandidateProfile candidate)
     {
@@ -571,8 +593,9 @@ public partial class RecruiterSwipePage : ContentPage
 
         var nearest = offersWithDistance.First();
         string distanceText = nearest.Distance < 1
-            ? $"À moins de 1 km de l'offre {nearest.Offer.Title}"
-            : $"À environ {Math.Round(nearest.Distance)} km de l'offre {nearest.Offer.Title}";
+                ? "· moins de 1 km"
+                : $"· {Math.Round(nearest.Distance)} km";
+
 
         lblDistanceToOffer.Text = distanceText;
         lblDistanceToOffer.IsVisible = true;
@@ -584,12 +607,14 @@ public partial class RecruiterSwipePage : ContentPage
     {
         compatibilityBadge.IsVisible = false;
         lblDetailCompatibility.IsVisible = false;
+        compatibilityProgressBar.WidthRequest = 0;
 
         if (!_sessionService.IsLoggedIn)
             return;
 
-        var recruiterOffers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(
-            _sessionService.CurrentUserId);
+        var recruiterOffers = _selectedJobOffer != null
+            ? new List<JobOffer> { _selectedJobOffer }
+            : await _jobOfferRepository.GetJobOffersByRecruiterAsync(_sessionService.CurrentUserId);
 
         if (!recruiterOffers.Any())
             return;
@@ -604,29 +629,39 @@ public partial class RecruiterSwipePage : ContentPage
             .First();
 
         compatibilityBadge.IsVisible = true;
-        lblCompatibility.Text = $"Compatibilité {bestMatch.Score}%";
+        lblCompatibility.Text = $"{bestMatch.Score}%";
+        lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
+        compatibilityProgressBar.WidthRequest = Math.Max(6, 118 * bestMatch.Score / 100.0);
 
         lblDetailCompatibility.Text =
-            $"Meilleure compatibilité : {bestMatch.Score}% avec l'offre {bestMatch.Offer.Title}";
+            $"Compatibilité : {bestMatch.Score}% avec l'offre {bestMatch.Offer.Title}";
 
         lblDetailCompatibility.IsVisible = true;
+
+
 
         if (bestMatch.Score >= 75)
         {
             compatibilityBadge.BackgroundColor = Color.FromArgb("#ECFDF5");
             lblCompatibility.TextColor = Color.FromArgb("#10B981");
+            compatibilityProgressBar.BackgroundColor = Color.FromArgb("#D34C88");
+            compatibilityProgressBar.WidthRequest = Math.Max(6, 128 * bestMatch.Score / 100.0);
+
         }
         else if (bestMatch.Score >= 45)
         {
             compatibilityBadge.BackgroundColor = Color.FromArgb("#F0EAFE");
             lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
+            compatibilityProgressBar.BackgroundColor = Color.FromArgb("#7C4DFF");
         }
         else
         {
             compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
             lblCompatibility.TextColor = Color.FromArgb("#E11D48");
+            compatibilityProgressBar.BackgroundColor = Color.FromArgb("#E11D48");
         }
     }
+
     private async Task LoadRecruiterOffers()
     {
         if (!_sessionService.IsLoggedIn)
@@ -698,6 +733,83 @@ public partial class RecruiterSwipePage : ContentPage
             ? string.Empty
             : $"@ {candidate.ExperienceCompany2}";
         lblExperiencePeriod2.Text = candidate.ExperiencePeriod2;
+    }
+
+    private async void SuperLike_Clicked(object sender, EventArgs e)
+    {
+        if (_currentCandidate == null || _isAnimating)
+            return;
+
+        lblLikeOverlay.Opacity = 1;
+        lblNopeOverlay.Opacity = 0;
+
+        await AnimateCardOutAsync(true);
+        await PerformSuperLikeAsync();
+    }
+
+    private async Task PerformSuperLikeAsync()
+    {
+        if (_currentCandidate == null || !_sessionService.IsLoggedIn)
+        {
+            _isAnimating = false;
+            return;
+        }
+
+        var likedCandidate = _currentCandidate;
+
+        var added = await _recruiterCandidateLikeRepository.AddLikeAsync(
+            _sessionService.CurrentUserId,
+            likedCandidate.CandidateId,
+            true);
+
+        var matchedOffer = await _candidateJobLikeRepository.GetFirstLikedOfferOfRecruiterAsync(
+            likedCandidate.CandidateId,
+            _sessionService.CurrentUserId);
+
+        _candidates.RemoveAt(_currentIndex);
+
+        if (added && matchedOffer != null)
+        {
+            await _matchRepository.AddMatchAsync(
+                likedCandidate.CandidateId,
+                likedCandidate.FullName,
+                _sessionService.CurrentUserId,
+                matchedOffer,
+                false);
+
+            await Shell.Current.GoToAsync(
+                $"{nameof(MatchPage)}" +
+                $"?participantId={likedCandidate.CandidateId}" +
+                $"&participantName={Uri.EscapeDataString(likedCandidate.FullName)}");
+
+            return;
+        }
+
+        ShowCurrentCandidate();
+    }
+    private async void Back_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterHomePage)}");
+    }
+
+    private async void Home_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterHomePage)}");
+    }
+
+    private async void AddOffer_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AddJobOfferPage));
+    }
+
+    private async void Messages_Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(MessagesPage));
+    }
+
+    private async void Profile_Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
     }
 
 

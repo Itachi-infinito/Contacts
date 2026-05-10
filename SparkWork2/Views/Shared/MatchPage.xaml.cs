@@ -151,8 +151,10 @@ public partial class MatchPage : ContentPage
     private async void KeepSwiping_Clicked(object sender, EventArgs e)
     {
         if (string.Equals(_sessionService.CurrentUserRole, "Recruiter", StringComparison.OrdinalIgnoreCase))
-            await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+            await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
         else
-            await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+            await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
+
     }
 }

@@ -23,6 +23,8 @@ public partial class CandidateSwipePage : ContentPage
     private List<JobOffer> _jobOffers = new();
     private int _currentIndex = 0;
     private JobOffer? _currentJobOffer;
+    private CandidateProfile? _candidateProfile;
+
 
     private double _panX;
     private const double SwipeThreshold = 120;
@@ -75,6 +77,11 @@ public partial class CandidateSwipePage : ContentPage
         if (!_sessionService.IsLoggedIn)
             return;
 
+        _candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
+            _sessionService.CurrentUserId,
+            _sessionService.CurrentUserName,
+            _sessionService.CurrentUserEmail);
+
         var allOffers = await _jobOfferRepository.GetJobOffersAsync();
         var likedOffers = await _candidateJobLikeRepository.GetLikesByCandidateAsync(_sessionService.CurrentUserId);
 
@@ -83,12 +90,24 @@ public partial class CandidateSwipePage : ContentPage
             .ToList();
 
         _jobOffers = allOffers
-            .Where(x => !likedJobOfferIds.Contains(x.JobOfferId))
+            .Where(offer => !likedJobOfferIds.Contains(offer.JobOfferId))
             .ToList();
+
+        if (_candidateProfile.MaxDistanceKm > 0 &&
+            _candidateProfile.Latitude != 0)
+        {
+            _jobOffers = _jobOffers
+                .Where(offer =>
+                    offer.Latitude == 0 ||
+                    !_distanceService.CanCalculateDistance(_candidateProfile, offer) ||
+                    _distanceService.CalculateDistanceKm(_candidateProfile, offer) <= _candidateProfile.MaxDistanceKm)
+                .ToList();
+        }
 
         _currentIndex = 0;
         ShowCurrentJobOffer();
     }
+
 
     private void ShowCurrentJobOffer()
     {
@@ -99,7 +118,8 @@ public partial class CandidateSwipePage : ContentPage
         {
             _currentJobOffer = null;
 
-            lblEmptyMessage.Text = "No more opportunities right now.";
+            lblEmptyMessage.Text = "Revenez bientôt pour de nouvelles offres adaptées à votre profil.";
+
 
             jobCard.IsVisible = false;
             emptyStateSection.IsVisible = true;
@@ -140,8 +160,9 @@ public partial class CandidateSwipePage : ContentPage
 
         lblSalary.Text = GetSalaryDisplay(currentOffer);
         lblSalary.IsVisible = currentOffer.SalaryMin > 0 || currentOffer.SalaryMax > 0;
-        _ = UpdateCompatibilityBadge(currentOffer);
-        _ = UpdateDistanceLabel(currentOffer);
+        UpdateCompatibilityBadge(currentOffer);
+        UpdateDistanceLabel(currentOffer);
+
 
 
 
@@ -438,33 +459,29 @@ public partial class CandidateSwipePage : ContentPage
 
         return string.Empty;
     }
-    private async Task UpdateCompatibilityBadge(JobOffer currentOffer)
+    private void UpdateCompatibilityBadge(JobOffer currentOffer)
     {
         try
         {
-            if (!_sessionService.IsLoggedIn)
+            if (!_sessionService.IsLoggedIn || _candidateProfile == null)
             {
                 compatibilityBadge.IsVisible = false;
+                matchTipCard.IsVisible = false;
                 return;
             }
 
-            var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
-                _sessionService.CurrentUserId,
-                _sessionService.CurrentUserName,
-                _sessionService.CurrentUserEmail);
-
-            int score = _compatibilityService.CalculateScore(candidateProfile, currentOffer);
+            int score = _compatibilityService.CalculateScore(_candidateProfile, currentOffer);
 
             compatibilityBadge.IsVisible = true;
             lblCompatibility.Text = $"Compatibilité {score}%";
-            matchTipCard.IsVisible = true;
+            compatibilityProgressBar.WidthRequest = Math.Max(6, 78 * score / 100.0);
 
+            matchTipCard.IsVisible = true;
             lblMatchTip.Text = score >= 75
                 ? "Votre profil correspond très bien à cette offre."
                 : score >= 45
                     ? "Cette offre peut vous correspondre, surtout si vous complétez vos compétences."
                     : "Cette offre est moins proche de votre profil actuel.";
-
 
             if (score >= 75)
             {
@@ -485,26 +502,25 @@ public partial class CandidateSwipePage : ContentPage
         catch (Exception ex)
         {
             compatibilityBadge.IsVisible = false;
+            matchTipCard.IsVisible = false;
+            compatibilityProgressBar.WidthRequest = 0;
             System.Diagnostics.Debug.WriteLine($"Compatibility error: {ex}");
+
         }
     }
 
-    private async Task UpdateDistanceLabel(JobOffer currentOffer)
+
+    private void UpdateDistanceLabel(JobOffer currentOffer)
     {
         try
         {
-            if (!_sessionService.IsLoggedIn)
+            if (!_sessionService.IsLoggedIn || _candidateProfile == null)
             {
                 lblDistance.IsVisible = false;
                 return;
             }
 
-            var candidateProfile = await _candidateProfileRepository.GetCandidateProfileAsync(
-                _sessionService.CurrentUserId,
-                _sessionService.CurrentUserName,
-                _sessionService.CurrentUserEmail);
-
-            string distanceDisplay = _distanceService.GetDistanceDisplay(candidateProfile, currentOffer);
+            string distanceDisplay = _distanceService.GetDistanceDisplay(_candidateProfile, currentOffer);
 
             lblDistance.IsVisible = !string.IsNullOrWhiteSpace(distanceDisplay);
             lblDistance.Text = distanceDisplay;
@@ -515,6 +531,7 @@ public partial class CandidateSwipePage : ContentPage
             System.Diagnostics.Debug.WriteLine($"Distance error: {ex}");
         }
     }
+
 
     private async void Home_Clicked(object sender, EventArgs e)
     {

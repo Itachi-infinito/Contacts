@@ -82,13 +82,17 @@
                             <Label Text="Compatibilité"
                                    FontSize="13"
                                    TextColor="#8581A6" />
-                            <Label Text="85%"
+                            <Label x:Name="lblCompatibilityValue"
+                                   Text="--"
                                    FontSize="24"
                                    FontAttributes="Bold"
                                    TextColor="#111827" />
-                            <Label Text="sur les offres récentes"
+
+                            <Label x:Name="lblCompatibilitySubtext"
+                                   Text="calcul en cours"
                                    FontSize="11"
                                    TextColor="#10B981" />
+
                         </VerticalStackLayout>
                     </Frame>
 
@@ -97,13 +101,17 @@
                             <Label Text="Distance"
                                    FontSize="13"
                                    TextColor="#8581A6" />
-                            <Label Text="25 km"
+                            <Label x:Name="lblDistanceValue"
+                                   Text="--"
                                    FontSize="24"
                                    FontAttributes="Bold"
                                    TextColor="#111827" />
-                            <Label Text="préférence active"
+
+                            <Label x:Name="lblDistanceSubtext"
+                                   Text="préférence active"
                                    FontSize="11"
                                    TextColor="#7C4DFF" />
+
                         </VerticalStackLayout>
                     </Frame>
                 </Grid>
@@ -121,6 +129,7 @@
                                        FontSize="18"
                                        FontAttributes="Bold"
                                        TextColor="#111827" />
+
                                 <Label Text="Offres horeca selon ton profil"
                                        FontSize="12"
                                        TextColor="#8B86A3" />
@@ -146,56 +155,139 @@
 
                             <VerticalStackLayout Spacing="8">
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <Label Text="Serveur polyvalent"
+                                    <Label x:Name="lblRecommendedTitle"
+                                           Text="Recherche en cours..."
                                            FontSize="16"
                                            FontAttributes="Bold"
                                            TextColor="#111827" />
 
-                                    <Label Grid.Column="1"
-                                           Text="85%"
+                                    <Label x:Name="lblRecommendedScore"
+                                           Grid.Column="1"
+                                           Text="--"
                                            FontSize="14"
                                            FontAttributes="Bold"
                                            TextColor="#10B981" />
                                 </Grid>
 
-                                <Label Text="Bruxelles · CDI · À moins de 1 km"
+                                <Label x:Name="lblRecommendedMeta"
+                                       Text="Analyse de ton profil"
                                        FontSize="13"
                                        TextColor="#5F5A75" />
 
-                                <HorizontalStackLayout Spacing="8">
-                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
-                                        <Label Text="Service en salle" FontSize="11" TextColor="#7C4DFF" />
-                                    </Frame>
-
-                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
-                                        <Label Text="HACCP" FontSize="11" TextColor="#7C4DFF" />
-                                    </Frame>
-                                </HorizontalStackLayout>
+                                <FlexLayout x:Name="recommendedSkillsLayout"
+                            Direction="Row"
+                            Wrap="Wrap"
+                            AlignItems="Center"
+                            JustifyContent="Start" />
                             </VerticalStackLayout>
                         </Frame>
                     </VerticalStackLayout>
                 </Frame>
 
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                    <Button Text="Découvrir"
-                            HeightRequest="52"
-                            BackgroundColor="#7C4DFF"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="16"
-                            Clicked="BrowseJobOffers_Clicked" />
 
-                    <Button Grid.Column="1"
-                            Text="Mes matchs"
-                            HeightRequest="52"
-                            BackgroundColor="White"
-                            BorderColor="#DED8F5"
-                            BorderWidth="1"
-                            TextColor="#111827"
-                            FontAttributes="Bold"
-                            CornerRadius="16"
-                            Clicked="Matches_Clicked" />
-                </Grid>
+                <Frame CornerRadius="24"
+                       Padding="18"
+                       BackgroundColor="White"
+                       BorderColor="#EEEAF8"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="Votre activité"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827" />
+
+                                <Label Text="Résumé de vos opportunités"
+                                       FontSize="12"
+                                       TextColor="#8B86A3" />
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="1"
+                                   Text="Cette semaine"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF"
+                                   VerticalTextAlignment="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                            <Frame CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Offres vues"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+                                    <Label x:Name="lblViewedOffersCount"
+                                           Text="--"
+                                           FontSize="22"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Postulations"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+                                    <Label x:Name="lblLikedOffersCount"
+                                           Text="--"
+                                           FontSize="22"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Row="1"
+                                   CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Matches"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+                                    <Label x:Name="lblMatchesCount"
+                                           Text="--"
+                                           FontSize="22"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Row="1"
+                                   Grid.Column="1"
+                                   CornerRadius="16"
+                                   Padding="14"
+                                   BackgroundColor="#FAF9FF"
+                                   BorderColor="#EEEAF8"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Profil"
+                                           FontSize="12"
+                                           TextColor="#8581A6" />
+                                    <Label x:Name="lblProfileCompletion"
+                                           Text="--"
+                                           FontSize="22"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
             </VerticalStackLayout>
         </ScrollView>
 

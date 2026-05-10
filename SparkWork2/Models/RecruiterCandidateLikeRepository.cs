@@ -12,7 +12,10 @@ public class RecruiterCandidateLikeRepository
         _databaseService = databaseService;
     }
 
-    public async Task<bool> AddLikeAsync(int recruiterUserId, int candidateUserId)
+    public async Task<bool> AddLikeAsync(
+    int recruiterUserId,
+    int candidateUserId,
+    bool isSuperLike = false)
     {
         var db = await _databaseService.GetConnectionAsync();
 
@@ -22,17 +25,27 @@ public class RecruiterCandidateLikeRepository
                 x.CandidateUserId == candidateUserId);
 
         if (existingLike != null)
+        {
+            if (isSuperLike && !existingLike.IsSuperLike)
+            {
+                existingLike.IsSuperLike = true;
+                await db.UpdateAsync(existingLike);
+            }
+
             return false;
+        }
 
         var like = new RecruiterCandidateLike
         {
             RecruiterUserId = recruiterUserId,
-            CandidateUserId = candidateUserId
+            CandidateUserId = candidateUserId,
+            IsSuperLike = isSuperLike
         };
 
         await db.InsertAsync(like);
         return true;
     }
+
 
     public async Task<List<RecruiterCandidateLike>> GetLikesByRecruiterAsync(int recruiterUserId)
     {

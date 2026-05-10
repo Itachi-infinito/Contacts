@@ -106,7 +106,8 @@ public partial class EditRecruiterProfilePage : ContentPage
 
     private async void Discover_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
     }
 
     private async void AddOffer_Clicked(object sender, EventArgs e)

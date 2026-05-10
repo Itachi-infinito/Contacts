@@ -107,11 +107,13 @@ public partial class RegisterCandidatePage : ContentPage
 
         _sessionService.SetSession(registeredUser);
 
-        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
-        Application.Current.MainPage = appShell;
-        appShell.UpdateFlyoutByRole();
+        Application.Current.MainPage = Shell.Current;
+
+        if (Shell.Current is AppShell appShell)
+            appShell.UpdateFlyoutByRole();
 
         await Shell.Current.GoToAsync($"//{nameof(CandidateHomePage)}");
+
 
     }
 

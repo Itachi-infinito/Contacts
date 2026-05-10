@@ -10,14 +10,14 @@
 
         <!-- HEADER -->
         <Grid Grid.Row="0"
-              BackgroundColor="White"
-              Padding="18,24,24,0"
-              RowDefinitions="Auto,Auto"
-              ColumnDefinitions="Auto,*,Auto">
+              BackgroundColor="#F7F5FC"
+              Padding="16,28,20,12"
+              ColumnDefinitions="Auto,*,Auto"
+              ColumnSpacing="12">
 
             <Button Grid.Column="0"
                     Text="‹"
-                    FontSize="34"
+                    FontSize="32"
                     Padding="0"
                     HeightRequest="44"
                     WidthRequest="44"
@@ -25,18 +25,23 @@
                     TextColor="#111827"
                     Clicked="Cancel_Clicked" />
 
-            <Label Grid.Column="1"
-                   Text="Modifier le profil"
-                   FontSize="22"
-                   FontAttributes="Bold"
-                   TextColor="#111827"
-                   HorizontalTextAlignment="Center"
-                   VerticalTextAlignment="Center" />
+            <VerticalStackLayout Grid.Column="1"
+                                 Spacing="3"
+                                 VerticalOptions="Center">
+                <Label Text="Modifier le profil"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="#111827" />
+
+                <Label Text="Mettez à jour votre profil candidat"
+                       FontSize="13"
+                       TextColor="#8B86A3" />
+            </VerticalStackLayout>
 
             <Frame Grid.Column="2"
-                   HeightRequest="46"
-                   WidthRequest="46"
-                   CornerRadius="23"
+                   HeightRequest="52"
+                   WidthRequest="52"
+                   CornerRadius="26"
                    Padding="0"
                    HasShadow="False"
                    VerticalOptions="Center">
@@ -51,39 +56,12 @@
                        Text="ME"
                        TextColor="White"
                        FontAttributes="Bold"
-                       FontSize="15"
+                       FontSize="16"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center" />
             </Frame>
-
-            <Grid Grid.Row="1"
-                  Grid.ColumnSpan="3"
-                  ColumnDefinitions="*,*,*"
-                  Margin="0,22,0,0"
-                  HeightRequest="42">
-
-                <Label Text="DÉCOUVRIR"
-                       Grid.Column="0"
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-
-                <Label Text="MESSAGES"
-                       Grid.Column="1"
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-
-                <Label Text="STATS"
-                       Grid.Column="2"
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Grid>
         </Grid>
+
 
         <!-- CONTENT -->
         <ScrollView Grid.Row="1">

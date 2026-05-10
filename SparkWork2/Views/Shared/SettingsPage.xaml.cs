@@ -11,16 +11,21 @@ public partial class SettingsPage : ContentPage
 {
     private readonly SessionService _sessionService;
     private readonly AccountCleanupRepository _accountCleanupRepository;
+    private readonly AppShell _appShell;
+
 
     public SettingsPage(
-        SessionService sessionService,
-        AccountCleanupRepository accountCleanupRepository)
+    SessionService sessionService,
+    AccountCleanupRepository accountCleanupRepository,
+    AppShell appShell)
     {
         InitializeComponent();
 
         _sessionService = sessionService;
         _accountCleanupRepository = accountCleanupRepository;
+        _appShell = appShell;
     }
+
 
     protected override void OnAppearing()
     {
@@ -68,9 +73,11 @@ public partial class SettingsPage : ContentPage
     private async void Discover_Tapped(object sender, TappedEventArgs e)
     {
         if (_sessionService.CurrentUserRole == "Recruiter")
-            await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+            await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
         else
-            await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+            await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
+
     }
 
     private async void Messages_Tapped(object sender, TappedEventArgs e)
@@ -90,10 +97,9 @@ public partial class SettingsPage : ContentPage
     {
         _sessionService.ClearSession();
 
-        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
-        Application.Current.MainPage = appShell;
+        Application.Current.MainPage = _appShell;
+        await _appShell.GoToAsync($"//{nameof(WelcomePage)}");
 
-        await appShell.GoToAsync($"//{nameof(WelcomePage)}");
     }
 
     private async void DeleteAccount_Clicked(object sender, EventArgs e)
@@ -113,9 +119,8 @@ public partial class SettingsPage : ContentPage
 
         _sessionService.ClearSession();
 
-        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
-        Application.Current.MainPage = appShell;
+        Application.Current.MainPage = _appShell;
+await _appShell.GoToAsync($"//{nameof(WelcomePage)}");
 
-        await appShell.GoToAsync($"//{nameof(WelcomePage)}");
     }
 }

@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace SparkWork2.Views.Public;
 
 public partial class WelcomePage : ContentPage
@@ -11,13 +9,13 @@ public partial class WelcomePage : ContentPage
 
     private async void Login_Clicked(object sender, EventArgs e)
     {
-        var loginPage = MauiProgram.Services.GetRequiredService<LoginPage>();
-        await Navigation.PushAsync(loginPage);
+        await Shell.Current.GoToAsync(nameof(LoginPage));
+
     }
 
     private async void Register_Clicked(object sender, EventArgs e)
     {
-        var registerPage = MauiProgram.Services.GetRequiredService<RegisterPage>();
-        await Navigation.PushAsync(registerPage);
+        await Shell.Current.GoToAsync(nameof(RegisterPage));
+
     }
 }

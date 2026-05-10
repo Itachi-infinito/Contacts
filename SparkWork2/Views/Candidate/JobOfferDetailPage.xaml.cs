@@ -174,7 +174,7 @@ public partial class JobOfferDetailPage : ContentPage
     }
     private async void Discover_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(CandidateSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
     }
 
     private async void Messages_Tapped(object sender, TappedEventArgs e)

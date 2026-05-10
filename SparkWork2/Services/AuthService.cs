@@ -65,8 +65,19 @@ public class AuthService
             return null;
 
         bool isValid = _passwordService.VerifyPassword(password, user.PasswordHash);
-        return isValid ? user : null;
+
+        if (!isValid)
+            return null;
+
+        if (_passwordService.NeedsRehash(user.PasswordHash))
+        {
+            user.PasswordHash = _passwordService.HashPassword(password);
+            await _userRepository.UpdateUserAsync(user);
+        }
+
+        return user;
     }
+
 
     private static string NormalizeEmail(string email)
     {

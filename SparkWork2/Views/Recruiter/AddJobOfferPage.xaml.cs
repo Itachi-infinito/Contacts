@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using SparkWork2.Models;
 using SparkWork2.Repositories;
 using SparkWork2.Services;
@@ -19,6 +18,8 @@ public partial class AddJobOfferPage : ContentPage
 
     private readonly List<string> _selectedRequiredSkills = new();
     private readonly List<string> _selectedNiceSkills = new();
+    private readonly GeocodingService _geocodingService;
+
 
 
     private void ClearForm()
@@ -49,13 +50,20 @@ public partial class AddJobOfferPage : ContentPage
 
     }
 
-    public AddJobOfferPage()
+    public AddJobOfferPage(
+    JobOfferRepository jobOfferRepository,
+    SessionService sessionService,
+    SkillCatalogService skillCatalogService,
+    GeocodingService geocodingService)
     {
         InitializeComponent();
 
-        _jobOfferRepository = MauiProgram.Services.GetRequiredService<JobOfferRepository>();
-        _sessionService = MauiProgram.Services.GetRequiredService<SessionService>();
-        _skillCatalogService = MauiProgram.Services.GetRequiredService<SkillCatalogService>();
+        _jobOfferRepository = jobOfferRepository;
+        _sessionService = sessionService;
+        _skillCatalogService = skillCatalogService;
+        _geocodingService = geocodingService;
+
+
 
         requiredSkillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
         niceSkillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
@@ -133,7 +141,37 @@ public partial class AddJobOfferPage : ContentPage
             await DisplayAlert("Erreur", "Le salaire minimum ne peut pas être supérieur au salaire maximum.", "OK");
             return;
         }
+        if (_selectedLatitude == 0 && _selectedLongitude == 0)
+        {
+            string geocodingQuery = !string.IsNullOrWhiteSpace(address)
+                ? $"{address}, {location}"
+                : location;
 
+            var coordinates = await _geocodingService.GeocodeAsync(geocodingQuery);
+
+            if (coordinates != null)
+            {
+                _selectedLatitude = coordinates.Value.Latitude;
+                _selectedLongitude = coordinates.Value.Longitude;
+                UpdateOfferCoordinatesLabel();
+            }
+        }
+
+        if (_selectedLatitude == 0 && _selectedLongitude == 0)
+        {
+            string geocodingQuery = !string.IsNullOrWhiteSpace(address)
+                ? $"{address}, {location}"
+                : location;
+
+            var coordinates = await _geocodingService.GeocodeAsync(geocodingQuery);
+
+            if (coordinates != null)
+            {
+                _selectedLatitude = coordinates.Value.Latitude;
+                _selectedLongitude = coordinates.Value.Longitude;
+                UpdateOfferCoordinatesLabel();
+            }
+        }
 
         var newJobOffer = new JobOffer
         {

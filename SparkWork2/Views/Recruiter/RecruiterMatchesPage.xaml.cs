@@ -104,7 +104,8 @@ public partial class RecruiterMatchesPage : ContentPage
 
     private async void Discover_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
     }
 
     private async void Messages_Tapped(object sender, TappedEventArgs e)

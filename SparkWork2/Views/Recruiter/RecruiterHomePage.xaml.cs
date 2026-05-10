@@ -73,7 +73,8 @@ public partial class RecruiterHomePage : ContentPage
 
     private async void BrowseCandidates_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
     }
 
 

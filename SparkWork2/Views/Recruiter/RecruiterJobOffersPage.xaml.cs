@@ -106,7 +106,8 @@ public partial class RecruiterJobOffersPage : ContentPage
 
     private async void Discover_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
     }
 
     private async void Messages_Tapped(object sender, TappedEventArgs e)
@@ -168,7 +169,8 @@ public partial class RecruiterJobOffersPage : ContentPage
     }
     private async void Discover_Button_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync($"//{nameof(RecruiterSwipePage)}");
+        await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+
     }
 
     private async void Messages_Button_Clicked(object sender, EventArgs e)

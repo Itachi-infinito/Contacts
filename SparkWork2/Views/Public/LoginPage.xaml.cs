@@ -9,14 +9,20 @@ public partial class LoginPage : ContentPage
 {
     private readonly AuthService _authService;
     private readonly SessionService _sessionService;
+    private readonly AppShell _appShell;
 
-    public LoginPage(AuthService authService, SessionService sessionService)
+    public LoginPage(
+        AuthService authService,
+        SessionService sessionService,
+        AppShell appShell)
     {
         InitializeComponent();
 
         _authService = authService;
         _sessionService = sessionService;
+        _appShell = appShell;
     }
+
 
     private async void Login_Clicked(object sender, EventArgs e)
     {
@@ -45,18 +51,18 @@ public partial class LoginPage : ContentPage
 
         _sessionService.SetSession(user);
 
-        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
-        Application.Current.MainPage = appShell;
-        appShell.UpdateFlyoutByRole();
+        Application.Current.MainPage = _appShell;
+        _appShell.UpdateFlyoutByRole();
+
 
         if (string.Equals(user.Role, "Candidate", StringComparison.OrdinalIgnoreCase))
         {
-            await appShell.GoToAsync($"//{nameof(CandidateHomePage)}");
+            await _appShell.GoToAsync($"//{nameof(CandidateHomePage)}");
 
         }
         else
         {
-            await appShell.GoToAsync($"//{nameof(RecruiterHomePage)}");
+            await _appShell.GoToAsync($"//{nameof(RecruiterHomePage)}");
 
         }
     }

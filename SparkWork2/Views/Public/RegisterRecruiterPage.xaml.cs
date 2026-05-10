@@ -107,11 +107,13 @@ public partial class RegisterRecruiterPage : ContentPage
 
         _sessionService.SetSession(registeredUser);
 
-        var appShell = MauiProgram.Services.GetRequiredService<AppShell>();
-        Application.Current.MainPage = appShell;
-        appShell.UpdateFlyoutByRole();
+        Application.Current.MainPage = Shell.Current;
 
-        await appShell.GoToAsync($"//{nameof(RecruiterHomePage)}");
+        if (Shell.Current is AppShell appShell)
+            appShell.UpdateFlyoutByRole();
+
+        await Shell.Current.GoToAsync($"//{nameof(RecruiterHomePage)}");
+
 
     }
 

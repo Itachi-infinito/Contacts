@@ -19,27 +19,31 @@ public partial class EditJobOfferPage : ContentPage
 
     private readonly List<string> _selectedRequiredSkills = new();
     private readonly List<string> _selectedNiceSkills = new();
+    private readonly GeocodingService _geocodingService;
+
 
 
 
     public EditJobOfferPage(
     JobOfferRepository jobOfferRepository,
     SessionService sessionService,
-    SkillCatalogService skillCatalogService)
-
+    SkillCatalogService skillCatalogService,
+    GeocodingService geocodingService)
     {
         InitializeComponent();
+
         _jobOfferRepository = jobOfferRepository;
         _sessionService = sessionService;
         _skillCatalogService = skillCatalogService;
+        _geocodingService = geocodingService;
 
         requiredSkillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
         niceSkillPicker.ItemsSource = _skillCatalogService.HorecaSkills.ToList();
 
         RefreshRequiredSkillsLayout();
         RefreshNiceSkillsLayout();
-
     }
+
 
     public string JobOfferId
     {
@@ -168,6 +172,31 @@ public partial class EditJobOfferPage : ContentPage
             return;
         }
 
+        bool locationChanged = !string.Equals(
+            jobOffer.Location,
+            location,
+            StringComparison.OrdinalIgnoreCase);
+
+        bool addressChanged = !string.Equals(
+            jobOffer.Address,
+            address,
+            StringComparison.OrdinalIgnoreCase);
+
+        if (locationChanged || addressChanged || (_selectedLatitude == 0 && _selectedLongitude == 0))
+        {
+            string geocodingQuery = !string.IsNullOrWhiteSpace(address)
+                ? $"{address}, {location}"
+                : location;
+
+            var coordinates = await _geocodingService.GeocodeAsync(geocodingQuery);
+
+            if (coordinates != null)
+            {
+                _selectedLatitude = coordinates.Value.Latitude;
+                _selectedLongitude = coordinates.Value.Longitude;
+                UpdateOfferCoordinatesLabel();
+            }
+        }
 
         jobOffer.Title = title;
         jobOffer.CompanyName = company;

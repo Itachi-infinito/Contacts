@@ -12,39 +12,6 @@ public class MessageRepository
         _databaseService = databaseService;
     }
 
-    public async Task SeedDataAsync()
-    {
-        var db = await _databaseService.GetConnectionAsync();
-
-        var existingMessages = await db.Table<Message>().ToListAsync();
-        if (existingMessages.Any())
-            return;
-
-        var seedMessages = new List<Message>
-        {
-            new Message
-            {
-                SenderUserId = 2,
-                ReceiverUserId = 1,
-                SenderName = "TechCorp",
-                ReceiverName = "Adel Chfik",
-                Content = "Hello, we are interested in your profile.",
-                SentAt = DateTime.Now.AddMinutes(-30)
-            },
-            new Message
-            {
-                SenderUserId = 3,
-                ReceiverUserId = 1,
-                SenderName = "StartUp Vision",
-                ReceiverName = "Adel Chfik",
-                Content = "Can we schedule an interview?",
-                SentAt = DateTime.Now.AddHours(-2)
-            }
-        };
-
-        await db.InsertAllAsync(seedMessages);
-    }
-
     public async Task<List<Message>> GetConversationAsync(int currentUserId, int participantUserId)
     {
         var db = await _databaseService.GetConnectionAsync();

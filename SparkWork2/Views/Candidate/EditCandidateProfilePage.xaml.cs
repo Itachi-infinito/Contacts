@@ -21,22 +21,26 @@ public partial class EditCandidateProfilePage : ContentPage
     private double _selectedLongitude;
     private readonly SkillCatalogService _skillCatalogService;
     private readonly List<string> _selectedSkills = new();
+    private readonly GeocodingService _geocodingService;
+
 
 
 
 
     public EditCandidateProfilePage(
-        CandidateProfileRepository candidateProfileRepository,
-        SessionService sessionService,
-        SkillCatalogService skillCatalogService)
-
+    CandidateProfileRepository candidateProfileRepository,
+    SessionService sessionService,
+    SkillCatalogService skillCatalogService,
+    GeocodingService geocodingService)
     {
         InitializeComponent();
+
         _candidateProfileRepository = candidateProfileRepository;
         _sessionService = sessionService;
         _skillCatalogService = skillCatalogService;
-
+        _geocodingService = geocodingService;
     }
+
 
     protected override async void OnAppearing()
     {
@@ -187,6 +191,22 @@ public partial class EditCandidateProfilePage : ContentPage
         if (maxDistanceKm <= 0)
         {
             maxDistanceKm = 25;
+        }
+        bool locationChanged = !string.Equals(
+            _currentProfile.Location,
+            location,
+            StringComparison.OrdinalIgnoreCase);
+
+        if (locationChanged || (_selectedLatitude == 0 && _selectedLongitude == 0))
+        {
+            var coordinates = await _geocodingService.GeocodeAsync(location);
+
+            if (coordinates != null)
+            {
+                _selectedLatitude = coordinates.Value.Latitude;
+                _selectedLongitude = coordinates.Value.Longitude;
+                UpdateCoordinatesLabel();
+            }
         }
 
 
