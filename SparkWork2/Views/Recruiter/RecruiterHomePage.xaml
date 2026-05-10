@@ -4,21 +4,21 @@
              x:Class="SparkWork2.Views.Recruiter.RecruiterHomePage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="White">
+             BackgroundColor="#F7F5FC">
 
     <Grid RowDefinitions="*,Auto">
 
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="24,28,24,24" Spacing="20">
+            <VerticalStackLayout Padding="20,32,20,24" Spacing="18">
 
+                <!-- HEADER -->
                 <Grid ColumnDefinitions="*,Auto">
                     <VerticalStackLayout Spacing="4">
                         <Label x:Name="lblGreeting"
                                Text="Bonjour"
-                               FontSize="24"
+                               FontSize="28"
                                FontAttributes="Bold"
                                TextColor="#111827" />
-
                         <Label Text="Prêt à trouver votre prochain talent ?"
                                FontSize="13"
                                TextColor="#8B86A3" />
@@ -29,14 +29,14 @@
                            HeightRequest="52"
                            CornerRadius="26"
                            Padding="0"
-                           HasShadow="False">
+                           HasShadow="False"
+                           VerticalOptions="Center">
                         <Frame.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#7C4DFF" Offset="0.0" />
                                 <GradientStop Color="#D34C88" Offset="1.0" />
                             </LinearGradientBrush>
                         </Frame.Background>
-
                         <Label x:Name="lblInitials"
                                Text="AL"
                                TextColor="White"
@@ -47,8 +47,9 @@
                     </Frame>
                 </Grid>
 
+                <!-- SEARCH BAR -->
                 <Frame CornerRadius="18"
-                       Padding="14"
+                       Padding="14,12"
                        BackgroundColor="White"
                        BorderColor="#EEEAF8"
                        HasShadow="False">
@@ -57,25 +58,24 @@
                                FontSize="18"
                                TextColor="#8B86A3"
                                VerticalTextAlignment="Center" />
-
                         <Label Grid.Column="1"
-                               Text="Rechercher un candidat, une compétence..."
+                               Text="Rechercher un candidat..."
                                FontSize="13"
                                TextColor="#A6A0C0"
                                VerticalTextAlignment="Center" />
-
                         <Button Grid.Column="2"
                                 Text="Filtres"
                                 HeightRequest="36"
-                                Padding="12,0"
-                                BackgroundColor="#F0EAFE"
-                                TextColor="#7C4DFF"
+                                Padding="14,0"
+                                BackgroundColor="#7C4DFF"
+                                TextColor="White"
                                 FontAttributes="Bold"
                                 FontSize="12"
                                 CornerRadius="12" />
                     </Grid>
                 </Frame>
 
+                <!-- STATS -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                     <Frame CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
                         <VerticalStackLayout Spacing="4">
@@ -89,7 +89,7 @@
                                    TextColor="#111827" />
                             <Label Text="compatibles cette semaine"
                                    FontSize="11"
-                                   TextColor="#10B981" />
+                                   TextColor="#7C4DFF" />
                         </VerticalStackLayout>
                     </Frame>
 
@@ -110,117 +110,162 @@
                     </Frame>
                 </Grid>
 
-                <Frame CornerRadius="24"
-                       Padding="18"
-                       BackgroundColor="White"
-                       BorderColor="#EEEAF8"
-                       HasShadow="False">
+                <!-- CANDIDAT RECOMMANDÉ -->
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Candidat recommandé"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#111827"
+                               VerticalTextAlignment="Center" />
+                        <Frame Grid.Column="1"
+                               BackgroundColor="#F0EAFE"
+                               BorderColor="#CFC4FF"
+                               CornerRadius="12"
+                               Padding="14,6"
+                               HasShadow="False">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="BrowseCandidates_Tapped" />
+                            </Frame.GestureRecognizers>
+                            <Label Text="Voir"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF" />
+                        </Frame>
+                    </Grid>
 
-                    <VerticalStackLayout Spacing="14">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <VerticalStackLayout Spacing="3">
-                                <Label Text="Candidat recommandé"
-                                       FontSize="18"
+                    <Frame CornerRadius="20"
+                           Padding="16"
+                           BackgroundColor="White"
+                           BorderColor="#EEEAF8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+
+                            <!-- Name + score -->
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label x:Name="lblRecommendedCandidateName"
+                                       Text="Aucun candidat"
+                                       FontSize="16"
                                        FontAttributes="Bold"
                                        TextColor="#111827" />
-                                <Label Text="Profil horeca compatible avec vos offres"
-                                       FontSize="12"
-                                       TextColor="#8B86A3" />
-                            </VerticalStackLayout>
+                                <Label Grid.Column="1"
+                                       x:Name="lblRecommendedCandidateScore"
+                                       Text=""
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="#7C4DFF" />
+                            </Grid>
 
-                            <Button Grid.Column="1"
-                                    Text="Voir"
-                                    HeightRequest="34"
-                                    Padding="14,0"
-                                    BackgroundColor="#7C4DFF"
-                                    TextColor="White"
-                                    FontAttributes="Bold"
-                                    FontSize="12"
-                                    CornerRadius="12"
-                                    Clicked="BrowseCandidates_Clicked" />
-                        </Grid>
+                            <!-- Location · role · offre -->
+                            <Label x:Name="lblRecommendedCandidateInfo"
+                                   Text="Crée une offre pour obtenir une recommandation"
+                                   FontSize="13"
+                                   TextColor="#5F5A75" />
 
-                        <Frame CornerRadius="18"
-                               Padding="14"
-                               BackgroundColor="#FAF9FF"
-                               BorderColor="#EEEAF8"
-                               HasShadow="False">
+                            <!-- Skill chips (dynamic) -->
+                            <FlexLayout x:Name="recommendedSkillsLayout"
+                                        Direction="Row"
+                                        Wrap="Wrap"
+                                        AlignItems="Center"
+                                        JustifyContent="Start" />
 
-                            <VerticalStackLayout Spacing="8">
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <Label x:Name="lblRecommendedCandidateName"
-                                           Text="Aucun candidat"
-                                           FontSize="16"
-                                           FontAttributes="Bold"
-                                           TextColor="#111827" />
+                            <!-- Progress bar -->
+                            <Grid x:Name="recommendedProgressContainer"
+                                  HeightRequest="6"
+                                  IsVisible="False">
+                                <Frame BackgroundColor="#EEEAF8"
+                                       CornerRadius="3"
+                                       Padding="0"
+                                       HasShadow="False" />
+                                <Frame x:Name="recommendedProgressBar"
+                                       WidthRequest="0"
+                                       CornerRadius="3"
+                                       Padding="0"
+                                       HasShadow="False"
+                                       HorizontalOptions="Start">
+                                    <Frame.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                            <GradientStop Color="#D34C88" Offset="1.0" />
+                                        </LinearGradientBrush>
+                                    </Frame.Background>
+                                </Frame>
+                            </Grid>
 
-                                    <Label Grid.Column="1"
-                                           x:Name="lblRecommendedCandidateScore"
-                                           Text="0%"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#10B981" />
-                                </Grid>
-
-                                <Label x:Name="lblRecommendedCandidateInfo"
-                                       Text="Crée une offre pour obtenir une recommandation"
-                                       FontSize="13"
-                                       TextColor="#5F5A75" />
-
-                                <HorizontalStackLayout Spacing="8">
-                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
-                                        <Label Text="Service en salle" FontSize="11" TextColor="#7C4DFF" />
-                                    </Frame>
-
-                                    <Frame BackgroundColor="#F0EAFE" CornerRadius="12" Padding="9,3" HasShadow="False">
-                                        <Label Text="Encaissement" FontSize="11" TextColor="#7C4DFF" />
-                                    </Frame>
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
-                        </Frame>
-                    </VerticalStackLayout>
-                </Frame>
-
-                <Frame CornerRadius="24"
-                       Padding="18"
-                       BackgroundColor="White"
-                       BorderColor="#EEEAF8"
-                       HasShadow="False">
-
-                    <VerticalStackLayout Spacing="12">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Postes actifs"
-                                   FontSize="18"
-                                   FontAttributes="Bold"
-                                   TextColor="#111827" />
-
-                            <Button Grid.Column="1"
-                                    Text="Tout voir"
-                                    HeightRequest="34"
-                                    Padding="12,0"
-                                    BackgroundColor="#F0EAFE"
-                                    TextColor="#7C4DFF"
-                                    FontAttributes="Bold"
-                                    FontSize="12"
-                                    CornerRadius="12"
-                                    Clicked="JobOffers_Clicked" />
-                        </Grid>
-
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                            <Frame WidthRequest="42"
-                                   HeightRequest="42"
-                                   CornerRadius="21"
+                            <!-- Voir le profil button -->
+                            <Frame x:Name="viewProfileFrame"
+                                   CornerRadius="16"
                                    Padding="0"
-                                   BackgroundColor="#111827"
-                                   HasShadow="False">
-                                <Label Text="H"
+                                   HeightRequest="46"
+                                   HasShadow="False"
+                                   IsVisible="False">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ViewRecommendedProfile_Tapped" />
+                                </Frame.GestureRecognizers>
+                                <Frame.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                        <GradientStop Color="#D34C88" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </Frame.Background>
+                                <Label Text="Voir le profil"
                                        TextColor="White"
                                        FontAttributes="Bold"
+                                       FontSize="15"
                                        HorizontalTextAlignment="Center"
                                        VerticalTextAlignment="Center" />
                             </Frame>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- POSTES ACTIFS -->
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Postes actifs"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#111827"
+                               VerticalTextAlignment="Center" />
+                        <Frame Grid.Column="1"
+                               BackgroundColor="#F0EAFE"
+                               BorderColor="#CFC4FF"
+                               CornerRadius="12"
+                               Padding="14,6"
+                               HasShadow="False">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="JobOffers_Tapped" />
+                            </Frame.GestureRecognizers>
+                            <Label Text="Tout voir"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF" />
+                        </Frame>
+                    </Grid>
+
+                    <Frame CornerRadius="20"
+                           Padding="16"
+                           BackgroundColor="White"
+                           BorderColor="#EEEAF8"
+                           HasShadow="False">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                            <Frame WidthRequest="44"
+                                   HeightRequest="44"
+                                   CornerRadius="12"
+                                   Padding="0"
+                                   BackgroundColor="#111827"
+                                   HasShadow="False">
+                                <Label x:Name="lblActiveOfferInitial"
+                                       Text="?"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Frame>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                 <Label x:Name="lblActiveOfferTitle"
                                        Text="Aucune offre active"
                                        FontSize="14"
@@ -237,90 +282,132 @@
                                    Text="0 profil"
                                    FontSize="12"
                                    FontAttributes="Bold"
-                                   TextColor="#7C4DFF"
+                                   TextColor="#EF4444"
                                    VerticalTextAlignment="Center" />
                         </Grid>
-                    </VerticalStackLayout>
-                </Frame>
+                    </Frame>
+                </VerticalStackLayout>
 
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                <Button Text="Mes offres"
-                        HeightRequest="52"
-                        BackgroundColor="#7C4DFF"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        Clicked="JobOffers_Clicked" />
+                <!-- BOTTOM ACTION BUTTONS -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Frame CornerRadius="16"
+                           Padding="0"
+                           HeightRequest="52"
+                           HasShadow="False">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="JobOffers_Tapped" />
+                        </Frame.GestureRecognizers>
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+                        <Label Text="Mes offres"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="15"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
 
-                <Button Grid.Column="1"
-                        Text="Matchs"
-                        HeightRequest="52"
-                        BackgroundColor="White"
-                        BorderColor="#DED8F5"
-                        BorderWidth="1"
-                        TextColor="#111827"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        Clicked="Matches_Clicked" />
-            </Grid>
+                    <Frame Grid.Column="1"
+                           CornerRadius="16"
+                           Padding="0"
+                           HeightRequest="52"
+                           BackgroundColor="White"
+                           BorderColor="#DED8F5"
+                           HasShadow="False">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Matches_Tapped" />
+                        </Frame.GestureRecognizers>
+                        <Label Text="Matchs"
+                               TextColor="#111827"
+                               FontAttributes="Bold"
+                               FontSize="15"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
 
-
-        </VerticalStackLayout>
+            </VerticalStackLayout>
         </ScrollView>
 
+        <!-- BOTTOM NAV -->
         <Grid Grid.Row="1"
-                BackgroundColor="White"
-                Padding="18,8,18,18"
-                ColumnDefinitions="*,*,Auto,*,*">
+              BackgroundColor="White"
+              Padding="4,10,4,22"
+              ColumnDefinitions="*,*,*,*,*">
 
-            <Button Text="Accueil"
-                    Grid.Column="0"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#7C4DFF" />
+            <!-- Accueil (actif) -->
+            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="3">
+                <Label Text="⌂" FontSize="22" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                <Label Text="Accueil"
+                       FontSize="10"
+                       TextColor="#7C4DFF"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <BoxView HeightRequest="4"
+                         WidthRequest="24"
+                         Color="#7C4DFF"
+                         CornerRadius="2"
+                         HorizontalOptions="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="1"
-                    Text="Découvrir"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="BrowseCandidates_Clicked" />
+            <!-- Découvrir -->
+            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="3">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Discover_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="⌕" FontSize="22" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="Découvrir" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
+            <!-- Bouton + (ajouter offre) -->
             <Frame Grid.Column="2"
-                    WidthRequest="50"
-                   HeightRequest="50"
-                   CornerRadius="25"
+                   WidthRequest="52"
+                   HeightRequest="52"
+                   CornerRadius="26"
                    Padding="0"
-                   BackgroundColor="#7C4DFF"
                    HasShadow="True"
-                   Margin="8,0">
-                <Frame.Shadow>
-                    <Shadow Brush="#557C4DFF"
-                            Offset="0,8"
-                            Radius="18" />
-                </Frame.Shadow>
-
-                <Button Text="+"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        BackgroundColor="Transparent"
-                        TextColor="White"
-                        Clicked="AddJobOffer_Clicked" />
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Margin="0,-8,0,0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddOffer_Nav_Tapped" />
+                </Frame.GestureRecognizers>
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <Label Text="+"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
             </Frame>
 
-            <Button Grid.Column="3"
-                    Text="Messages"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Messages_Clicked" />
+            <!-- Messages -->
+            <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="3">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Messages_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="💬" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="Messages" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="4"
-                    Text="Profil"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="RecruiterProfile_Clicked" />
+            <!-- Profil -->
+            <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" Spacing="3">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Profile_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="👤" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="Profil" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
         </Grid>
 
     </Grid>
