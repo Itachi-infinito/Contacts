@@ -8,7 +8,7 @@
 
     <Grid RowDefinitions="Auto,*,Auto,Auto">
 
-
+        <!-- HEADER -->
         <Grid Grid.Row="0"
               BackgroundColor="#F7F5FC"
               Padding="16,28,20,10"
@@ -25,14 +25,11 @@
                     TextColor="#111827"
                     Clicked="Back_Clicked" />
 
-            <VerticalStackLayout Grid.Column="1"
-                                 Spacing="4"
-                                 VerticalOptions="Center">
+            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
                 <Label Text="Candidats"
                        FontSize="28"
                        FontAttributes="Bold"
                        TextColor="#111827" />
-
                 <Label Text="Profils compatibles avec vos offres"
                        FontSize="13"
                        TextColor="#8B86A3" />
@@ -48,15 +45,14 @@
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Profile_Tapped" />
                 </Frame.GestureRecognizers>
-
                 <Frame.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#7C4DFF" Offset="0.0" />
                         <GradientStop Color="#D34C88" Offset="1.0" />
                     </LinearGradientBrush>
                 </Frame.Background>
-
-                <Label Text="AI"
+                <Label x:Name="lblHeaderInitials"
+                       Text="AI"
                        TextColor="White"
                        FontAttributes="Bold"
                        FontSize="16"
@@ -65,34 +61,27 @@
             </Frame>
         </Grid>
 
-
+        <!-- CARD AREA -->
         <Grid Grid.Row="1">
+            <ScrollView x:Name="cardScrollView" Padding="0,10,0,0">
+                <VerticalStackLayout Spacing="14" HorizontalOptions="Center">
 
-            <ScrollView x:Name="cardScrollView"
-                        Padding="0,10,0,0">
-
-
-                <VerticalStackLayout Spacing="16"
-                                     HorizontalOptions="Center">
+                    <!-- OFFER FILTER -->
                     <Frame x:Name="offerFilterCard"
                            WidthRequest="344"
                            CornerRadius="18"
-                           Padding="12"
+                           Padding="14"
                            BackgroundColor="White"
                            BorderColor="#EEEAF8"
                            HasShadow="False">
-
-                        <Grid ColumnDefinitions="Auto,*,Auto"
-                                 ColumnSpacing="12">
-
-                            <Frame WidthRequest="34"
-                                   HeightRequest="34"
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                            <Frame WidthRequest="36"
+                                   HeightRequest="36"
                                    CornerRadius="12"
                                    Padding="0"
                                    BackgroundColor="#F0EAFE"
                                    HasShadow="False"
                                    VerticalOptions="Center">
-
                                 <Label Text="≡"
                                        FontSize="18"
                                        TextColor="#7C4DFF"
@@ -100,42 +89,35 @@
                                        VerticalTextAlignment="Center" />
                             </Frame>
 
-                            <VerticalStackLayout Grid.Column="1"
-                                                 Spacing="2"
-                                                 VerticalOptions="Center">
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
                                 <Label Text="Offre pour le matching"
-                                       FontSize="12"
-                                       FontAttributes="Bold"
+                                       FontSize="11"
                                        TextColor="#8581A6" />
-
                                 <Picker x:Name="offerFilterPicker"
                                         Title="Toutes mes offres"
                                         ItemDisplayBinding="{Binding Title}"
                                         SelectedIndexChanged="OfferFilterPicker_SelectedIndexChanged"
                                         TextColor="#111827"
-                                        TitleColor="#111827" />
+                                        TitleColor="#111827"
+                                        FontAttributes="Bold"
+                                        FontSize="15" />
                             </VerticalStackLayout>
 
                             <Button Grid.Column="2"
                                     Text="Toutes"
-                                    HeightRequest="34"
+                                    HeightRequest="36"
                                     Padding="14,0"
                                     BackgroundColor="#F0EAFE"
                                     TextColor="#7C4DFF"
                                     FontAttributes="Bold"
-                                    FontSize="12"
+                                    FontSize="13"
                                     CornerRadius="14"
+                                    VerticalOptions="Center"
                                     Clicked="ClearOfferFilter_Clicked" />
-
-                            <Label x:Name="lblOfferFilterHint"
-                                   Grid.Column="1"
-                                   IsVisible="False"
-                                   Text="Les candidats seront triés par compatibilité." />
                         </Grid>
                     </Frame>
 
-
-
+                    <!-- CANDIDATE CARD -->
                     <Frame x:Name="candidateCard"
                            WidthRequest="344"
                            BackgroundColor="White"
@@ -143,53 +125,44 @@
                            Padding="0"
                            HasShadow="True"
                            IsClippedToBounds="True">
-
                         <Frame.Shadow>
-                            <Shadow Brush="#25A78BFA"
-                                    Offset="0,18"
-                                    Radius="32"
-                                    Opacity="1" />
+                            <Shadow Brush="#30A78BFA" Offset="0,16" Radius="28" Opacity="1" />
                         </Frame.Shadow>
-
                         <Frame.GestureRecognizers>
                             <PanGestureRecognizer PanUpdated="Card_PanUpdated" />
                         </Frame.GestureRecognizers>
 
-                        <Grid RowDefinitions="248,Auto,Auto">
+                        <Grid RowDefinitions="256,Auto,Auto">
 
-
+                            <!-- IMAGE WITH GRADIENT -->
                             <Grid Grid.Row="0">
-                                <Frame CornerRadius="0"
-                                       Padding="0"
-                                       HasShadow="False"
-                                       IsClippedToBounds="True">
-
+                                <Frame CornerRadius="0" Padding="0" HasShadow="False" IsClippedToBounds="True">
                                     <Grid>
                                         <Image x:Name="imgCandidate"
                                                Aspect="AspectFill"
-                                               Opacity="1"
                                                IsVisible="True" />
 
+                                        <!-- Gradient overlay : transparent top → dark bottom -->
                                         <BoxView>
                                             <BoxView.Background>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                    <GradientStop Color="#209B7CFF" Offset="0.0" />
-                                                    <GradientStop Color="#003B1272" Offset="0.55" />
-                                                    <GradientStop Color="#B13B1272" Offset="1.0" />
+                                                    <GradientStop Color="#007C4DFF" Offset="0.0" />
+                                                    <GradientStop Color="#10000000" Offset="0.35" />
+                                                    <GradientStop Color="#D0000000" Offset="1.0" />
                                                 </LinearGradientBrush>
                                             </BoxView.Background>
                                         </BoxView>
 
-                                        <Grid x:Name="candidatePlaceholderIllustration"
-                                                 IsVisible="False" />
+                                        <Grid x:Name="candidatePlaceholderIllustration" IsVisible="False" />
 
+                                        <!-- Actif badge -->
                                         <Frame BackgroundColor="White"
                                                CornerRadius="16"
-                                               Padding="9,4"
+                                               Padding="10,5"
                                                HasShadow="False"
                                                HorizontalOptions="End"
                                                VerticalOptions="Start"
-                                               Margin="0,16,14,0">
+                                               Margin="0,14,14,0">
                                             <HorizontalStackLayout Spacing="5">
                                                 <Ellipse WidthRequest="7"
                                                          HeightRequest="7"
@@ -198,87 +171,77 @@
                                                 <Label Text="Actif"
                                                        FontSize="12"
                                                        FontAttributes="Bold"
-                                                       TextColor="#5F5A75" />
+                                                       TextColor="#374151" />
                                             </HorizontalStackLayout>
                                         </Frame>
 
-                                        <VerticalStackLayout Padding="18,0,18,18"
-                                                             Spacing="3"
+                                        <!-- Name overlay on image -->
+                                        <VerticalStackLayout Padding="18,0,18,20"
+                                                             Spacing="4"
                                                              VerticalOptions="End">
                                             <Label x:Name="lblFullName"
-                                                   FontSize="24"
+                                                   FontSize="26"
                                                    FontAttributes="Bold"
                                                    TextColor="White"
                                                    LineBreakMode="TailTruncation" />
-
                                             <Label x:Name="lblTitle"
-                                                   FontSize="15"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#EFE9FF"
+                                                   FontSize="14"
+                                                   TextColor="#E8E0FF"
                                                    LineBreakMode="TailTruncation" />
                                         </VerticalStackLayout>
 
+                                        <!-- Swipe overlays -->
                                         <Label x:Name="lblLikeOverlay"
-                                               Text="VALIDÉ"
-                                               FontSize="28"
+                                               Text="VALIDÉ ✓"
+                                               FontSize="26"
                                                FontAttributes="Bold"
                                                TextColor="#10B981"
                                                Rotation="-15"
                                                Opacity="0"
                                                HorizontalOptions="Start"
                                                VerticalOptions="Start"
-                                               Margin="22,32,0,0" />
-
+                                               Margin="20,30,0,0" />
                                         <Label x:Name="lblNopeOverlay"
-                                               Text="PASSÉ"
-                                               FontSize="28"
+                                               Text="PASSÉ ✗"
+                                               FontSize="26"
                                                FontAttributes="Bold"
                                                TextColor="#EF4444"
                                                Rotation="15"
                                                Opacity="0"
                                                HorizontalOptions="End"
                                                VerticalOptions="Start"
-                                               Margin="0,32,22,0" />
+                                               Margin="0,30,20,0" />
                                     </Grid>
                                 </Frame>
                             </Grid>
 
-
+                            <!-- CARD INFO -->
                             <VerticalStackLayout Grid.Row="1"
                                                  Padding="18,16,18,18"
-                                                 Spacing="13">
+                                                 Spacing="12">
 
+                                <!-- Compatibility bar -->
                                 <Frame x:Name="compatibilityBadge"
                                        BackgroundColor="Transparent"
                                        Padding="0"
                                        HasShadow="False"
                                        IsVisible="False">
-
-                                    <Grid ColumnDefinitions="Auto,*,Auto"
-                                         ColumnSpacing="10">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                                         <Label Text="Compatibilité"
                                                FontSize="13"
-                                               FontAttributes="Bold"
                                                TextColor="#8581A6"
                                                VerticalTextAlignment="Center" />
-
-                                        <Grid Grid.Column="1"
-                                              WidthRequest="118"
-                                              HeightRequest="6"
-                                              VerticalOptions="Center">
-
+                                        <Grid Grid.Column="1" HeightRequest="6" VerticalOptions="Center">
                                             <Frame BackgroundColor="#EEEAF8"
                                                    CornerRadius="3"
                                                    Padding="0"
                                                    HasShadow="False" />
-
                                             <Frame x:Name="compatibilityProgressBar"
                                                    WidthRequest="0"
                                                    CornerRadius="3"
                                                    Padding="0"
                                                    HasShadow="False"
                                                    HorizontalOptions="Start">
-
                                                 <Frame.Background>
                                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                                                         <GradientStop Color="#7C4DFF" Offset="0.0" />
@@ -287,9 +250,6 @@
                                                 </Frame.Background>
                                             </Frame>
                                         </Grid>
-
-
-
                                         <Label x:Name="lblCompatibility"
                                                Grid.Column="2"
                                                FontSize="14"
@@ -299,6 +259,7 @@
                                     </Grid>
                                 </Frame>
 
+                                <!-- Skill & contract badges -->
                                 <FlexLayout x:Name="skillsBadgesLayout"
                                             Direction="Row"
                                             Wrap="Wrap"
@@ -306,132 +267,71 @@
                                             JustifyContent="Start"
                                             IsVisible="False" />
 
+                                <!-- Salary preference -->
                                 <Label x:Name="lblCandidatePreferences"
                                        FontSize="13"
                                        TextColor="#5F5A75"
                                        IsVisible="False" />
 
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label Text="⌖"
-                                           FontSize="15"
+                                <!-- Location + distance (combined) -->
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="📍"
+                                           FontSize="13"
                                            TextColor="#8B86A3"
                                            VerticalTextAlignment="Center" />
-
                                     <Label x:Name="lblLocation"
                                            FontSize="13"
                                            FontAttributes="Bold"
                                            TextColor="#8581A6"
                                            VerticalTextAlignment="Center" />
-
-                                    <Label x:Name="lblDistanceToOffer"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
-                                           TextColor="#8581A6"
-                                           VerticalTextAlignment="Center"
-                                           IsVisible="False" />
                                 </HorizontalStackLayout>
-
-
                             </VerticalStackLayout>
 
-
+                            <!-- EXPANDED DETAILS -->
                             <VerticalStackLayout x:Name="expandedDetailsSection"
                                                  Grid.Row="2"
                                                  IsVisible="False"
                                                  Opacity="0"
                                                  Padding="20,0,20,22"
                                                  Spacing="8">
-
-                                <BoxView HeightRequest="1"
-                                         Color="#EEEAF8" />
-
+                                <BoxView HeightRequest="1" Color="#EEEAF8" />
                                 <Label Text="Détails du candidat"
                                        FontSize="16"
                                        FontAttributes="Bold"
                                        TextColor="#111827" />
+                                <Label x:Name="lblDetailSkills" TextColor="#374151" IsVisible="False" />
+                                <Label x:Name="lblDetailDesiredContractType" TextColor="#374151" IsVisible="False" />
+                                <Label x:Name="lblDetailExperienceLevel" TextColor="#374151" IsVisible="False" />
+                                <Label x:Name="lblDetailDesiredSalary" TextColor="#374151" IsVisible="False" />
+                                <Label x:Name="lblDetailDistanceToOffer" TextColor="#374151" IsVisible="False" />
+                                <Label x:Name="lblDetailCompatibility" TextColor="#7C4DFF" IsVisible="False" />
 
-                                <Label x:Name="lblDetailFullName"
-                                       TextColor="#374151" />
-
-                                <Label x:Name="lblDetailTitle"
-                                       TextColor="#374151" />
-
-                                <Label x:Name="lblDetailLocation"
-                                       TextColor="#374151" />
-                                <Label x:Name="lblDetailSkills"
-                                       TextColor="#374151"
-                                       IsVisible="False" />
-
-                                <Label x:Name="lblDetailDesiredContractType"
-                                       TextColor="#374151"
-                                       IsVisible="False" />
-
-                                <Label x:Name="lblDetailExperienceLevel"
-                                       TextColor="#374151"
-                                       IsVisible="False" />
-
-                                <Label x:Name="lblDetailDesiredSalary"
-                                       TextColor="#374151"
-                                       IsVisible="False" />
-                                <Label x:Name="lblDetailDistanceToOffer"
-                                       TextColor="#374151"
-                                       IsVisible="False" />
-                                <Label x:Name="lblDetailCompatibility"
-                                       TextColor="#374151"
-                                       IsVisible="False" />
-
-
-
-
-                                <VerticalStackLayout x:Name="aboutSection"
-                                                     Spacing="6">
+                                <VerticalStackLayout x:Name="aboutSection" Spacing="6">
                                     <Label Text="Profil"
                                            FontSize="15"
                                            FontAttributes="Bold"
                                            TextColor="#111827" />
-
                                     <Label x:Name="lblAbout"
                                            FontSize="13"
                                            LineBreakMode="WordWrap"
                                            TextColor="#5F5A75" />
                                 </VerticalStackLayout>
-                                <VerticalStackLayout x:Name="experienceSection"
-                                                     Spacing="10"
-                                                     IsVisible="False">
-                                    <BoxView HeightRequest="1"
-                                             Color="#EEEAF8"
-                                             Margin="0,4,0,0" />
+
+                                <VerticalStackLayout x:Name="experienceSection" Spacing="10" IsVisible="False">
+                                    <BoxView HeightRequest="1" Color="#EEEAF8" Margin="0,4,0,0" />
                                     <Label Text="Expériences"
                                            FontSize="15"
                                            FontAttributes="Bold"
                                            TextColor="#111827" />
-                                    <VerticalStackLayout x:Name="experience1Layout"
-                                                         Spacing="2"
-                                                         IsVisible="False">
-                                        <Label x:Name="lblExperienceTitle1"
-                                               FontSize="13"
-                                               FontAttributes="Bold"
-                                               TextColor="#111827" />
-                                        <Label x:Name="lblExperienceCompany1"
-                                               FontSize="12"
-                                               TextColor="#7C4DFF" />
-                                        <Label x:Name="lblExperiencePeriod1"
-                                               FontSize="11"
-                                               TextColor="#8B86A3" />
+                                    <VerticalStackLayout x:Name="experience1Layout" Spacing="2" IsVisible="False">
+                                        <Label x:Name="lblExperienceTitle1" FontSize="13" FontAttributes="Bold" TextColor="#111827" />
+                                        <Label x:Name="lblExperienceCompany1" FontSize="12" TextColor="#7C4DFF" />
+                                        <Label x:Name="lblExperiencePeriod1" FontSize="11" TextColor="#8B86A3" />
                                     </VerticalStackLayout>
-                                    <VerticalStackLayout x:Name="experience2Layout"
-                                                         Spacing="2"
-                                                         IsVisible="False">
-                                        <Label x:Name="lblExperienceTitle2"
-                                               FontSize="13"
-                                               FontAttributes="Bold"
-                                               TextColor="#111827" />
-                                        <Label x:Name="lblExperienceCompany2"
-                                               FontSize="12"
-                                               TextColor="#7C4DFF" />
-                                        <Label x:Name="lblExperiencePeriod2"
-                                               FontSize="11"
-                                               TextColor="#8B86A3" />
+                                    <VerticalStackLayout x:Name="experience2Layout" Spacing="2" IsVisible="False">
+                                        <Label x:Name="lblExperienceTitle2" FontSize="13" FontAttributes="Bold" TextColor="#111827" />
+                                        <Label x:Name="lblExperienceCompany2" FontSize="12" TextColor="#7C4DFF" />
+                                        <Label x:Name="lblExperiencePeriod2" FontSize="11" TextColor="#8B86A3" />
                                     </VerticalStackLayout>
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
@@ -439,20 +339,21 @@
                     </Frame>
 
                     <Label x:Name="lblSwipeHint"
-                           Text="← Passer    •    Retenir →"
+                           Text="‹ Passer    •    Retenir ›"
                            FontSize="12"
-                           TextColor="#8B86A3"
+                           TextColor="#B0ABCE"
                            HorizontalTextAlignment="Center" />
+
                 </VerticalStackLayout>
             </ScrollView>
 
+            <!-- EMPTY STATE -->
             <VerticalStackLayout x:Name="emptyStateSection"
                                  IsVisible="False"
                                  Spacing="16"
                                  Padding="32,0"
                                  HorizontalOptions="Center"
                                  VerticalOptions="Center">
-
                 <Frame WidthRequest="86"
                        HeightRequest="86"
                        CornerRadius="43"
@@ -460,7 +361,6 @@
                        BackgroundColor="#F0EAFE"
                        HasShadow="False"
                        HorizontalOptions="Center">
-
                     <Label Text="✓"
                            FontSize="38"
                            FontAttributes="Bold"
@@ -468,22 +368,18 @@
                            HorizontalTextAlignment="Center"
                            VerticalTextAlignment="Center" />
                 </Frame>
-
                 <Label Text="Vous avez tout vu"
                        FontSize="22"
                        FontAttributes="Bold"
                        TextColor="#111827"
                        HorizontalTextAlignment="Center" />
-
                 <Label x:Name="lblEmptyMessage"
                        Text="Revenez bientôt pour découvrir de nouveaux candidats."
                        FontSize="14"
                        TextColor="#8B86A3"
                        LineBreakMode="WordWrap"
                        HorizontalTextAlignment="Center" />
-
-                <Button x:Name="btnRefreshCandidates"
-                        Text="Actualiser"
+                <Button Text="Actualiser"
                         HeightRequest="44"
                         WidthRequest="148"
                         BackgroundColor="#7C4DFF"
@@ -492,25 +388,22 @@
                         CornerRadius="14"
                         Clicked="Reload_Clicked" />
             </VerticalStackLayout>
-
         </Grid>
 
+        <!-- ACTION BUTTONS -->
         <Grid x:Name="actionsGrid"
-                Grid.Row="2"
-                ColumnDefinitions="*,Auto,*"
-                ColumnSpacing="14"
-                Padding="26,0,26,16"
-                HorizontalOptions="Fill">
+              Grid.Row="2"
+              ColumnDefinitions="*,Auto,*"
+              ColumnSpacing="12"
+              Padding="24,0,24,14">
 
-            <Frame Grid.Column="0"
+            <Frame CornerRadius="22"
                    HeightRequest="58"
-                   CornerRadius="22"
                    Padding="0"
                    BackgroundColor="White"
                    BorderColor="#F3B6D0"
                    HasShadow="False">
-
-                <Button Text="×  Passer"
+                <Button Text="✕  Passer"
                         BackgroundColor="Transparent"
                         TextColor="#D34C88"
                         FontSize="16"
@@ -526,11 +419,10 @@
                    BackgroundColor="White"
                    BorderColor="#F6D98B"
                    HasShadow="False">
-
                 <Button Text="☆"
                         BackgroundColor="Transparent"
                         TextColor="#F59E0B"
-                        FontSize="30"
+                        FontSize="28"
                         FontAttributes="Bold"
                         Clicked="SuperLike_Clicked" />
             </Frame>
@@ -540,14 +432,12 @@
                    CornerRadius="22"
                    Padding="0"
                    HasShadow="False">
-
                 <Frame.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#7C4DFF" Offset="0.0" />
                         <GradientStop Color="#D34C88" Offset="1.0" />
                     </LinearGradientBrush>
                 </Frame.Background>
-
                 <Button Text="Retenir ✓"
                         BackgroundColor="Transparent"
                         TextColor="White"
@@ -557,50 +447,81 @@
             </Frame>
         </Grid>
 
+        <!-- BOTTOM NAV -->
         <Grid Grid.Row="3"
               BackgroundColor="White"
-              Padding="18,8,18,18"
+              Padding="4,10,4,22"
               ColumnDefinitions="*,*,*,*,*">
 
-            <Button Text="⌂&#10;Accueil"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Home_Clicked" />
+            <!-- Accueil -->
+            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="3">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Home_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="⌂" FontSize="22" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="Accueil" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="1"
-                    Text="⌕&#10;Découvrir"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#7C4DFF" />
+            <!-- Découvrir (actif) -->
+            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="3">
+                <Label Text="⌕" FontSize="22" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                <Label Text="Découvrir"
+                       FontSize="10"
+                       TextColor="#7C4DFF"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <BoxView HeightRequest="4"
+                         WidthRequest="24"
+                         Color="#7C4DFF"
+                         CornerRadius="2"
+                         HorizontalOptions="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="2"
-                    Text="+"
-                    WidthRequest="52"
-                    HeightRequest="52"
-                    BackgroundColor="#7C4DFF"
-                    TextColor="White"
-                    FontSize="26"
-                    FontAttributes="Bold"
-                    CornerRadius="26"
-                    Clicked="AddOffer_Clicked" />
+            <!-- Bouton + (ajouter offre) -->
+            <Frame Grid.Column="2"
+                   WidthRequest="52"
+                   HeightRequest="52"
+                   CornerRadius="26"
+                   Padding="0"
+                   HasShadow="True"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Margin="0,-8,0,0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddOffer_Nav_Tapped" />
+                </Frame.GestureRecognizers>
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <Label Text="+"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
 
-            <Button Grid.Column="3"
-                    Text="□&#10;Messages"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Messages_Button_Clicked" />
+            <!-- Messages -->
+            <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="3">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Messages_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="💬" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="Messages" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="4"
-                    Text="♙&#10;Profil"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Profile_Button_Clicked" />
+            <!-- Profil -->
+            <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" Spacing="3">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Profile_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="👤" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="Profil" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
         </Grid>
-
-
 
     </Grid>
 </ContentPage>
