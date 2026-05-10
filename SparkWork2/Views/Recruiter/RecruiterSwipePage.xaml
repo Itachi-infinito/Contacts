@@ -4,13 +4,13 @@
              x:Class="SparkWork2.Views.Recruiter.RecruiterSwipePage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#F7F5FC">
+             BackgroundColor="White">
 
     <Grid RowDefinitions="Auto,*,Auto,Auto">
 
         <!-- HEADER -->
         <Grid Grid.Row="0"
-              BackgroundColor="#F7F5FC"
+              BackgroundColor="White"
               Padding="16,28,20,10"
               ColumnDefinitions="Auto,*,Auto"
               ColumnSpacing="10">
@@ -67,55 +67,72 @@
                 <VerticalStackLayout Spacing="14" HorizontalOptions="Center">
 
                     <!-- OFFER FILTER -->
-                    <Frame x:Name="offerFilterCard"
-                           WidthRequest="344"
-                           CornerRadius="18"
-                           Padding="14"
-                           BackgroundColor="White"
-                           BorderColor="#EEEAF8"
-                           HasShadow="False">
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                            <Frame WidthRequest="36"
-                                   HeightRequest="36"
-                                   CornerRadius="12"
-                                   Padding="0"
-                                   BackgroundColor="#F0EAFE"
-                                   HasShadow="False"
-                                   VerticalOptions="Center">
-                                <Label Text="≡"
-                                       FontSize="18"
+                    <Border x:Name="offerFilterCard"
+                            WidthRequest="344"
+                            StrokeThickness="1"
+                            Stroke="#E5E0F5"
+                            BackgroundColor="#F8F6FF">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,*,Auto"
+                              ColumnSpacing="12"
+                              Padding="14,10">
+
+                            <Border WidthRequest="32"
+                                    HeightRequest="32"
+                                    BackgroundColor="#EEEDFE"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <Label Text="&#xE152;"
+                                       FontFamily="MaterialIcons"
+                                       FontSize="17"
                                        TextColor="#7C4DFF"
                                        HorizontalTextAlignment="Center"
                                        VerticalTextAlignment="Center" />
-                            </Frame>
+                            </Border>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="1"
+                                                 VerticalOptions="Center">
                                 <Label Text="Offre pour le matching"
-                                       FontSize="11"
-                                       TextColor="#8581A6" />
+                                       FontSize="10"
+                                       TextColor="#8b82b0" />
                                 <Picker x:Name="offerFilterPicker"
                                         Title="Toutes mes offres"
                                         ItemDisplayBinding="{Binding Title}"
                                         SelectedIndexChanged="OfferFilterPicker_SelectedIndexChanged"
-                                        TextColor="#111827"
-                                        TitleColor="#111827"
+                                        TextColor="#1a1a2e"
+                                        TitleColor="#1a1a2e"
                                         FontAttributes="Bold"
-                                        FontSize="15" />
+                                        FontSize="13" />
                             </VerticalStackLayout>
 
-                            <Button Grid.Column="2"
-                                    Text="Toutes"
-                                    HeightRequest="36"
-                                    Padding="14,0"
-                                    BackgroundColor="#F0EAFE"
-                                    TextColor="#7C4DFF"
-                                    FontAttributes="Bold"
-                                    FontSize="13"
-                                    CornerRadius="14"
+                            <Border Grid.Column="2"
+                                    BackgroundColor="#EEEDFE"
+                                    StrokeThickness="0"
                                     VerticalOptions="Center"
-                                    Clicked="ClearOfferFilter_Clicked" />
+                                    Padding="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Label Text="Toutes"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="#534AB7"
+                                       Padding="12,5"
+                                       HorizontalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ClearOfferFilter_Clicked" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Border>
+
                         </Grid>
-                    </Frame>
+                    </Border>
 
                     <!-- CANDIDATE CARD -->
                     <Frame x:Name="candidateCard"
@@ -354,43 +371,121 @@
             <!-- EMPTY STATE -->
             <VerticalStackLayout x:Name="emptyStateSection"
                                  IsVisible="False"
-                                 Spacing="16"
+                                 Spacing="20"
                                  Padding="32,0"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center">
-                <Frame WidthRequest="86"
-                       HeightRequest="86"
-                       CornerRadius="43"
-                       Padding="0"
-                       BackgroundColor="#F0EAFE"
-                       HasShadow="False"
-                       HorizontalOptions="Center">
-                    <Label Text="✓"
-                           FontSize="38"
-                           FontAttributes="Bold"
-                           TextColor="#7C4DFF"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
-                </Frame>
-                <Label Text="Vous avez tout vu"
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       TextColor="#111827"
-                       HorizontalTextAlignment="Center" />
+                                 HorizontalOptions="Fill"
+                                 VerticalOptions="Center"
+                                 BackgroundColor="White">
+
+                <Grid WidthRequest="260"
+                      HeightRequest="170"
+                      HorizontalOptions="Center"
+                      Margin="0,0,0,0">
+
+                    <Border x:Name="emptyCardLeft"
+                            WidthRequest="54"
+                            HeightRequest="74"
+                            StrokeThickness="0"
+                            Rotation="-10"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Start"
+                            Margin="34,4,0,0"
+                            Opacity="0.72">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#D8CCFF" Offset="0.0" />
+                                <GradientStop Color="#A78BFA" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+                    <Border x:Name="emptyCardRight"
+                            WidthRequest="54"
+                            HeightRequest="74"
+                            StrokeThickness="0"
+                            Rotation="10"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            Margin="0,18,34,0"
+                            Opacity="0.72">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#FBCFE8" Offset="0.0" />
+                                <GradientStop Color="#EC4899" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+                    <Ellipse WidthRequest="88"
+                             HeightRequest="88"
+                             Stroke="#CFC4FF"
+                             StrokeThickness="1.5"
+                             StrokeDashArray="6,4"
+                             Fill="Transparent"
+                             HorizontalOptions="Center"
+                             VerticalOptions="End"
+                             Margin="0,0,0,4" />
+
+                    <Border x:Name="emptyStateIcon"
+                            WidthRequest="62"
+                            HeightRequest="62"
+                            StrokeThickness="0"
+                            HorizontalOptions="Center"
+                            VerticalOptions="End"
+                            Margin="0,0,0,17">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="31" />
+                        </Border.StrokeShape>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+
+                        <Label Text="✓"
+                               FontSize="32"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </Grid>
+
+
+
+                <Label Text="Vous avez tout vu !" FontSize="22" FontAttributes="Bold"
+                         TextColor="#111827" HorizontalTextAlignment="Center" />
                 <Label x:Name="lblEmptyMessage"
-                       Text="Revenez bientôt pour découvrir de nouveaux candidats."
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       LineBreakMode="WordWrap"
+                       Text="Revenez bientôt pour découvrir de nouveaux candidats compatibles avec vos offres."
+                       FontSize="14" TextColor="#8B86A3" LineBreakMode="WordWrap"
                        HorizontalTextAlignment="Center" />
-                <Button Text="Actualiser"
-                        HeightRequest="44"
-                        WidthRequest="148"
-                        BackgroundColor="#7C4DFF"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        CornerRadius="14"
-                        Clicked="Reload_Clicked" />
+
+                <Frame CornerRadius="27" HeightRequest="54" Padding="0" HasShadow="False">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Reload_Tapped" />
+                    </Frame.GestureRecognizers>
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7C4DFF" Offset="0.0" />
+                            <GradientStop Color="#D34C88" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                        <Label Text="↺" FontSize="20" TextColor="White" VerticalTextAlignment="Center" />
+                        <Label Text="Actualiser" FontSize="16" FontAttributes="Bold" TextColor="White"
+                                VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Label Text="• Nouveaux profils ajoutés chaque jour •"
+                         FontSize="12" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
         </Grid>
 
@@ -399,132 +494,187 @@
               Grid.Row="2"
               ColumnDefinitions="*,Auto,*"
               ColumnSpacing="12"
-              Padding="24,0,24,14">
+              Padding="20,8,20,18">
 
-            <Frame CornerRadius="22"
-                   HeightRequest="58"
-                   Padding="0"
-                   BackgroundColor="White"
-                   BorderColor="#F3B6D0"
-                   HasShadow="False">
+            <!-- Passer -->
+            <Border HeightRequest="52"
+                    StrokeThickness="1.5"
+                    Stroke="#F9D0E2"
+                    BackgroundColor="White">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="26" />
+                </Border.StrokeShape>
                 <Button Text="✕  Passer"
                         BackgroundColor="Transparent"
                         TextColor="#D34C88"
-                        FontSize="16"
+                        FontSize="15"
                         FontAttributes="Bold"
                         Clicked="Reject_Clicked" />
-            </Frame>
+            </Border>
 
-            <Frame Grid.Column="1"
-                   WidthRequest="58"
-                   HeightRequest="58"
-                   CornerRadius="29"
-                   Padding="0"
-                   BackgroundColor="White"
-                   BorderColor="#F6D98B"
-                   HasShadow="False">
+            <!-- Favori -->
+            <Border Grid.Column="1"
+                    WidthRequest="54" HeightRequest="54"
+                    StrokeThickness="1.5"
+                    Stroke="#FEF3C7"
+                    BackgroundColor="White">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="27" />
+                </Border.StrokeShape>
                 <Button Text="☆"
                         BackgroundColor="Transparent"
                         TextColor="#F59E0B"
-                        FontSize="28"
+                        FontSize="26"
                         FontAttributes="Bold"
                         Clicked="SuperLike_Clicked" />
-            </Frame>
+            </Border>
 
-            <Frame Grid.Column="2"
-                   HeightRequest="58"
-                   CornerRadius="22"
-                   Padding="0"
-                   HasShadow="False">
-                <Frame.Background>
+            <!-- Retenir -->
+            <Border Grid.Column="2"
+                    HeightRequest="52"
+                    StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="26" />
+                </Border.StrokeShape>
+                <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#7C4DFF" Offset="0.0" />
                         <GradientStop Color="#D34C88" Offset="1.0" />
                     </LinearGradientBrush>
-                </Frame.Background>
+                </Border.Background>
                 <Button Text="Retenir ✓"
                         BackgroundColor="Transparent"
                         TextColor="White"
-                        FontSize="16"
+                        FontSize="15"
                         FontAttributes="Bold"
                         Clicked="Like_Clicked" />
-            </Frame>
+            </Border>
+
+            
         </Grid>
 
         <!-- BOTTOM NAV -->
         <Grid Grid.Row="3"
+              HeightRequest="78"
               BackgroundColor="White"
-              Padding="4,10,4,22"
+              Padding="4,6,4,10"
               ColumnDefinitions="*,*,*,*,*">
 
+
+            <BoxView Grid.ColumnSpan="5"
+                    HeightRequest="0.5"
+                    Color="#E5E0F5"
+                    VerticalOptions="Start" />
+
             <!-- Accueil -->
-            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="3">
+            <VerticalStackLayout Grid.Column="0"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Home_Nav_Tapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Label Text="⌂" FontSize="22" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
-                <Label Text="Accueil" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="&#xE88A;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Accueil"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
             <!-- Découvrir (actif) -->
-            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="3">
-                <Label Text="⌕" FontSize="22" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+            <VerticalStackLayout Grid.Column="1"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
+                <Label Text="&#xE8B6;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#7C4DFF"
+                       HorizontalTextAlignment="Center" />
                 <Label Text="Découvrir"
-                       FontSize="10"
+                       FontSize="9"
                        TextColor="#7C4DFF"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center" />
                 <BoxView HeightRequest="4"
-                         WidthRequest="24"
+                         WidthRequest="4"
                          Color="#7C4DFF"
                          CornerRadius="2"
                          HorizontalOptions="Center" />
             </VerticalStackLayout>
 
-            <!-- Bouton + (ajouter offre) -->
-            <Frame Grid.Column="2"
-                   WidthRequest="52"
-                   HeightRequest="52"
-                   CornerRadius="26"
-                   Padding="0"
-                   HasShadow="True"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   Margin="0,-8,0,0">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="AddOffer_Nav_Tapped" />
-                </Frame.GestureRecognizers>
-                <Frame.Background>
+            <!-- Bouton + central -->
+            <Border Grid.Column="2"
+                    WidthRequest="46"
+                    HeightRequest="46"
+                    StrokeThickness="0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,0,0,0">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="25" />
+                </Border.StrokeShape>
+                <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#7C4DFF" Offset="0.0" />
                         <GradientStop Color="#D34C88" Offset="1.0" />
                     </LinearGradientBrush>
-                </Frame.Background>
+                </Border.Background>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddOffer_Nav_Tapped" />
+                </Border.GestureRecognizers>
                 <Label Text="+"
-                       FontSize="28"
+                       FontSize="26"
                        FontAttributes="Bold"
                        TextColor="White"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center" />
-            </Frame>
+
+            </Border>
 
             <!-- Messages -->
-            <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="3">
+            <VerticalStackLayout Grid.Column="3"
+                         HorizontalOptions="Center"
+                         Spacing="2"
+                         VerticalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Messages_Nav_Tapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Label Text="💬" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
-                <Label Text="Messages" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="&#xE0BF;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Messages"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
             <!-- Profil -->
-            <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" Spacing="3">
+            <VerticalStackLayout Grid.Column="4"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Profile_Nav_Tapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Label Text="👤" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
-                <Label Text="Profil" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="&#xE7FD;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Profil"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
+
         </Grid>
 
     </Grid>

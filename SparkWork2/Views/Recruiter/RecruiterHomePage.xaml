@@ -4,11 +4,12 @@
              x:Class="SparkWork2.Views.Recruiter.RecruiterHomePage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#F7F5FC">
+             BackgroundColor="White">
 
     <Grid RowDefinitions="*,Auto">
 
-        <ScrollView Grid.Row="0">
+        <ScrollView Grid.Row="0"
+                    BackgroundColor="White">
             <VerticalStackLayout Padding="20,32,20,24" Spacing="18">
 
                 <!-- HEADER -->
@@ -50,9 +51,10 @@
                 <!-- SEARCH BAR -->
                 <Frame CornerRadius="18"
                        Padding="14,12"
-                       BackgroundColor="White"
-                       BorderColor="#EEEAF8"
+                       BackgroundColor="#F8F6FF"
+                       BorderColor="#DED8F5"
                        HasShadow="False">
+
                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                         <Label Text="⌕"
                                FontSize="18"
@@ -67,17 +69,18 @@
                                 Text="Filtres"
                                 HeightRequest="36"
                                 Padding="14,0"
-                                BackgroundColor="#7C4DFF"
-                                TextColor="White"
+                                BackgroundColor="#F0EAFE"
+                                TextColor="#7C4DFF"
                                 FontAttributes="Bold"
                                 FontSize="12"
                                 CornerRadius="12" />
+
                     </Grid>
                 </Frame>
 
                 <!-- STATS -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                    <Frame CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
+                    <Frame CornerRadius="18" Padding="16" BackgroundColor="#F8F6FF" BorderColor="#DED8F5" HasShadow="False">
                         <VerticalStackLayout Spacing="4">
                             <Label Text="Candidats"
                                    FontSize="13"
@@ -93,7 +96,7 @@
                         </VerticalStackLayout>
                     </Frame>
 
-                    <Frame Grid.Column="1" CornerRadius="18" Padding="16" BackgroundColor="White" BorderColor="#EEEAF8" HasShadow="False">
+                    <Frame Grid.Column="1" CornerRadius="18" Padding="16" BackgroundColor="#F8F6FF" BorderColor="#DED8F5" HasShadow="False">
                         <VerticalStackLayout Spacing="4">
                             <Label Text="Matchs"
                                    FontSize="13"
@@ -120,10 +123,11 @@
                                VerticalTextAlignment="Center" />
                         <Frame Grid.Column="1"
                                BackgroundColor="#F0EAFE"
-                               BorderColor="#CFC4FF"
-                               CornerRadius="12"
-                               Padding="14,6"
-                               HasShadow="False">
+                            BorderColor="Transparent"
+                            CornerRadius="12"
+                            Padding="14,6"
+                            HasShadow="False">
+
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="BrowseCandidates_Tapped" />
                             </Frame.GestureRecognizers>
@@ -136,9 +140,10 @@
 
                     <Frame CornerRadius="20"
                            Padding="16"
-                           BackgroundColor="White"
-                           BorderColor="#EEEAF8"
+                           BackgroundColor="#F8F6FF"
+                           BorderColor="#DED8F5"
                            HasShadow="False">
+
                         <VerticalStackLayout Spacing="10">
 
                             <!-- Name + score -->
@@ -231,10 +236,11 @@
                                VerticalTextAlignment="Center" />
                         <Frame Grid.Column="1"
                                BackgroundColor="#F0EAFE"
-                               BorderColor="#CFC4FF"
-                               CornerRadius="12"
-                               Padding="14,6"
-                               HasShadow="False">
+                                BorderColor="Transparent"
+                                CornerRadius="12"
+                                Padding="14,6"
+                                HasShadow="False">
+
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="JobOffers_Tapped" />
                             </Frame.GestureRecognizers>
@@ -247,9 +253,10 @@
 
                     <Frame CornerRadius="20"
                            Padding="16"
-                           BackgroundColor="White"
-                           BorderColor="#EEEAF8"
+                           BackgroundColor="#F8F6FF"
+                           BorderColor="#DED8F5"
                            HasShadow="False">
+
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                             <Frame WidthRequest="44"
                                    HeightRequest="44"
@@ -316,7 +323,7 @@
                            CornerRadius="16"
                            Padding="0"
                            HeightRequest="52"
-                           BackgroundColor="White"
+                           BackgroundColor="#F8F6FF" 
                            BorderColor="#DED8F5"
                            HasShadow="False">
                         <Frame.GestureRecognizers>
@@ -336,80 +343,125 @@
 
         <!-- BOTTOM NAV -->
         <Grid Grid.Row="1"
+              HeightRequest="78"
               BackgroundColor="White"
-              Padding="4,10,4,22"
+              Padding="4,8,4,10"
               ColumnDefinitions="*,*,*,*,*">
 
-            <!-- Accueil (actif) -->
-            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="3">
-                <Label Text="⌂" FontSize="22" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+            <BoxView Grid.ColumnSpan="5"
+                     HeightRequest="0.5"
+                     Color="#E5E0F5"
+                     VerticalOptions="Start" />
+
+            <!-- Accueil actif -->
+            <VerticalStackLayout Grid.Column="0"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
+                <Label Text="&#xE88A;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#7C4DFF"
+                       HorizontalTextAlignment="Center" />
                 <Label Text="Accueil"
-                       FontSize="10"
+                       FontSize="9"
                        TextColor="#7C4DFF"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center" />
                 <BoxView HeightRequest="4"
-                         WidthRequest="24"
+                         WidthRequest="4"
                          Color="#7C4DFF"
                          CornerRadius="2"
                          HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <!-- Découvrir -->
-            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="3">
+            <VerticalStackLayout Grid.Column="1"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Discover_Nav_Tapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Label Text="⌕" FontSize="22" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
-                <Label Text="Découvrir" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="&#xE8B6;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Découvrir"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
-            <!-- Bouton + (ajouter offre) -->
-            <Frame Grid.Column="2"
-                   WidthRequest="52"
-                   HeightRequest="52"
-                   CornerRadius="26"
-                   Padding="0"
-                   HasShadow="True"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   Margin="0,-8,0,0">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="AddOffer_Nav_Tapped" />
-                </Frame.GestureRecognizers>
-                <Frame.Background>
+            <!-- Bouton + central -->
+            <Border Grid.Column="2"
+                    WidthRequest="46"
+                    HeightRequest="46"
+                    StrokeThickness="0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,0,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="23" />
+                </Border.StrokeShape>
+                <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#7C4DFF" Offset="0.0" />
                         <GradientStop Color="#D34C88" Offset="1.0" />
                     </LinearGradientBrush>
-                </Frame.Background>
+                </Border.Background>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddOffer_Nav_Tapped" />
+                </Border.GestureRecognizers>
                 <Label Text="+"
-                       FontSize="28"
+                       FontSize="26"
                        FontAttributes="Bold"
                        TextColor="White"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center" />
-            </Frame>
+            </Border>
 
             <!-- Messages -->
-            <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="3">
+            <VerticalStackLayout Grid.Column="3"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Messages_Nav_Tapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Label Text="💬" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
-                <Label Text="Messages" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="&#xE0BF;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Messages"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
             <!-- Profil -->
-            <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" Spacing="3">
+            <VerticalStackLayout Grid.Column="4"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Profile_Nav_Tapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Label Text="👤" FontSize="20" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
-                <Label Text="Profil" FontSize="10" TextColor="#8B86A3" HorizontalTextAlignment="Center" />
+                <Label Text="&#xE7FD;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Profil"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
         </Grid>
+
 
     </Grid>
 </ContentPage>

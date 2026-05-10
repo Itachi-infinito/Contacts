@@ -23,8 +23,8 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons"); // ← ajouté
             });
-
         builder.Services.AddTransient<AuthService>();
         builder.Services.AddTransient<AccountCleanupRepository>();
         builder.Services.AddSingleton<AppShell>();
@@ -88,5 +88,7 @@ public static class MauiProgram
         var app = builder.Build();
         Services = app.Services;
         return app;
+
     }
+
 }

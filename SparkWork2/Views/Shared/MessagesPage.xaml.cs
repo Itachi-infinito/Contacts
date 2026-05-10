@@ -23,23 +23,16 @@ public partial class MessagesPage : ContentPage
         base.OnAppearing();
 
         UpdateHeader();
-        UpdateBottomNavigation();
 
         await LoadMessages();
     }
 
     private void UpdateHeader()
     {
-        lblHeaderInitials.Text = BuildInitials(_sessionService.CurrentUserName);
+        lblInitials.Text = BuildInitials(_sessionService.CurrentUserName);
     }
 
-    private void UpdateBottomNavigation()
-    {
-        bool isRecruiter = _sessionService.CurrentUserRole == "Recruiter";
 
-        recruiterBottomNav.IsVisible = isRecruiter;
-        candidateBottomNav.IsVisible = !isRecruiter;
-    }
 
     private async Task LoadMessages()
     {
@@ -186,4 +179,36 @@ public partial class MessagesPage : ContentPage
 
         return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
     }
+    private async void Home_Nav_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync($"//{nameof(RecruiterHomePage)}");
+        else
+            await Shell.Current.GoToAsync($"//{nameof(CandidateHomePage)}");
+    }
+
+    private async void Discover_Nav_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+        else
+            await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
+    }
+
+    private async void Add_Nav_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync(nameof(AddJobOfferPage));
+        else
+            await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
+    }
+
+    private async void Profile_Nav_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
+        else
+            await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
+    }
+
 }

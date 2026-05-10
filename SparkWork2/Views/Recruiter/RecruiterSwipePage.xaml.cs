@@ -182,6 +182,13 @@ public partial class RecruiterSwipePage : ContentPage
         lblNopeOverlay.Opacity = 0;
         lblSwipeHint.IsVisible = false;
         actionsGrid.IsVisible = false;
+        emptyStateIcon.Scale = 0;
+        emptyStateIcon.Opacity = 0;
+        _ = Task.WhenAll(
+            emptyStateIcon.ScaleTo(1.0, 500, Easing.SpringOut),
+            emptyStateIcon.FadeTo(1.0, 350));
+
+        StartEmptyCardAnimations();
     }
 
     private void ResetCardVisuals()
@@ -324,22 +331,32 @@ public partial class RecruiterSwipePage : ContentPage
 
     private async void Reject_Clicked(object sender, EventArgs e)
     {
-        if (_currentCandidate == null || _isAnimating) return;
-        lblNopeOverlay.Opacity = 1;
-        await AnimateCardOutAsync(false);
-        await PerformLikeAsync(true);
+        if (_currentCandidate == null || _isAnimating)
+            return;
 
+        lblLikeOverlay.Opacity = 0;
+        lblNopeOverlay.Opacity = 1;
+
+        await AnimateCardOutAsync(false);
         PerformReject();
     }
 
+
     private async void SuperLike_Clicked(object sender, EventArgs e)
     {
-        if (_currentCandidate == null || _isAnimating) return;
+        if (_currentCandidate == null || _isAnimating)
+            return;
+
         lblLikeOverlay.Opacity = 1;
+        lblNopeOverlay.Opacity = 0;
+
         await AnimateCardOutAsync(true);
+        await PerformLikeAsync(true);
     }
 
+
     private async void Reload_Clicked(object sender, EventArgs e) => await LoadCandidates();
+    private async void Reload_Tapped(object sender, TappedEventArgs e) => await LoadCandidates();
 
     // ── UI updaters ───────────────────────────────────────────────────────
 
@@ -382,7 +399,10 @@ public partial class RecruiterSwipePage : ContentPage
 
         if (!_sessionService.IsLoggedIn) return;
 
-        var offers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(_sessionService.CurrentUserId);
+        var offers = _selectedJobOffer != null
+            ? new List<JobOffer> { _selectedJobOffer }
+            : await _jobOfferRepository.GetJobOffersByRecruiterAsync(_sessionService.CurrentUserId);
+
 
         var nearest = offers
             .Where(o => _distanceService.CanCalculateDistance(candidate, o))
@@ -565,5 +585,42 @@ public partial class RecruiterSwipePage : ContentPage
         return parts.Length == 1
             ? parts[0][0].ToString().ToUpperInvariant()
             : $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
+    private void StartEmptyCardAnimations()
+    {
+        // Carte gauche : flottement vertical + légère rotation
+        _ = Task.Run(async () =>
+        {
+            while (true)
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    await Task.WhenAll(
+                        emptyCardLeft.TranslateTo(0, -5, 1200, Easing.SinInOut),
+                        emptyCardLeft.RotateTo(-11, 1200, Easing.SinInOut));
+                    await Task.WhenAll(
+                        emptyCardLeft.TranslateTo(0, 0, 1200, Easing.SinInOut),
+                        emptyCardLeft.RotateTo(-14, 1200, Easing.SinInOut));
+                });
+            }
+        });
+
+        // Carte droite : flottement décalé + légère rotation inverse
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(600); // décalage pour que les deux ne bougent pas en même temps
+            while (true)
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    await Task.WhenAll(
+                        emptyCardRight.TranslateTo(0, -5, 1400, Easing.SinInOut),
+                        emptyCardRight.RotateTo(15, 1400, Easing.SinInOut));
+                    await Task.WhenAll(
+                        emptyCardRight.TranslateTo(0, 0, 1400, Easing.SinInOut),
+                        emptyCardRight.RotateTo(12, 1400, Easing.SinInOut));
+                });
+            }
+        });
     }
 }

@@ -14,8 +14,8 @@
               Padding="24,28,24,16">
 
             <!-- HEADER -->
-            <Grid Grid.Row="0"
-                  ColumnDefinitions="*,Auto">
+            <Grid ColumnDefinitions="*,Auto"
+                 Padding="28,34,28,12">
 
                 <VerticalStackLayout Spacing="4">
                     <Label Text="Messages"
@@ -33,11 +33,8 @@
                        HeightRequest="52"
                        CornerRadius="26"
                        Padding="0"
-                       HasShadow="False">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Profile_Tapped" />
-                    </Frame.GestureRecognizers>
-
+                       HasShadow="False"
+                       VerticalOptions="Center">
                     <Frame.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                             <GradientStop Color="#7C4DFF" Offset="0.0" />
@@ -45,11 +42,11 @@
                         </LinearGradientBrush>
                     </Frame.Background>
 
-                    <Label x:Name="lblHeaderInitials"
-                           Text="ME"
+                    <Label x:Name="lblInitials"
+                           Text="M"
                            TextColor="White"
                            FontAttributes="Bold"
-                           FontSize="16"
+                           FontSize="18"
                            HorizontalTextAlignment="Center"
                            VerticalTextAlignment="Center" />
                 </Frame>
@@ -58,26 +55,27 @@
             <!-- SEARCH -->
             <Frame Grid.Row="1"
                    CornerRadius="18"
-                   Padding="14"
-                   BackgroundColor="White"
-                   BorderColor="#EEEAF8"
+                   Padding="16,12"
+                   Margin="28,0,28,0"
+                   BackgroundColor="#F8F6FF"
+                   BorderColor="#DED8F5"
                    HasShadow="False">
 
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="10">
-
-                    <Label Text="⌕"
-                           FontSize="18"
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="&#xE8B6;"
+                           FontFamily="MaterialIcons"
+                           FontSize="20"
                            TextColor="#8B86A3"
                            VerticalTextAlignment="Center" />
 
                     <Label Grid.Column="1"
                            Text="Rechercher une conversation..."
-                           FontSize="13"
+                           FontSize="14"
                            TextColor="#A6A0C0"
                            VerticalTextAlignment="Center" />
                 </Grid>
             </Frame>
+
 
             <!-- CONVERSATIONS -->
             <CollectionView Grid.Row="2"
@@ -261,96 +259,118 @@
             </CollectionView>
         </Grid>
 
-        <!-- CANDIDATE NAV -->
-        <Grid x:Name="candidateBottomNav"
-              Grid.Row="1"
-              BackgroundColor="White"
-              Padding="18,8,18,18"
-              ColumnDefinitions="*,*,*,*">
+        <Grid Grid.Row="1"
+                HeightRequest="78"
+                BackgroundColor="White"
+                Padding="4,8,4,10"
+                ColumnDefinitions="*,*,*,*,*">
 
-            <Button Text="Accueil"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Home_Clicked" />
+            <BoxView Grid.ColumnSpan="5"
+                     HeightRequest="0.5"
+                     Color="#E5E0F5"
+                     VerticalOptions="Start" />
 
-            <Button Grid.Column="1"
-                    Text="Découvrir"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Discover_Clicked" />
+            <VerticalStackLayout Grid.Column="0"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Home_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xE88A;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Accueil"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="2"
-                    Text="Messages"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#7C4DFF" />
+            <VerticalStackLayout Grid.Column="1"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Discover_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xE8B6;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Découvrir"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="3"
-                    Text="Profil"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Profile_Clicked" />
+            <Border Grid.Column="2"
+                    WidthRequest="46"
+                    HeightRequest="46"
+                    StrokeThickness="0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="23" />
+                </Border.StrokeShape>
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7C4DFF" Offset="0.0" />
+                        <GradientStop Color="#D34C88" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Add_Nav_Tapped" />
+                </Border.GestureRecognizers>
+                <Label Text="+"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Border>
+
+            <VerticalStackLayout Grid.Column="3"
+                         HorizontalOptions="Center"
+                         Spacing="2"
+                         VerticalOptions="Center">
+                <Label Text="&#xE0BF;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#7C4DFF"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Messages"
+                       FontSize="9"
+                       TextColor="#7C4DFF"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <BoxView HeightRequest="4"
+                         WidthRequest="4"
+                         Color="#7C4DFF"
+                         CornerRadius="2"
+                         HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="4"
+                                 HorizontalOptions="Center"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Profile_Nav_Tapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xE7FD;"
+                       FontFamily="MaterialIcons"
+                       FontSize="24"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Profil"
+                       FontSize="9"
+                       TextColor="#b0a8cc"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
         </Grid>
 
-        <!-- RECRUITER NAV -->
-        <Grid x:Name="recruiterBottomNav"
-              Grid.Row="1"
-              IsVisible="False"
-              BackgroundColor="White"
-              Padding="18,8,18,18"
-              ColumnDefinitions="*,*,Auto,*,*">
-
-            <Button Text="Accueil"
-                    Grid.Column="0"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Home_Clicked" />
-
-            <Button Grid.Column="1"
-                    Text="Découvrir"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Discover_Clicked" />
-
-            <Frame Grid.Column="2"
-                   WidthRequest="50"
-                   HeightRequest="50"
-                   CornerRadius="25"
-                   Padding="0"
-                   BackgroundColor="#7C4DFF"
-                   HasShadow="True"
-                   Margin="8,0">
-                <Frame.Shadow>
-                    <Shadow Brush="#557C4DFF"
-                            Offset="0,8"
-                            Radius="18" />
-                </Frame.Shadow>
-
-                <Button Text="+"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        BackgroundColor="Transparent"
-                        TextColor="White"
-                        Clicked="AddOffer_Clicked" />
-            </Frame>
-
-            <Button Grid.Column="3"
-                    Text="Messages"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#7C4DFF" />
-
-            <Button Grid.Column="4"
-                    Text="Profil"
-                    FontSize="11"
-                    BackgroundColor="Transparent"
-                    TextColor="#8B86A3"
-                    Clicked="Profile_Clicked" />
-        </Grid>
     </Grid>
 </ContentPage>
