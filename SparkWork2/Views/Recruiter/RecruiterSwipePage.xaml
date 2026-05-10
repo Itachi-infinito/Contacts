@@ -231,7 +231,11 @@
                                                FontSize="13"
                                                TextColor="#8581A6"
                                                VerticalTextAlignment="Center" />
-                                        <Grid Grid.Column="1" HeightRequest="6" VerticalOptions="Center">
+                                        <Grid Grid.Column="1"
+                                              WidthRequest="118"
+                                              HeightRequest="6"
+                                              VerticalOptions="Center">
+
                                             <Frame BackgroundColor="#EEEAF8"
                                                    CornerRadius="3"
                                                    Padding="0"

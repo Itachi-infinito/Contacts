@@ -263,7 +263,8 @@ public partial class RecruiterSwipePage : ContentPage
 
     // ── Like / Reject / SuperLike ────────────────────────────────────────
 
-    private async Task PerformLikeAsync()
+    private async Task PerformLikeAsync(bool isSuperLike = false)
+
     {
         if (_currentCandidate == null || !_sessionService.IsLoggedIn)
         {
@@ -273,9 +274,13 @@ public partial class RecruiterSwipePage : ContentPage
 
         var liked = _currentCandidate;
 
+
+
         await _recruiterCandidateLikeRepository.AddLikeAsync(
             _sessionService.CurrentUserId,
-            liked.CandidateId);
+            liked.CandidateId,
+            isSuperLike);
+
 
         var matchedOffer = await _candidateJobLikeRepository.GetFirstLikedOfferOfRecruiterAsync(
             liked.CandidateId,
@@ -322,6 +327,8 @@ public partial class RecruiterSwipePage : ContentPage
         if (_currentCandidate == null || _isAnimating) return;
         lblNopeOverlay.Opacity = 1;
         await AnimateCardOutAsync(false);
+        await PerformLikeAsync(true);
+
         PerformReject();
     }
 
@@ -330,7 +337,6 @@ public partial class RecruiterSwipePage : ContentPage
         if (_currentCandidate == null || _isAnimating) return;
         lblLikeOverlay.Opacity = 1;
         await AnimateCardOutAsync(true);
-        await PerformLikeAsync();
     }
 
     private async void Reload_Clicked(object sender, EventArgs e) => await LoadCandidates();
@@ -343,13 +349,16 @@ public partial class RecruiterSwipePage : ContentPage
         compatibilityProgressBar.WidthRequest = 0;
         lblDetailCompatibility.IsVisible = false;
 
-        if (!_sessionService.IsLoggedIn) return;
+        if (!_sessionService.IsLoggedIn)
+            return;
 
         var offers = _selectedJobOffer != null
-            ? new List<JobOffer> { _selectedJobOffer }
-            : await _jobOfferRepository.GetJobOffersByRecruiterAsync(_sessionService.CurrentUserId);
+                ? new List<JobOffer> { _selectedJobOffer }
+                : await _jobOfferRepository.GetJobOffersByRecruiterAsync(_sessionService.CurrentUserId);
 
-        if (!offers.Any()) return;
+
+        if (!offers.Any())
+            return;
 
         var best = offers
             .Select(o => new { Offer = o, Score = _compatibilityService.CalculateScore(candidate, o) })
@@ -358,17 +367,13 @@ public partial class RecruiterSwipePage : ContentPage
 
         compatibilityBadge.IsVisible = true;
         lblCompatibility.Text = $"{best.Score}%";
+        lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
         compatibilityProgressBar.WidthRequest = Math.Max(4, ProgressBarMaxWidth * best.Score / 100.0);
-
-        lblCompatibility.TextColor = best.Score >= 75
-            ? Color.FromArgb("#10B981")
-            : best.Score >= 45
-                ? Color.FromArgb("#7C4DFF")
-                : Color.FromArgb("#E11D48");
 
         lblDetailCompatibility.Text = $"Compatibilité : {best.Score}% avec « {best.Offer.Title} »";
         lblDetailCompatibility.IsVisible = true;
     }
+
 
     // Combines location + distance into one label "Nivelles · 12 km"
     private async Task UpdateDistanceAndLocation(CandidateProfile candidate)
