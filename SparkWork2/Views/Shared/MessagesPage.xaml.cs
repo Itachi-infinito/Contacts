@@ -39,10 +39,19 @@ public partial class MessagesPage : ContentPage
         if (!_sessionService.IsLoggedIn)
             return;
 
-        messagesCollection.ItemsSource = null;
-        messagesCollection.ItemsSource =
-            await _messageRepository.GetConversationsAsync(_sessionService.CurrentUserId);
+        var conversations = await _messageRepository.GetConversationsAsync(
+            _sessionService.CurrentUserId);
+
+        var conversationList = conversations.ToList();
+
+        messagesCollection.ItemsSource = conversationList;
+
+        bool hasConversations = conversationList.Any();
+
+        messagesCollection.IsVisible = hasConversations;
+        emptyStateLayout.IsVisible = !hasConversations;
     }
+
 
     private async Task OpenConversationAsync(ConversationItem selectedConversation)
     {
@@ -209,6 +218,13 @@ public partial class MessagesPage : ContentPage
             await Shell.Current.GoToAsync($"//{nameof(RecruiterProfilePage)}");
         else
             await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
+    }
+    private async void DiscoverCandidates_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));
+        else
+            await Shell.Current.GoToAsync(nameof(CandidateSwipePage));
     }
 
 }
