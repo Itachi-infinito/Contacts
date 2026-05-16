@@ -43,10 +43,11 @@ public partial class AddJobOfferPage : ContentPage
         RefreshRequiredSkillsLayout();
         RefreshNiceSkillsLayout();
 
+
         _selectedLatitude = 0;
         _selectedLongitude = 0;
         UpdateOfferCoordinatesLabel();
-
+        UpdateOfferCompletion();
 
     }
 
@@ -70,6 +71,10 @@ public partial class AddJobOfferPage : ContentPage
 
         RefreshRequiredSkillsLayout();
         RefreshNiceSkillsLayout();
+        lblHeaderInitials.Text = BuildInitials(_sessionService.CurrentUserName);
+
+        WireCompletionTracking();
+        UpdateOfferCompletion();
 
     }
 
@@ -140,21 +145,6 @@ public partial class AddJobOfferPage : ContentPage
         {
             await DisplayAlert("Erreur", "Le salaire minimum ne peut pas être supérieur au salaire maximum.", "OK");
             return;
-        }
-        if (_selectedLatitude == 0 && _selectedLongitude == 0)
-        {
-            string geocodingQuery = !string.IsNullOrWhiteSpace(address)
-                ? $"{address}, {location}"
-                : location;
-
-            var coordinates = await _geocodingService.GeocodeAsync(geocodingQuery);
-
-            if (coordinates != null)
-            {
-                _selectedLatitude = coordinates.Value.Latitude;
-                _selectedLongitude = coordinates.Value.Longitude;
-                UpdateOfferCoordinatesLabel();
-            }
         }
 
         if (_selectedLatitude == 0 && _selectedLongitude == 0)
@@ -280,6 +270,8 @@ public partial class AddJobOfferPage : ContentPage
         requiredSkillPicker.SelectedItem = null;
 
         RefreshRequiredSkillsLayout();
+        UpdateOfferCompletion();
+
     }
 
     private void AddNiceSkill_Clicked(object sender, EventArgs e)
@@ -295,6 +287,8 @@ public partial class AddJobOfferPage : ContentPage
         niceSkillPicker.SelectedItem = null;
 
         RefreshNiceSkillsLayout();
+        UpdateOfferCompletion();
+
     }
 
     private void RefreshRequiredSkillsLayout()
@@ -371,6 +365,8 @@ public partial class AddJobOfferPage : ContentPage
             string.Equals(x, skill, StringComparison.OrdinalIgnoreCase));
 
         RefreshRequiredSkillsLayout();
+        UpdateOfferCompletion();
+
     }
 
     private void RemoveNiceSkill(string? skill)
@@ -382,7 +378,83 @@ public partial class AddJobOfferPage : ContentPage
             string.Equals(x, skill, StringComparison.OrdinalIgnoreCase));
 
         RefreshNiceSkillsLayout();
+        UpdateOfferCompletion();
+
     }
 
+    private void WireCompletionTracking()
+    {
+        entryTitle.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryCompany.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryLocation.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryContractType.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryAddress.TextChanged += (_, _) => UpdateOfferCompletion();
+        entrySalaryMin.TextChanged += (_, _) => UpdateOfferCompletion();
+        entrySalaryMax.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryLevel.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryRemoteMode.TextChanged += (_, _) => UpdateOfferCompletion();
+        editorDescription.TextChanged += (_, _) => UpdateOfferCompletion();
+    }
+
+    private void UpdateOfferCompletion()
+    {
+        bool hasInfo =
+            !string.IsNullOrWhiteSpace(entryTitle.Text) &&
+            !string.IsNullOrWhiteSpace(entryCompany.Text) &&
+            !string.IsNullOrWhiteSpace(entryLocation.Text) &&
+            !string.IsNullOrWhiteSpace(entryContractType.Text);
+
+        bool hasSalary =
+            !string.IsNullOrWhiteSpace(entrySalaryMin.Text) ||
+            !string.IsNullOrWhiteSpace(entrySalaryMax.Text) ||
+            !string.IsNullOrWhiteSpace(entryLevel.Text) ||
+            !string.IsNullOrWhiteSpace(entryRemoteMode.Text);
+
+        bool hasSkills = _selectedRequiredSkills.Any() || _selectedNiceSkills.Any();
+
+        bool hasDescription =
+            !string.IsNullOrWhiteSpace(editorDescription.Text) &&
+            editorDescription.Text.Trim().Length >= 10;
+
+        int completed = 0;
+        if (hasInfo) completed++;
+        if (hasSalary) completed++;
+        if (hasSkills) completed++;
+        if (hasDescription) completed++;
+
+        int percent = (int)Math.Round(completed * 100.0 / 4);
+
+        lblOfferCompletionPercent.Text = $"{percent}%";
+        offerCompletionProgress.Progress = percent / 100.0;
+
+        SetStepState(infoStepBar, lblInfoStep, hasInfo);
+        SetStepState(salaryStepBar, lblSalaryStep, hasSalary);
+        SetStepState(skillsStepBar, lblSkillsStep, hasSkills);
+        SetStepState(descriptionStepBar, lblDescriptionStep, hasDescription);
+    }
+
+    private void SetStepState(BoxView bar, Label label, bool isDone)
+    {
+        bar.Color = isDone
+            ? Color.FromArgb("#7C4DFF")
+            : Color.FromArgb("#DDD7F2");
+
+        label.TextColor = isDone
+            ? Color.FromArgb("#7C4DFF")
+            : Color.FromArgb("#B0ABCE");
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "AL";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
 
 }

@@ -4,175 +4,198 @@
              x:Class="SparkWork2.Views.Recruiter.EditJobOfferPage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#F7F5FC">
+             BackgroundColor="#F8F6FF">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="32,34,32,24" Spacing="16">
 
-        <!-- HEADER -->
-        <Grid Grid.Row="0"
-              BackgroundColor="White"
-              Padding="18,24,24,0"
-              RowDefinitions="Auto,Auto"
-              ColumnDefinitions="Auto,*,Auto">
+                <!-- HEADER -->
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                    <Button Text="‹"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            FontSize="30"
+                            Padding="0"
+                            BackgroundColor="White"
+                            BorderColor="#DED8F5"
+                            BorderWidth="1"
+                            TextColor="#7C4DFF"
+                            CornerRadius="22"
+                            Clicked="Cancel_Clicked" />
 
-            <Button Grid.Column="0"
-                    Text="‹"
-                    FontSize="34"
-                    Padding="0"
-                    HeightRequest="44"
-                    WidthRequest="44"
-                    BackgroundColor="Transparent"
-                    TextColor="#111827"
-                    Clicked="Cancel_Clicked" />
-
-            <Label Grid.Column="1"
-                   Text="Modifier l'offre"
-                   FontSize="22"
-                   FontAttributes="Bold"
-                   TextColor="#111827"
-                   HorizontalTextAlignment="Center"
-                   VerticalTextAlignment="Center" />
-
-            <Frame Grid.Column="2"
-                   HeightRequest="46"
-                   WidthRequest="46"
-                   CornerRadius="23"
-                   Padding="0"
-                   HasShadow="False"
-                   VerticalOptions="Center">
-                <Frame.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#7C4DFF" Offset="0.0" />
-                        <GradientStop Color="#D34C88" Offset="1.0" />
-                    </LinearGradientBrush>
-                </Frame.Background>
-
-                <Label Text="AL"
-                       TextColor="White"
-                       FontAttributes="Bold"
-                       FontSize="15"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Frame>
-
-            <Grid Grid.Row="1"
-                  Grid.ColumnSpan="3"
-                  ColumnDefinitions="*,*,*"
-                  Margin="0,22,0,0"
-                  HeightRequest="42">
-
-                <Label Text="DÉCOUVRIR"
-                       Grid.Column="0"
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-
-                <Label Text="MESSAGES"
-                       Grid.Column="1"
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-
-                <Label Text="STATS"
-                       Grid.Column="2"
-                       FontSize="14"
-                       TextColor="#8B86A3"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Grid>
-        </Grid>
-
-        <!-- CONTENT -->
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="20,24,20,28"
-                                 Spacing="16">
-
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="MODIFIER L'OPPORTUNITÉ"
-                           FontSize="16"
+                    <Label Grid.Column="1"
+                           Text="Modifier l'offre"
+                           FontSize="26"
                            FontAttributes="Bold"
-                           TextColor="#8581A6" />
+                           TextColor="#111827"
+                           VerticalTextAlignment="Center" />
 
-                    <Label Text="Les modifications seront visibles par les candidats."
-                           FontSize="13"
-                           TextColor="#8B86A3" />
-                </VerticalStackLayout>
+                    <Frame Grid.Column="2"
+                           WidthRequest="54"
+                           HeightRequest="54"
+                           CornerRadius="27"
+                           Padding="0"
+                           HasShadow="False">
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
 
+                        <Label x:Name="lblHeaderInitials"
+                               Text="AL"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="17"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
+
+                <!-- BANNER -->
                 <Frame CornerRadius="24"
+                       Padding="20"
+                       HasShadow="False">
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7C4DFF" Offset="0.0" />
+                            <GradientStop Color="#D34C88" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                        <Frame WidthRequest="54"
+                               HeightRequest="54"
+                               CornerRadius="16"
+                               Padding="0"
+                               BackgroundColor="#30FFFFFF"
+                               HasShadow="False">
+                            <Label Text="&#xE3C9;"
+                                   FontFamily="MaterialIcons"
+                                   FontSize="30"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
+                        </Frame>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="3">
+                            <Label Text="Modifier l'opportunité"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                            <Label Text="Les modifications seront visibles par les candidats"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8EFFF"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Frame Grid.Column="2"
+                               CornerRadius="14"
+                               Padding="12,5"
+                               BackgroundColor="#30FFFFFF"
+                               HasShadow="False"
+                               VerticalOptions="Center">
+                            <Label Text="• Actif"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                        </Frame>
+                    </Grid>
+                </Frame>
+
+                <!-- COMPLETION -->
+                <Frame CornerRadius="20"
                        Padding="18"
                        BackgroundColor="White"
-                       BorderColor="#EEEAF8"
+                       BorderColor="#DED8F5"
                        HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Complétion de l'offre"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+                            <Label x:Name="lblOfferCompletionPercent"
+                                   Grid.Column="1"
+                                   Text="80%"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DFF" />
+                        </Grid>
 
+                        <Label x:Name="lblCompletionHint"
+                               Text="Ajoutez une description pour atteindre 100%"
+                               FontSize="13"
+                               TextColor="#8B86A3" />
+
+                        <ProgressBar x:Name="offerCompletionProgress"
+                                     Progress="0.8"
+                                     ProgressColor="#D34C88"
+                                     BackgroundColor="#EEEAF8"
+                                     HeightRequest="6" />
+
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                            <VerticalStackLayout Spacing="5">
+                                <BoxView x:Name="infoStepBar" HeightRequest="4" Color="#D34C88" CornerRadius="2" />
+                                <Label x:Name="lblInfoStep" Text="Infos" FontSize="11" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <BoxView x:Name="salaryStepBar" HeightRequest="4" Color="#D34C88" CornerRadius="2" />
+                                <Label x:Name="lblSalaryStep" Text="Salaire" FontSize="11" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="2" Spacing="5">
+                                <BoxView x:Name="skillsStepBar" HeightRequest="4" Color="#D34C88" CornerRadius="2" />
+                                <Label x:Name="lblSkillsStep" Text="Compétences" FontSize="11" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="3" Spacing="5">
+                                <BoxView x:Name="descriptionStepBar" HeightRequest="4" Color="#DDD7F2" CornerRadius="2" />
+                                <Label x:Name="lblDescriptionStep" Text="Description" FontSize="11" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- INFOS -->
+                <Frame CornerRadius="24" Padding="20" BackgroundColor="White" BorderColor="#DED8F5" HasShadow="False">
                     <VerticalStackLayout Spacing="16">
 
-                        <Label Text="Informations principales"
-                               FontSize="17"
-                               FontAttributes="Bold"
-                               TextColor="#111827" />
+                        <HorizontalStackLayout Spacing="12">
+                            <Frame WidthRequest="44" HeightRequest="44" CornerRadius="12" Padding="0" BackgroundColor="#F0EAFE" HasShadow="False">
+                                <Label Text="&#xE8F9;" FontFamily="MaterialIcons" FontSize="24" TextColor="#7C4DFF" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Frame>
+                            <Label Text="Informations principales" FontSize="20" FontAttributes="Bold" TextColor="#111827" VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
 
                         <VerticalStackLayout Spacing="7">
-                            <Label Text="Titre du poste"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryTitle"
-                                       Placeholder="Ex: Développeur junior"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
+                            <Label Text="TITRE DU POSTE" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                <Entry x:Name="entryTitle" Placeholder="Ex: Développeur junior" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="7">
-                            <Label Text="Entreprise"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryCompany"
-                                       Placeholder="Ex: Thales"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
+                            <Label Text="ENTREPRISE" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                <Entry x:Name="entryCompany" Placeholder="Ex: Thales" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="7">
-                            <Label Text="Localisation"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryLocation"
-                                       Placeholder="Ex: Bruxelles"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
+                            <Label Text="LOCALISATION" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                <Entry x:Name="entryLocation" Placeholder="Ex: Bruxelles" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
 
                         <Button x:Name="btnUseOfferLocation"
                                 Text="Utiliser ma position pour cette offre"
-                                HeightRequest="46"
+                                HeightRequest="48"
                                 BackgroundColor="#F0EAFE"
                                 TextColor="#7C4DFF"
                                 FontAttributes="Bold"
@@ -185,291 +208,190 @@
                                TextColor="#8B86A3"
                                HorizontalTextAlignment="Center" />
 
-                        <VerticalStackLayout Spacing="7">
-                            <Label Text="Type de contrat"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryContractType"
-                                       Placeholder="Ex: Full-time, CDI, Stage"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
-                            </Frame>
-                        </VerticalStackLayout>
-
-                        <!-- Address -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Adresse"
-                                   FontSize="14"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryAddress"
-                                       Placeholder="Ex: Avenue Louise 100"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
-                            </Frame>
-                        </VerticalStackLayout>
-
-                        <!-- Salary -->
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            <VerticalStackLayout Spacing="6">
-                                <Label Text="Salaire min"
-                                       FontSize="14"
-                                       FontAttributes="Bold"
-                                       TextColor="#8581A6" />
-
-                                <Frame BackgroundColor="#FAF9FF"
-                                       BorderColor="#EEEAF8"
-                                       CornerRadius="14"
-                                       Padding="14,4"
-                                       HasShadow="False">
-                                    <Entry x:Name="entrySalaryMin"
-                                           Placeholder="Ex: 2800"
-                                           Keyboard="Numeric"
-                                           PlaceholderColor="#A6A0C0"
-                                           TextColor="#111827"
-                                           BackgroundColor="Transparent" />
+                            <VerticalStackLayout Spacing="7">
+                                <Label Text="TYPE DE CONTRAT" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                                <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                    <Entry x:Name="entryContractType" Placeholder="Ex: CDI, Stage" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                                 </Frame>
                             </VerticalStackLayout>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="6">
-                                <Label Text="Salaire max"
-                                       FontSize="14"
-                                       FontAttributes="Bold"
-                                       TextColor="#8581A6" />
-
-                                <Frame BackgroundColor="#FAF9FF"
-                                       BorderColor="#EEEAF8"
-                                       CornerRadius="14"
-                                       Padding="14,4"
-                                       HasShadow="False">
-                                    <Entry x:Name="entrySalaryMax"
-                                           Placeholder="Ex: 3800"
-                                           Keyboard="Numeric"
-                                           PlaceholderColor="#A6A0C0"
-                                           TextColor="#111827"
-                                           BackgroundColor="Transparent" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="7">
+                                <Label Text="MODE DE TRAVAIL" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                                <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                    <Entry x:Name="entryRemoteMode" Placeholder="Ex: Hybride" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                                 </Frame>
                             </VerticalStackLayout>
                         </Grid>
 
-                        <!-- Level -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Niveau recherché"
-                                   FontSize="14"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryLevel"
-                                       Placeholder="Ex: Junior, Medior, Senior"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="ADRESSE COMPLÈTE" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                <Entry x:Name="entryAddress" Placeholder="Ex: Avenue Louise 100" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                             </Frame>
                         </VerticalStackLayout>
-
-                        <!-- Remote mode -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Mode de travail"
-                                   FontSize="14"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Frame BackgroundColor="#FAF9FF"
-                                   BorderColor="#EEEAF8"
-                                   CornerRadius="14"
-                                   Padding="14,4"
-                                   HasShadow="False">
-                                <Entry x:Name="entryRemoteMode"
-                                       Placeholder="Ex: Sur site, Hybride, Remote"
-                                       PlaceholderColor="#A6A0C0"
-                                       TextColor="#111827"
-                                       BackgroundColor="Transparent" />
-                            </Frame>
-                        </VerticalStackLayout>
-
                     </VerticalStackLayout>
                 </Frame>
-                <Frame CornerRadius="24"
-                        Padding="18"
-                        BackgroundColor="White"
-                        BorderColor="#EEEAF8"
-                        HasShadow="False">
 
+                <!-- SALAIRE -->
+                <Frame CornerRadius="24" Padding="20" BackgroundColor="White" BorderColor="#DED8F5" HasShadow="False">
                     <VerticalStackLayout Spacing="16">
-                        <Label Text="Compétences"
-                               FontSize="17"
-                               FontAttributes="Bold"
-                               TextColor="#111827" />
+                        <HorizontalStackLayout Spacing="12">
+                            <Frame WidthRequest="44" HeightRequest="44" CornerRadius="12" Padding="0" BackgroundColor="#FCE7F3" HasShadow="False">
+                                <Label Text="$" FontSize="24" TextColor="#D34C88" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Frame>
+                            <Label Text="Salaire &amp; Niveau" FontSize="20" FontAttributes="Bold" TextColor="#111827" VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
 
-                        <VerticalStackLayout Spacing="10">
-                            <Label Text="Compétences obligatoires"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Grid ColumnDefinitions="*,Auto"
-                                  ColumnSpacing="8">
-
-                                <Frame BackgroundColor="#FAF9FF"
-                                       BorderColor="#EEEAF8"
-                                       CornerRadius="14"
-                                       Padding="10,0"
-                                       HasShadow="False">
-
-                                    <Picker x:Name="requiredSkillPicker"
-                                            Title="Choisir une compétence"
-                                            TextColor="#111827"
-                                            TitleColor="#A6A0C0" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="7">
+                                <Label Text="SALAIRE MIN" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                                <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                    <Entry x:Name="entrySalaryMin" Placeholder="Ex: 1500" Keyboard="Numeric" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                                 </Frame>
+                            </VerticalStackLayout>
 
-                                <Button Grid.Column="1"
-                                        Text="+"
-                                        WidthRequest="46"
-                                        HeightRequest="46"
-                                        BackgroundColor="#7C4DFF"
-                                        TextColor="White"
-                                        FontAttributes="Bold"
-                                        CornerRadius="14"
-                                        Clicked="AddRequiredSkill_Clicked" />
-                            </Grid>
-
-                            <FlexLayout x:Name="selectedRequiredSkillsLayout"
-                                        Direction="Row"
-                                        Wrap="Wrap"
-                                        AlignItems="Center"
-                                        JustifyContent="Start" />
-
-                            <Label x:Name="lblRequiredSkillsEmpty"
-                                   Text="Aucune compétence obligatoire sélectionnée."
-                                   FontSize="12"
-                                   TextColor="#8B86A3" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Spacing="10">
-                            <Label Text="Compétences bonus"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#8581A6" />
-
-                            <Grid ColumnDefinitions="*,Auto"
-                                  ColumnSpacing="8">
-
-                                <Frame BackgroundColor="#FAF9FF"
-                                        BorderColor="#EEEAF8"
-                                        CornerRadius="14"
-                                        Padding="10,0"
-                                        HasShadow="False">
-
-                                    <Picker x:Name="niceSkillPicker"
-                                            Title="Choisir une compétence"
-                                            TextColor="#111827"
-                                            TitleColor="#A6A0C0" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="7">
+                                <Label Text="SALAIRE MAX" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                                <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                    <Entry x:Name="entrySalaryMax" Placeholder="Ex: 2500" Keyboard="Numeric" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
                                 </Frame>
+                            </VerticalStackLayout>
+                        </Grid>
 
-                                <Button Grid.Column="1"
-                                        Text="+"
-                                        WidthRequest="46"
-                                        HeightRequest="46"
-                                        BackgroundColor="#7C4DFF"
-                                        TextColor="White"
-                                        FontAttributes="Bold"
-                                        CornerRadius="14"
-                                        Clicked="AddNiceSkill_Clicked" />
-                            </Grid>
-
-                            <FlexLayout x:Name="selectedNiceSkillsLayout"
-                                        Direction="Row"
-                                        Wrap="Wrap"
-                                        AlignItems="Center"
-                                        JustifyContent="Start" />
-
-                            <Label x:Name="lblNiceSkillsEmpty"
-                                   Text="Aucune compétence bonus sélectionnée."
-                                   FontSize="12"
-                                   TextColor="#8B86A3" />
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="NIVEAU RECHERCHÉ" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,4" HasShadow="False">
+                                <Entry x:Name="entryLevel" Placeholder="Ex: Junior" PlaceholderColor="#A6A0C0" TextColor="#111827" BackgroundColor="Transparent" />
+                            </Frame>
                         </VerticalStackLayout>
-
-
-                        <Label Text="Les compétences viennent du catalogue horeca."
-                               FontSize="12"
-                               TextColor="#8B86A3" />
-
                     </VerticalStackLayout>
                 </Frame>
 
+                <!-- COMPÉTENCES -->
+                <Frame CornerRadius="24" Padding="20" BackgroundColor="White" BorderColor="#DED8F5" HasShadow="False">
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="12">
+                            <Frame WidthRequest="44" HeightRequest="44" CornerRadius="12" Padding="0" BackgroundColor="#DCFCE7" HasShadow="False">
+                                <Label Text="✓" FontSize="24" TextColor="#16A34A" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Frame>
+                            <Label Text="Compétences" FontSize="20" FontAttributes="Bold" TextColor="#111827" VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
 
-                <Frame CornerRadius="24"
-                       Padding="18"
-                       BackgroundColor="White"
-                       BorderColor="#EEEAF8"
-                       HasShadow="False">
+                        <Label Text="COMPÉTENCES OBLIGATOIRES" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
 
-                    <VerticalStackLayout Spacing="12">
-                        <Label Text="Description"
-                               FontSize="17"
-                               FontAttributes="Bold"
-                               TextColor="#111827" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#DED8F5" CornerRadius="14" Padding="10,0" HasShadow="False">
+                                <Picker x:Name="requiredSkillPicker" Title="Choisir une compétence" TextColor="#111827" TitleColor="#A6A0C0" />
+                            </Frame>
 
-                        <Frame BackgroundColor="#FAF9FF"
-                               BorderColor="#EEEAF8"
-                               CornerRadius="14"
-                               Padding="14,10"
-                               HasShadow="False">
+                            <Button Grid.Column="1" Text="+" WidthRequest="50" HeightRequest="50" BackgroundColor="#7C4DFF" TextColor="White" FontAttributes="Bold" FontSize="22" CornerRadius="16" Clicked="AddRequiredSkill_Clicked" />
+                        </Grid>
+
+                        <FlexLayout x:Name="selectedRequiredSkillsLayout" Direction="Row" Wrap="Wrap" AlignItems="Center" JustifyContent="Start" />
+
+                        <Label x:Name="lblRequiredSkillsEmpty" Text="Aucune compétence obligatoire sélectionnée." FontSize="12" TextColor="#8B86A3" />
+
+                        <Label Text="COMPÉTENCES BONUS" FontSize="13" FontAttributes="Bold" TextColor="#8581A6" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Frame BackgroundColor="#FAF9FF" BorderColor="#DED8F5" CornerRadius="14" Padding="10,0" HasShadow="False">
+                                <Picker x:Name="niceSkillPicker" Title="Choisir une compétence" TextColor="#111827" TitleColor="#A6A0C0" />
+                            </Frame>
+
+                            <Button Grid.Column="1" Text="+" WidthRequest="50" HeightRequest="50" BackgroundColor="#D8CFF7" TextColor="#7C4DFF" FontAttributes="Bold" FontSize="22" CornerRadius="16" Clicked="AddNiceSkill_Clicked" />
+                        </Grid>
+
+                        <FlexLayout x:Name="selectedNiceSkillsLayout" Direction="Row" Wrap="Wrap" AlignItems="Center" JustifyContent="Start" />
+
+                        <Label x:Name="lblNiceSkillsEmpty" Text="Aucune compétence bonus sélectionnée." FontSize="12" TextColor="#8B86A3" />
+
+                        <Label Text="Les compétences viennent du catalogue horeca." FontSize="12" TextColor="#8B86A3" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- DESCRIPTION -->
+                <Frame CornerRadius="24" Padding="20" BackgroundColor="White" BorderColor="#DED8F5" HasShadow="False">
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                            <Frame WidthRequest="44" HeightRequest="44" CornerRadius="12" Padding="0" BackgroundColor="#FEF3C7" HasShadow="False">
+                                <Label Text="&#xE873;" FontFamily="MaterialIcons" FontSize="24" TextColor="#D97706" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Frame>
+
+                            <Label Grid.Column="1" Text="Description" FontSize="20" FontAttributes="Bold" TextColor="#111827" VerticalTextAlignment="Center" />
+
+                            <Frame x:Name="descriptionStatusBadge" Grid.Column="2" CornerRadius="12" Padding="10,4" BackgroundColor="#FEF3C7" HasShadow="False">
+                                <Label Text="À compléter" FontSize="12" FontAttributes="Bold" TextColor="#D97706" />
+                            </Frame>
+                        </Grid>
+
+                        <Frame BackgroundColor="#FAF9FF" BorderColor="#CFC4FF" CornerRadius="14" Padding="14,10" HasShadow="False">
                             <Editor x:Name="editorDescription"
                                     Placeholder="Décris le rôle, les missions, les attentes et le profil recherché."
                                     PlaceholderColor="#A6A0C0"
                                     TextColor="#111827"
                                     BackgroundColor="Transparent"
                                     AutoSize="TextChanges"
-                                    HeightRequest="150" />
+                                    HeightRequest="130" />
                         </Frame>
                     </VerticalStackLayout>
                 </Frame>
 
-                <Grid ColumnDefinitions="*,*"
-                      ColumnSpacing="12"
-                      Margin="0,4,0,0">
+                <!-- CONSEIL -->
+                <Frame CornerRadius="22" Padding="20" BackgroundColor="#F7EFFF" BorderColor="#D8B4FE" HasShadow="False">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Frame WidthRequest="44" HeightRequest="44" CornerRadius="14" Padding="0" BackgroundColor="White" HasShadow="False">
+                            <Label Text="💡" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Frame>
 
-                    <Button Grid.Column="0"
-                            Text="Annuler"
-                            HeightRequest="52"
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Conseil" FontSize="16" FontAttributes="Bold" TextColor="#111827" />
+                            <Label Text="Complétez la description pour atteindre 100% et maximiser vos matchs avec les bons candidats."
+                                   FontSize="15"
+                                   TextColor="#5F4ACB"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <!-- ACTIONS -->
+                <Grid ColumnDefinitions="*,1.35*" ColumnSpacing="12" Margin="0,4,0,0">
+                    <Button Text="Annuler"
+                            HeightRequest="58"
                             BackgroundColor="White"
                             BorderColor="#DED8F5"
                             BorderWidth="1"
-                            TextColor="#111827"
+                            TextColor="#8B86A3"
                             FontAttributes="Bold"
-                            CornerRadius="14"
+                            FontSize="16"
+                            CornerRadius="29"
                             Clicked="Cancel_Clicked" />
 
-                    <Button Grid.Column="1"
-                            Text="Enregistrer"
-                            HeightRequest="52"
-                            BackgroundColor="#7C4DFF"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="14"
-                            Clicked="Update_Clicked" />
+                    <Frame Grid.Column="1"
+                           HeightRequest="58"
+                           CornerRadius="29"
+                           Padding="0"
+                           HasShadow="True">
+                        <Frame.Shadow>
+                            <Shadow Brush="#307C4DFF" Offset="0,10" Radius="18" Opacity="1" />
+                        </Frame.Shadow>
+
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0.0" />
+                                <GradientStop Color="#D34C88" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+
+                        <Grid>
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label Text="&#xE161;" FontFamily="MaterialIcons" FontSize="22" TextColor="White" />
+                                <Label Text="Enregistrer" FontSize="17" FontAttributes="Bold" TextColor="White" />
+                            </HorizontalStackLayout>
+
+                            <Button BackgroundColor="Transparent" Text="" Clicked="Update_Clicked" />
+                        </Grid>
+                    </Frame>
                 </Grid>
 
             </VerticalStackLayout>

@@ -25,6 +25,14 @@ public partial class MessagesPage : ContentPage
         UpdateHeader();
 
         await LoadMessages();
+        bool isRecruiter = string.Equals(
+    _sessionService.CurrentUserRole,
+    "Recruiter",
+    StringComparison.OrdinalIgnoreCase);
+
+        candidateBottomNav.IsVisible = !isRecruiter;
+        recruiterBottomNav.IsVisible = isRecruiter;
+
     }
 
     private void UpdateHeader()
@@ -219,7 +227,8 @@ public partial class MessagesPage : ContentPage
         else
             await Shell.Current.GoToAsync($"//{nameof(CandidateProfilePage)}");
     }
-    private async void DiscoverCandidates_Tapped(object sender, TappedEventArgs e)
+    
+    private async void DiscoverCandidates_Clicked(object sender, EventArgs e)
     {
         if (_sessionService.CurrentUserRole == "Recruiter")
             await Shell.Current.GoToAsync(nameof(RecruiterSwipePage));

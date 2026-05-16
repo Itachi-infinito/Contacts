@@ -32,12 +32,14 @@ public partial class SettingsPage : ContentPage
         base.OnAppearing();
 
         lblCurrentUser.Text = _sessionService.CurrentUserName;
-        lblCurrentRole.Text = FormatRole(_sessionService.CurrentUserRole);
+        lblCurrentRole.Text = $"{FormatRole(_sessionService.CurrentUserRole)} · Actif";
+        lblCurrentEmail.Text = _sessionService.CurrentUserEmail;
 
         var initials = BuildInitials(_sessionService.CurrentUserName);
         lblHeaderInitials.Text = initials;
         lblAccountInitials.Text = initials;
     }
+
 
     private static string FormatRole(string role)
     {
@@ -123,4 +125,12 @@ public partial class SettingsPage : ContentPage
 await _appShell.GoToAsync($"//{nameof(WelcomePage)}");
 
     }
+    private async void EditProfile_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_sessionService.CurrentUserRole == "Recruiter")
+            await Shell.Current.GoToAsync(nameof(EditRecruiterProfilePage));
+        else
+            await Shell.Current.GoToAsync(nameof(EditCandidateProfilePage));
+    }
+
 }

@@ -59,6 +59,8 @@ public partial class CandidateSwipePage : ContentPage
     {
         base.OnAppearing();
 
+        lblHeaderInitials.Text = BuildInitials(_sessionService.CurrentUserName);
+
         try
         {
             await LoadJobOffers();
@@ -69,6 +71,7 @@ public partial class CandidateSwipePage : ContentPage
             await DisplayAlert("Erreur", ex.Message, "OK");
         }
     }
+
 
 
 
@@ -87,14 +90,13 @@ public partial class CandidateSwipePage : ContentPage
 
         var likedJobOfferIds = likedOffers
             .Select(x => x.JobOfferId)
-            .ToList();
+            .ToHashSet();
 
         _jobOffers = allOffers
             .Where(offer => !likedJobOfferIds.Contains(offer.JobOfferId))
             .ToList();
 
-        if (_candidateProfile.MaxDistanceKm > 0 &&
-            _candidateProfile.Latitude != 0)
+        if (_candidateProfile.MaxDistanceKm > 0 && _candidateProfile.Latitude != 0)
         {
             _jobOffers = _jobOffers
                 .Where(offer =>
@@ -104,9 +106,18 @@ public partial class CandidateSwipePage : ContentPage
                 .ToList();
         }
 
+        _jobOffers = _jobOffers
+            .OrderByDescending(offer => _compatibilityService.CalculateScore(_candidateProfile, offer))
+            .ThenBy(offer =>
+                _distanceService.CanCalculateDistance(_candidateProfile, offer)
+                    ? _distanceService.CalculateDistanceKm(_candidateProfile, offer)
+                    : double.MaxValue)
+            .ToList();
+
         _currentIndex = 0;
         ShowCurrentJobOffer();
     }
+
 
 
     private void ShowCurrentJobOffer()
@@ -220,8 +231,8 @@ public partial class CandidateSwipePage : ContentPage
         jobCard.TranslationX = 0;
         jobCard.TranslationY = 0;
         jobCard.Rotation = 0;
-        lblLikeOverlay.Opacity = 0;
-        lblNopeOverlay.Opacity = 0;
+        likeOverlayFrame.Opacity = 0;
+        nopeOverlayFrame.Opacity = 0;
     }
 
     private void ResetExpandedState()
@@ -284,13 +295,13 @@ public partial class CandidateSwipePage : ContentPage
 
                 if (e.TotalX > 0)
                 {
-                    lblLikeOverlay.Opacity = Math.Min(Math.Abs(e.TotalX) / 120.0, 1);
-                    lblNopeOverlay.Opacity = 0;
+                    likeOverlayFrame.Opacity = Math.Min(Math.Abs(e.TotalX) / 120.0, 1);
+                    nopeOverlayFrame.Opacity = 0;
                 }
                 else
                 {
-                    lblNopeOverlay.Opacity = Math.Min(Math.Abs(e.TotalX) / 120.0, 1);
-                    lblLikeOverlay.Opacity = 0;
+                    nopeOverlayFrame.Opacity = Math.Min(Math.Abs(e.TotalX) / 120.0, 1);
+                    likeOverlayFrame.Opacity = 0;
                 }
                 break;
 
@@ -317,8 +328,8 @@ public partial class CandidateSwipePage : ContentPage
         {
             await jobCard.TranslateTo(0, 0, 180, Easing.SpringOut);
             await jobCard.RotateTo(0, 180, Easing.SpringOut);
-            lblLikeOverlay.Opacity = 0;
-            lblNopeOverlay.Opacity = 0;
+            likeOverlayFrame.Opacity = 0;
+            nopeOverlayFrame.Opacity= 0;
         }
     }
 
@@ -381,7 +392,7 @@ public partial class CandidateSwipePage : ContentPage
         if (_currentJobOffer == null)
             return;
 
-        lblLikeOverlay.Opacity = 1;
+        likeOverlayFrame.Opacity= 1;
         await AnimateCardOutAsync(true);
         await PerformLikeAsync();
     }
@@ -391,7 +402,7 @@ public partial class CandidateSwipePage : ContentPage
         if (_currentJobOffer == null)
             return;
 
-        lblNopeOverlay.Opacity = 1;
+        nopeOverlayFrame.Opacity = 1;
         await AnimateCardOutAsync(false);
         PerformReject();
     }
@@ -470,44 +481,36 @@ public partial class CandidateSwipePage : ContentPage
                 return;
             }
 
-            int score = _compatibilityService.CalculateScore(_candidateProfile, currentOffer);
+            int score = Math.Clamp(
+                _compatibilityService.CalculateScore(_candidateProfile, currentOffer),
+                0,
+                100);
 
             compatibilityBadge.IsVisible = true;
-            lblCompatibility.Text = $"Compatibilité {score}%";
-            compatibilityProgressBar.WidthRequest = Math.Max(6, 78 * score / 100.0);
+            compatibilityBadge.BackgroundColor = Colors.White;
+            lblCompatibility.Text = $"● Compatibilité {score}%";
+            lblCompatibility.TextColor = score >= 75
+                ? Color.FromArgb("#059669")
+                : Color.FromArgb("#7C4DFF");
+
+            compatibilityProgressBar.WidthRequest = Math.Max(8, 78 * score / 100.0);
 
             matchTipCard.IsVisible = true;
             lblMatchTip.Text = score >= 75
                 ? "Votre profil correspond très bien à cette offre."
                 : score >= 45
-                    ? "Cette offre peut vous correspondre, surtout si vous complétez vos compétences."
+                    ? "Complétez vos compétences pour augmenter vos chances avec cette offre."
                     : "Cette offre est moins proche de votre profil actuel.";
-
-            if (score >= 75)
-            {
-                compatibilityBadge.BackgroundColor = Color.FromArgb("#ECFDF5");
-                lblCompatibility.TextColor = Color.FromArgb("#10B981");
-            }
-            else if (score >= 45)
-            {
-                compatibilityBadge.BackgroundColor = Color.FromArgb("#F0EAFE");
-                lblCompatibility.TextColor = Color.FromArgb("#7C4DFF");
-            }
-            else
-            {
-                compatibilityBadge.BackgroundColor = Color.FromArgb("#FFF1F2");
-                lblCompatibility.TextColor = Color.FromArgb("#E11D48");
-            }
         }
-        catch (Exception ex)
+        catch
         {
             compatibilityBadge.IsVisible = false;
             matchTipCard.IsVisible = false;
             compatibilityProgressBar.WidthRequest = 0;
-            System.Diagnostics.Debug.WriteLine($"Compatibility error: {ex}");
-
         }
     }
+
+
 
 
     private void UpdateDistanceLabel(JobOffer currentOffer)

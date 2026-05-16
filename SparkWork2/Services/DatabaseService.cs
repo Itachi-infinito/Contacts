@@ -65,6 +65,13 @@ public class DatabaseService
         await AddColumnIfMissing("CandidateProfile", "ExperienceCompany2", "TEXT DEFAULT ''");
         await AddColumnIfMissing("CandidateProfile", "ExperiencePeriod2", "TEXT DEFAULT ''");
         await AddColumnIfMissing("RecruiterCandidateLike", "IsSuperLike", "INTEGER DEFAULT 0");
+        await AddColumnIfMissing("RecruiterProfile", "Website", "TEXT");
+        await AddColumnIfMissing("RecruiterProfile", "Address", "TEXT");
+        await AddColumnIfMissing("RecruiterProfile", "Phone", "TEXT");
+        await AddColumnIfMissing("RecruiterProfile", "IsProfileVisible", "INTEGER DEFAULT 1");
+        await AddColumnIfMissing("RecruiterProfile", "ShowSector", "INTEGER DEFAULT 1");
+        await AddColumnIfMissing("RecruiterProfile", "ShowLocation", "INTEGER DEFAULT 0");
+
 
 
 

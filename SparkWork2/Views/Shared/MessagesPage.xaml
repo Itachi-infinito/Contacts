@@ -232,29 +232,32 @@
                             </LinearGradientBrush>
                         </Frame.Background>
 
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="DiscoverCandidates_Tapped" />
-                        </Frame.GestureRecognizers>
+                        <Grid>
+                            <Grid ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="12"
+                                  Padding="28,0"
+                                  VerticalOptions="Center">
 
-                        <Grid ColumnDefinitions="Auto,*"
-                              ColumnSpacing="12"
-                              Padding="28,0"
-                              VerticalOptions="Center">
+                                <Label Text="&#xE8B6;"
+                                       FontFamily="MaterialIcons"
+                                       FontSize="24"
+                                       TextColor="White"
+                                       VerticalTextAlignment="Center" />
 
-                            <Label Text="&#xE8B6;"
-                                   FontFamily="MaterialIcons"
-                                   FontSize="24"
-                                   TextColor="White"
-                                   VerticalTextAlignment="Center" />
+                                <Label Grid.Column="1"
+                                       Text="Découvrir des candidats"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Grid>
 
-                            <Label Grid.Column="1"
-                                    Text="Découvrir des candidats"
-                                    FontSize="17"
-                                    FontAttributes="Bold"
-                                    TextColor="White"
-                                    HorizontalTextAlignment="Center"
-                                    VerticalTextAlignment="Center" />
+                            <Button BackgroundColor="Transparent"
+                                    Text=""
+                                    Clicked="DiscoverCandidates_Clicked" />
                         </Grid>
+
                     </Frame>
 
                     <Label Text="• Un match = une conversation débloquée •"
@@ -268,11 +271,14 @@
 
         </Grid>
 
-        <Grid Grid.Row="1"
+        <Grid x:Name="recruiterBottomNav"
+                Grid.Row="1"
                 HeightRequest="78"
                 BackgroundColor="White"
                 Padding="4,8,4,10"
-                ColumnDefinitions="*,*,*,*,*">
+                ColumnDefinitions="*,*,*,*,*"
+                IsVisible="False">
+
 
             <BoxView Grid.ColumnSpan="5"
                      HeightRequest="0.5"
@@ -380,6 +386,47 @@
                        HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
         </Grid>
+        <!-- CANDIDATE NAV -->
+        <Grid x:Name="candidateBottomNav"
+              Grid.Row="1"
+              BackgroundColor="White"
+              Padding="18,8,18,18"
+              ColumnDefinitions="*,*,*,*"
+              IsVisible="False">
+
+            <Grid Grid.Column="0">
+                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                    <Label Text="&#xE88A;" FontFamily="MaterialIcons" FontSize="25" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                    <Label Text="Accueil" FontSize="11" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+                <Button Text="" BackgroundColor="Transparent" Clicked="Home_Clicked" />
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                    <Label Text="&#xE8B6;" FontFamily="MaterialIcons" FontSize="25" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                    <Label Text="Découvrir" FontSize="11" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+                <Button Text="" BackgroundColor="Transparent" Clicked="Discover_Clicked" />
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                    <Label Text="&#xE0BF;" FontFamily="MaterialIcons" FontSize="25" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                    <Label Text="Messages" FontSize="11" FontAttributes="Bold" TextColor="#7C4DFF" HorizontalTextAlignment="Center" />
+                    <BoxView WidthRequest="4" HeightRequest="4" CornerRadius="2" Color="#7C4DFF" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid Grid.Column="3">
+                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                    <Label Text="&#xE7FD;" FontFamily="MaterialIcons" FontSize="25" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                    <Label Text="Profil" FontSize="11" TextColor="#B0ABCE" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+                <Button Text="" BackgroundColor="Transparent" Clicked="Profile_Clicked" />
+            </Grid>
+        </Grid>
+
 
     </Grid>
 </ContentPage>

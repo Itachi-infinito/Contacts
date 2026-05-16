@@ -42,6 +42,11 @@ public partial class EditJobOfferPage : ContentPage
 
         RefreshRequiredSkillsLayout();
         RefreshNiceSkillsLayout();
+        lblHeaderInitials.Text = BuildInitials(_sessionService.CurrentUserName);
+
+        WireCompletionTracking();
+        UpdateOfferCompletion();
+
     }
 
 
@@ -96,6 +101,7 @@ public partial class EditJobOfferPage : ContentPage
         _selectedLatitude = jobOffer.Latitude;
         _selectedLongitude = jobOffer.Longitude;
         UpdateOfferCoordinatesLabel();
+        UpdateOfferCompletion();
 
 
     }
@@ -393,5 +399,91 @@ public partial class EditJobOfferPage : ContentPage
         RefreshNiceSkillsLayout();
     }
 
+    private void WireCompletionTracking()
+    {
+        entryTitle.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryCompany.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryLocation.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryContractType.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryAddress.TextChanged += (_, _) => UpdateOfferCompletion();
+        entrySalaryMin.TextChanged += (_, _) => UpdateOfferCompletion();
+        entrySalaryMax.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryLevel.TextChanged += (_, _) => UpdateOfferCompletion();
+        entryRemoteMode.TextChanged += (_, _) => UpdateOfferCompletion();
+        editorDescription.TextChanged += (_, _) => UpdateOfferCompletion();
+    }
+
+    private void UpdateOfferCompletion()
+    {
+        bool hasInfo =
+            !string.IsNullOrWhiteSpace(entryTitle.Text) &&
+            !string.IsNullOrWhiteSpace(entryCompany.Text) &&
+            !string.IsNullOrWhiteSpace(entryLocation.Text) &&
+            !string.IsNullOrWhiteSpace(entryContractType.Text);
+
+        bool hasSalary =
+            !string.IsNullOrWhiteSpace(entrySalaryMin.Text) ||
+            !string.IsNullOrWhiteSpace(entrySalaryMax.Text) ||
+            !string.IsNullOrWhiteSpace(entryLevel.Text) ||
+            !string.IsNullOrWhiteSpace(entryRemoteMode.Text);
+
+        bool hasSkills = _selectedRequiredSkills.Any() || _selectedNiceSkills.Any();
+
+        bool hasDescription =
+            !string.IsNullOrWhiteSpace(editorDescription.Text) &&
+            editorDescription.Text.Trim().Length >= 40;
+
+        int percent = 0;
+
+        if (hasInfo)
+            percent += 30;
+
+        if (hasSalary)
+            percent += 25;
+
+        if (hasSkills)
+            percent += 25;
+
+        if (hasDescription)
+            percent += 20;
+
+        lblOfferCompletionPercent.Text = $"{percent}%";
+        offerCompletionProgress.Progress = percent / 100.0;
+
+        lblCompletionHint.Text = hasDescription
+            ? "Votre offre est complète."
+            : "Ajoutez une description pour atteindre 100%";
+
+        descriptionStatusBadge.IsVisible = !hasDescription;
+
+        SetStepState(infoStepBar, lblInfoStep, hasInfo);
+        SetStepState(salaryStepBar, lblSalaryStep, hasSalary);
+        SetStepState(skillsStepBar, lblSkillsStep, hasSkills);
+        SetStepState(descriptionStepBar, lblDescriptionStep, hasDescription);
+    }
+
+    private void SetStepState(BoxView bar, Label label, bool isDone)
+    {
+        bar.Color = isDone
+            ? Color.FromArgb("#D34C88")
+            : Color.FromArgb("#DDD7F2");
+
+        label.TextColor = isDone
+            ? Color.FromArgb("#7C4DFF")
+            : Color.FromArgb("#B0ABCE");
+    }
+
+    private static string BuildInitials(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "AL";
+
+        var parts = value.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+            return parts[0][0].ToString().ToUpperInvariant();
+
+        return $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant();
+    }
 
 }

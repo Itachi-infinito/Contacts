@@ -9,15 +9,21 @@ public partial class RecruiterJobOffersPage : ContentPage
 {
     private readonly JobOfferRepository _jobOfferRepository;
     private readonly SessionService _sessionService;
+    private readonly MatchRepository _matchRepository;
+
 
     public RecruiterJobOffersPage(
-        JobOfferRepository jobOfferRepository,
-        SessionService sessionService)
+    JobOfferRepository jobOfferRepository,
+    SessionService sessionService,
+    MatchRepository matchRepository)
     {
         InitializeComponent();
+
         _jobOfferRepository = jobOfferRepository;
         _sessionService = sessionService;
+        _matchRepository = matchRepository;
     }
+
 
     protected override async void OnAppearing()
     {
@@ -33,13 +39,29 @@ public partial class RecruiterJobOffersPage : ContentPage
         var offers = await _jobOfferRepository.GetJobOffersByRecruiterAsync(
             _sessionService.CurrentUserId);
 
-        jobOffersCollection.ItemsSource = null;
-        jobOffersCollection.ItemsSource = offers;
+        var matches = await _matchRepository.GetMatchesAsync(_sessionService.CurrentUserId);
 
-        lblOfferCount.Text = offers.Count == 1
-            ? "1 offre publiée"
-            : $"{offers.Count} offres publiées";
+        var offerCards = offers
+            .Select(offer => new JobOfferCardItem(offer))
+            .ToList();
+
+        jobOffersCollection.ItemsSource = null;
+        jobOffersCollection.ItemsSource = offerCards;
+
+        bool hasOffers = offerCards.Any();
+
+        offersContent.IsVisible = hasOffers;
+        emptyStateLayout.IsVisible = !hasOffers;
+
+        lblOfferCount.Text = hasOffers
+            ? offers.Count == 1 ? "1 offre publiée" : $"{offers.Count} offres publiées"
+            : "Aucune offre publiée";
+
+        lblActiveOffersCount.Text = offerCards.Count(x => !x.IsPaused).ToString();
+        lblCandidatesSeenCount.Text = "0";
+        lblTotalMatchesCount.Text = matches.Count.ToString();
     }
+
 
     private async void CreateOffer_Clicked(object sender, EventArgs e)
     {
@@ -49,40 +71,42 @@ public partial class RecruiterJobOffersPage : ContentPage
 
     private async void Edit_Clicked(object sender, EventArgs e)
     {
-        if (sender is Button button && button.CommandParameter is JobOffer selectedJobOffer)
+        if (sender is Button button && button.CommandParameter is JobOfferCardItem selected)
         {
             await Shell.Current.GoToAsync(
-                $"{nameof(EditJobOfferPage)}?id={selectedJobOffer.JobOfferId}");
+                $"{nameof(EditJobOfferPage)}?id={selected.Offer.JobOfferId}");
         }
     }
 
     private async void Delete_Clicked(object sender, EventArgs e)
     {
-        if (sender is Button button && button.CommandParameter is JobOffer selectedJobOffer)
+        if (sender is Button button && button.CommandParameter is JobOfferCardItem selected)
         {
-            await DeleteJobOfferAsync(selectedJobOffer);
+            await DeleteJobOfferAsync(selected.Offer);
         }
     }
 
+
     private async void EditBubble_Tapped(object sender, TappedEventArgs e)
     {
-        if (sender is not Frame frame || frame.BindingContext is not JobOffer selectedJobOffer)
+        if (sender is not Frame frame || frame.BindingContext is not JobOfferCardItem selected)
             return;
 
         await BubbleTapAnimation(frame);
 
         await Shell.Current.GoToAsync(
-            $"{nameof(EditJobOfferPage)}?id={selectedJobOffer.JobOfferId}");
+            $"{nameof(EditJobOfferPage)}?id={selected.Offer.JobOfferId}");
     }
 
     private async void DeleteBubble_Tapped(object sender, TappedEventArgs e)
     {
-        if (sender is not Frame frame || frame.BindingContext is not JobOffer selectedJobOffer)
+        if (sender is not Frame frame || frame.BindingContext is not JobOfferCardItem selected)
             return;
 
         await BubbleTapAnimation(frame);
-        await DeleteJobOfferAsync(selectedJobOffer);
+        await DeleteJobOfferAsync(selected.Offer);
     }
+
 
     private async Task DeleteJobOfferAsync(JobOffer selectedJobOffer)
     {
@@ -178,6 +202,68 @@ public partial class RecruiterJobOffersPage : ContentPage
         await Shell.Current.GoToAsync($"//{nameof(MessagesPage)}");
     }
 
+    private sealed class JobOfferCardItem
+    {
+        public JobOffer Offer { get; }
+
+        public string Title => Offer.Title;
+        public string CompanyName => Offer.CompanyName;
+        public string Location => Offer.Location;
+        public string ContractType => Offer.ContractType;
+        public string Level => Offer.Level;
+        public string RemoteMode => Offer.RemoteMode;
+        public string RequiredSkills => Offer.RequiredSkills;
+
+        public bool HasLevel => !string.IsNullOrWhiteSpace(Level);
+        public bool HasRemoteMode => !string.IsNullOrWhiteSpace(RemoteMode);
+        public bool HasRequiredSkills => !string.IsNullOrWhiteSpace(RequiredSkills);
+
+        public bool IsPaused { get; }
+        public string StatusText => IsPaused ? "Ⅱ En pause" : "• Actif";
+        public string StatusBackground => IsPaused ? "#FEF3C7" : "#DCFCE7";
+        public string StatusColor => IsPaused ? "#92400E" : "#166534";
+        public double CardOpacity => IsPaused ? 0.72 : 1;
+
+        public string PrimaryActionText => IsPaused ? "Réactiver" : "Modifier";
+        public string PrimaryActionIcon => IsPaused ? "▷" : "✎";
+
+        public string ViewsCount => "0";
+        public string MatchesCount => "0";
+        public string RetainedCount => "0";
+
+        public bool HasSalary => Offer.SalaryMin > 0 || Offer.SalaryMax > 0;
+
+        public string SalaryDisplay
+        {
+            get
+            {
+                if (Offer.SalaryMin > 0 && Offer.SalaryMax > 0)
+                    return $"{Offer.SalaryMin} — {Offer.SalaryMax} €";
+
+                if (Offer.SalaryMin > 0)
+                    return $"À partir de {Offer.SalaryMin} €";
+
+                if (Offer.SalaryMax > 0)
+                    return $"Jusqu'à {Offer.SalaryMax} €";
+
+                return string.Empty;
+            }
+        }
+
+        public List<string> RequiredSkillItems =>
+            string.IsNullOrWhiteSpace(Offer.RequiredSkills)
+                ? new List<string>()
+                : Offer.RequiredSkills
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Take(4)
+                    .ToList();
+
+        public JobOfferCardItem(JobOffer offer)
+        {
+            Offer = offer;
+            IsPaused = false;
+        }
+    }
 
 
 }
